@@ -39,9 +39,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="DataStructures\Cell.cs" />
+    <Compile Include="DataStructures\Derived.cs" />
+    <Compile Include="DataStructures\Grid.cs" />
+    <Compile Include="DataStructures\ICell.cs" />
+    <Compile Include="DataStructures\ReadonlyWrapper.cs" />
+    <Compile Include="DataStructures\Sequence.cs" />
+    <Compile Include="DataStructures\Var.cs" />
+    <Compile Include="DataStructures\Vector2D.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
