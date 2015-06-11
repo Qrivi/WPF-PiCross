@@ -51,8 +51,6 @@
   </Choose>
   <ItemGroup>
     <Compile Include="GeneratePatternsTests.cs" />
-    <Compile Include="GenerateSpacingsTests.cs" />
-    <Compile Include="IntegerGenerationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SequenceTests.cs" />
   </ItemGroup>
