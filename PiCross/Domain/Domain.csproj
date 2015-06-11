@@ -48,6 +48,7 @@
     <Compile Include="DataStructures\Var.cs" />
     <Compile Include="DataStructures\Vector2D.cs" />
     <Compile Include="Game\Constraints.cs" />
+    <Compile Include="Game\Grid.cs" />
     <Compile Include="Game\Slice.cs" />
     <Compile Include="Game\SquareState.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
