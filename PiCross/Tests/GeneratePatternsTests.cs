@@ -69,7 +69,7 @@ namespace PiCross.Tests
 
             private void CheckSingle( string str )
             {
-                var slice = new Slice( Sequence.FromString( str ).Map( SquareState.FromSymbol ) );
+                var slice = Slice.FromString( str );
 
                 Assert.IsTrue( sequences.Contains( slice ), "{0} should appear", slice.ToString() );
                 sequences.Remove( slice );

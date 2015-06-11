@@ -52,5 +52,42 @@ namespace PiCross.Game
         {
             return squares.Map( x => x.Symbol ).AsString();
         }
+
+        public bool CompatibleWith(Slice that)
+        {
+            if ( that == null )
+            {
+                throw new ArgumentNullException( "slice" );
+            }
+            else if ( this.Squares.Length != that.Squares.Length )
+            {
+                throw new ArgumentException( "Slices should have same length" );
+            }
+            else
+            {
+                return this.squares.Indices.All( i => squares[i].CompatibleWith( that.squares[i] ) );
+            }
+        }
+
+        public Slice Merge(Slice that)
+        {
+            if ( that == null )
+            {
+                throw new ArgumentNullException( "slice" );
+            }
+            else if ( this.Squares.Length != that.Squares.Length )
+            {
+                throw new ArgumentException( "Slices should have same length" );
+            }
+            else
+            {
+                return new Slice( this.squares.ZipWith( that.squares, ( x, y ) => x.Merge( y ) ) );
+            }
+        }
+
+        public static Slice FromString(string str)
+        {
+            return new Slice( Sequence.FromString( str ).Map( SquareState.FromSymbol ) );
+        }
     }
 }
