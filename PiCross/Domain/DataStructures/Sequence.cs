@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PiCross.DataStructures
 {
-    public interface ISequence<out T> : IEnumerable<T>
+    public interface ISequence<out T>
     {
         int Length { get; }
 
@@ -14,21 +14,34 @@ namespace PiCross.DataStructures
 
         IEnumerable<int> Indices { get; }
 
-        bool IsValidIndex( int index );
+        IEnumerable<T> Items { get; }
 
-        ISequence<T> Concatenate( ISequence<T> xs );
+        bool IsValidIndex( int index );
     }
 
     public static class Sequence
     {
+        public static ISequence<T> CreateEmpty<T>()
+        {
+            return new EmptySequence<T>();
+        }
+
         public static ISequence<T> FromItems<T>( params T[] items )
         {
             return new ArraySequence<T>( items.Length, i => items[i] );
         }
 
-        public static ISequence<T> CreateView<T>( int length, Func<int, T> function)
+        public static ISequence<T> CreateView<T>( int length, Func<int, T> function )
         {
             return new VirtualSequence<T>( length, function );
+        }
+    }
+
+    public static class SequenceExtensions
+    {
+        public static ISequence<T> Concatenate<T>( this ISequence<T> xs, ISequence<T> ys )
+        {
+            return Sequence.CreateView( xs.Length + ys.Length, i => i < xs.Length ? xs[i] : ys[i - xs.Length] );
         }
     }
 
@@ -46,24 +59,75 @@ namespace PiCross.DataStructures
             }
         }
 
+        public IEnumerable<T> Items
+        {
+            get
+            {
+                return Indices.Select( i => this[i] );
+            }
+        }
+
         public bool IsValidIndex( int index )
         {
             return 0 <= index && index < Length;
         }
 
-        public IEnumerator<T> GetEnumerator()
+        public override string ToString()
         {
-            return this.Indices.Select( i => this[i] ).GetEnumerator();
+            var items = string.Join( ", ", Items.Select( x => x.ToString() ) );
+
+            return string.Format( "SEQ[{0}]", items );
         }
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        public override bool Equals( object obj )
         {
-            return this.GetEnumerator();
+            return Equals( obj as ISequence<T> );
         }
 
-        public ISequence<T> Concatenate(ISequence<T> xs)
+        public bool Equals( ISequence<T> that )
         {
-            return Sequence.CreateView( this.Length + xs.Length, i => i < this.Length ? this[i] : xs[i - this.Length] );
+            if ( that == null )
+            {
+                return false;
+            }
+            else if ( this.Length != that.Length )
+            {
+                return false;
+            }
+            else
+            {
+                return Indices.All( i => EqualItems( this[i], that[i] ) );
+            }
+        }
+
+        private bool EqualItems( T x, T y )
+        {
+            if ( x == null )
+            {
+                return y == null;
+            }
+            else
+            {
+                return x.Equals( y );
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return Items.Select( x => x.GetHashCode() ).Aggregate( 0, ( x, y ) => x ^ y );
+        }
+    }
+
+    internal class EmptySequence<T> : SequenceBase<T>
+    {
+        public override int Length
+        {
+            get { return 0; }
+        }
+
+        public override T this[int index]
+        {
+            get { throw new ArgumentOutOfRangeException( "index" ); }
         }
     }
 
