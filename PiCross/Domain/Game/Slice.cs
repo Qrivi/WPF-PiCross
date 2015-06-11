@@ -88,6 +88,6 @@ namespace PiCross.Game
         public static Slice FromString(string str)
         {
             return new Slice( Sequence.FromString( str ).Map( SquareState.FromSymbol ) );
-        }
+        }        
     }
 }

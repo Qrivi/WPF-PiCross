@@ -8,7 +8,7 @@ using PiCross.DataStructures;
 namespace PiCross.Tests
 {
     [TestClass]
-    public class GeneratePatternsTests
+    public class ConstraintsGenerateSlicesTests
     {
         [TestMethod]
         public void Length_1_No_Constraints()
@@ -64,7 +64,7 @@ namespace PiCross.Tests
 
             public Test( int length, params int[] constraints )
             {
-                sequences = new Constraints( Sequence.FromItems( constraints ) ).Generate( length ).ToList();
+                sequences = new Constraints( Sequence.FromItems( constraints ) ).GenerateSlices( length ).ToList();
             }
 
             private void CheckSingle( string str )

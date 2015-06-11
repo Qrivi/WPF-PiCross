@@ -18,7 +18,7 @@ namespace PiCross.Game
             this.values = values;
         }
 
-        public IEnumerable<Slice> Generate( int sliceLength )
+        public IEnumerable<Slice> GenerateSlices( int sliceLength )
         {
             return GeneratePatterns( sliceLength, values ).Select( x => new Slice( x ) );
         }
