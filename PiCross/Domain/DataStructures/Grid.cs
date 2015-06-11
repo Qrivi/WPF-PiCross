@@ -217,12 +217,12 @@ namespace PiCross.DataStructures
 
         public ISequence<T> Row(int y)
         {
-            return Sequence.CreateView( Width, x => this[new Vector2D( x, y )] );
+            return Sequence.FromFunction( Width, x => this[new Vector2D( x, y )] );
         }
 
         public ISequence<T> Column(int x)
         {
-            return Sequence.CreateView( Height, y => this[new Vector2D( x, y )] );
+            return Sequence.FromFunction( Height, y => this[new Vector2D( x, y )] );
         }
     }
 

@@ -31,7 +31,7 @@ namespace PiCross.DataStructures
             return new ArraySequence<T>( items.Length, i => items[i] );
         }
 
-        public static ISequence<T> CreateView<T>( int length, Func<int, T> function )
+        public static ISequence<T> FromFunction<T>( int length, Func<int, T> function )
         {
             return new VirtualSequence<T>( length, function );
         }
@@ -41,7 +41,37 @@ namespace PiCross.DataStructures
     {
         public static ISequence<T> Concatenate<T>( this ISequence<T> xs, ISequence<T> ys )
         {
-            return Sequence.CreateView( xs.Length + ys.Length, i => i < xs.Length ? xs[i] : ys[i - xs.Length] );
+            return Sequence.FromFunction( xs.Length + ys.Length, i => i < xs.Length ? xs[i] : ys[i - xs.Length] );
+        }
+
+        public static ISequence<T> Flatten<T>(this ISequence<ISequence<T>> xss)
+        {
+            // TODO Binary approach will probably be more efficient
+            return xss.Items.Aggregate( Sequence.CreateEmpty<T>(), ( xs, ys ) => xs.Concatenate( ys ) );
+        }
+
+        public static ISequence<R> ZipWith<T1, T2, R>(this ISequence<T1> xs, ISequence<T2> ys, Func<T1, T2, R> zipper)
+        {
+            if ( xs == null )
+            {
+                throw new ArgumentNullException( "xs" );
+            }
+            else if ( ys == null )
+            {
+                throw new ArgumentNullException( "ys" );
+            }
+            else if ( xs.Length != ys.Length )
+            {
+                throw new ArgumentException( "xs and ys should have same length" );
+            }
+            else if ( zipper == null )
+            {
+                throw new ArgumentNullException( "zipper" );
+            }
+            else
+            {
+                return Sequence.FromFunction( xs.Length, i => zipper( xs[i], ys[i] ) );
+            }
         }
     }
 

@@ -24,11 +24,28 @@ namespace PiCross.Game
             }
             else
             {
+                // TODO Possible optimization: create separate sequence prefixer class
                 return from i in Enumerable.Range( 0, sum + 1 )
                        from tail in GenerateIntegers( count - 1, sum - i )
                        let prefix = Sequence.FromItems( i )
                        select prefix.Concatenate( tail );
             }
         }
+
+        internal static IEnumerable<ISequence<int>> GenerateSpacings(int length, int constraintCount, int constraintSum)
+        {
+            var spacingCount = constraintCount + 1;
+            var spacingSum = length - constraintSum - Math.Max( 0, constraintCount - 2 );
+
+            var numbers = GenerateIntegers( spacingCount, spacingSum );
+            var deltas = Sequence.FromFunction( spacingCount, i => i == 0 || i == spacingCount - 1 ? 0 : 1 );
+
+            return numbers.Select( ns => ns.ZipWith( deltas, ( x, y ) => x + y ) );
+        }
+
+        //internal static IEnumerable<ISequence<SquareState>> GeneratePatterns(int totalSize, ISequence<int> constraints)
+        //{
+
+        //}
     }
 }
