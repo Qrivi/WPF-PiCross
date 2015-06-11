@@ -88,6 +88,23 @@ namespace PiCross.Game
         public static Slice FromString(string str)
         {
             return new Slice( Sequence.FromString( str ).Map( SquareState.FromSymbol ) );
-        }        
+        }
+
+        public static Slice Merge(IEnumerable<Slice> slices)
+        {
+            return slices.Aggregate( ( x, y ) => x.Merge( y ) );
+        }
+        
+        public Slice Refine(Constraints constraints)
+        {
+            if ( constraints == null )
+            {
+                throw new ArgumentNullException( "constraints" );
+            }
+            else
+            {
+                return Merge( constraints.GenerateSlices( squares.Length ).Where( CompatibleWith ) );
+            }
+        }
     }
 }

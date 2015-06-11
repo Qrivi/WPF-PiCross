@@ -18,6 +18,12 @@ namespace PiCross.Game
             this.values = values;
         }
 
+        public Constraints(params int[] values)
+            : this( Sequence.FromItems(values))
+        {
+            // NOP
+        }
+
         public IEnumerable<Slice> GenerateSlices( int sliceLength )
         {
             return GeneratePatterns( sliceLength, values ).Select( x => new Slice( x ) );
