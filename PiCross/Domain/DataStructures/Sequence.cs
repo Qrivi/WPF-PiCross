@@ -13,13 +13,22 @@ namespace PiCross.DataStructures
         T this[int index] { get; }
 
         IEnumerable<int> Indices { get; }
+
+        bool IsValidIndex( int index );
+
+        ISequence<T> Concatenate( ISequence<T> xs );
     }
 
     public static class Sequence
     {
-        public static ISequence<T> FromItems<T>(params T[] items)
+        public static ISequence<T> FromItems<T>( params T[] items )
         {
             return new ArraySequence<T>( items.Length, i => items[i] );
+        }
+
+        public static ISequence<T> CreateView<T>( int length, Func<int, T> function)
+        {
+            return new VirtualSequence<T>( length, function );
         }
     }
 
@@ -37,6 +46,11 @@ namespace PiCross.DataStructures
             }
         }
 
+        public bool IsValidIndex( int index )
+        {
+            return 0 <= index && index < Length;
+        }
+
         public IEnumerator<T> GetEnumerator()
         {
             return this.Indices.Select( i => this[i] ).GetEnumerator();
@@ -46,20 +60,37 @@ namespace PiCross.DataStructures
         {
             return this.GetEnumerator();
         }
+
+        public ISequence<T> Concatenate(ISequence<T> xs)
+        {
+            return Sequence.CreateView( this.Length + xs.Length, i => i < this.Length ? this[i] : xs[i - this.Length] );
+        }
     }
 
     internal class ArraySequence<T> : SequenceBase<T>
     {
         private readonly T[] items;
 
-        public ArraySequence(int length, Func<int, T> initializer)
+        public ArraySequence( int length, Func<int, T> initializer )
         {
-            items = Enumerable.Range(0, length).Select(initializer).ToArray();
+            if ( length < 0 )
+            {
+                throw new ArgumentOutOfRangeException( "length" );
+            }
+            else if ( initializer == null )
+            {
+                throw new ArgumentNullException( "initializer" );
+            }
+            else
+            {
+                items = Enumerable.Range( 0, length ).Select( initializer ).ToArray();
+            }
         }
 
         public override int Length
         {
-            get{
+            get
+            {
                 return items.Length;
             }
         }
@@ -69,6 +100,53 @@ namespace PiCross.DataStructures
             get
             {
                 return items[index];
+            }
+        }
+    }
+
+    internal class VirtualSequence<T> : SequenceBase<T>
+    {
+        private readonly int length;
+
+        private readonly Func<int, T> function;
+
+        public VirtualSequence( int length, Func<int, T> function )
+        {
+            if ( length < 0 )
+            {
+                throw new ArgumentOutOfRangeException( "length" );
+            }
+            else if ( function == null )
+            {
+                throw new ArgumentNullException( "function" );
+            }
+            else
+            {
+                this.length = length;
+                this.function = function;
+            }
+        }
+
+        public override int Length
+        {
+            get
+            {
+                return length;
+            }
+        }
+
+        public override T this[int index]
+        {
+            get
+            {
+                if ( !IsValidIndex( index ) )
+                {
+                    throw new ArgumentOutOfRangeException( "index" );
+                }
+                else
+                {
+                    return function( index );
+                }
             }
         }
     }
