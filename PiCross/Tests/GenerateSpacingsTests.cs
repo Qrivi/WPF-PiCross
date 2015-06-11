@@ -47,6 +47,16 @@ namespace PiCross.Tests
             test.Done();
         }
 
+        [TestMethod]
+        public void Length_3_Constraints_1_1()
+        {
+            var test = new Test( 3, 1, 1 );
+
+            test.Check( 0, 1, 0 );
+
+            test.Done();
+        }
+
         private class Test
         {
             private readonly List<ISequence<int>> sequences;

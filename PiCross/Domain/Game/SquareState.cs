@@ -14,14 +14,51 @@ namespace PiCross.Game
 
         public static readonly SquareState EMPTY = new Empty();
 
+        public static SquareState FromSymbol( char symbol )
+        {
+            if ( UNKNOWN.Symbol == symbol )
+            {
+                return UNKNOWN;
+            }
+            else if ( FILLED.Symbol == symbol )
+            {
+                return FILLED;
+            }
+            else if ( EMPTY.Symbol == symbol )
+            {
+                return EMPTY;
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException( "symbol" );
+            }
+        }
+
         private SquareState()
         {
             // NOP
         }
 
-        public abstract bool CompatibleWith(SquareState that);
+        public abstract bool CompatibleWith( SquareState that );
 
         public abstract SquareState Merge( SquareState that );
+
+        public abstract char Symbol { get; }
+
+        public override bool Equals( object obj )
+        {
+            return this == obj;
+        }
+
+        public override int GetHashCode()
+        {
+            return Symbol.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            return Symbol.ToString();
+        }
 
         private class Unknown : SquareState
         {
@@ -33,6 +70,11 @@ namespace PiCross.Game
             public override SquareState Merge( SquareState that )
             {
                 return UNKNOWN;
+            }
+
+            public override char Symbol
+            {
+                get { return '?'; }
             }
         }
 
@@ -54,6 +96,11 @@ namespace PiCross.Game
                     return UNKNOWN;
                 }
             }
+
+            public override char Symbol
+            {
+                get { return 'x'; }
+            }
         }
 
         private class Empty : SquareState
@@ -73,6 +120,11 @@ namespace PiCross.Game
                 {
                     return UNKNOWN;
                 }
+            }
+
+            public override char Symbol
+            {
+                get { return '.'; }
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿using PiCross.DataStructures;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,8 @@ namespace PiCross.Game
     {
         internal static IEnumerable<ISequence<int>> GenerateIntegers(int count, int sum)
         {
+            // TODO Validate arguments
+
             if ( count == 0 )
             {
                 if ( sum == 0 )
@@ -34,8 +37,10 @@ namespace PiCross.Game
 
         internal static IEnumerable<ISequence<int>> GenerateSpacings(int length, int constraintCount, int constraintSum)
         {
+            // TODO Validate arguments
+
             var spacingCount = constraintCount + 1;
-            var spacingSum = length - constraintSum - Math.Max( 0, constraintCount - 2 );
+            var spacingSum = length - constraintSum - Math.Max( 0, constraintCount - 1 );
 
             var numbers = GenerateIntegers( spacingCount, spacingSum );
             var deltas = Sequence.FromFunction( spacingCount, i => i == 0 || i == spacingCount - 1 ? 0 : 1 );
@@ -43,9 +48,32 @@ namespace PiCross.Game
             return numbers.Select( ns => ns.ZipWith( deltas, ( x, y ) => x + y ) );
         }
 
-        //internal static IEnumerable<ISequence<SquareState>> GeneratePatterns(int totalSize, ISequence<int> constraints)
-        //{
+        internal static IEnumerable<ISequence<SquareState>> GeneratePatterns( int totalSize, ISequence<int> constraints )
+        {
+            if (totalSize < 0)
+            {
+                throw new ArgumentOutOfRangeException( "totalSize" );
+            }
+            else if ( constraints == null )
+            {
+                throw new ArgumentNullException( "constraints" );
+            }
+            else
+            {
+                var constraintCount = constraints.Length;
+                var constraintSum = constraints.Items.Sum();
 
-        //}
+                var spacings = GenerateSpacings( totalSize, constraintCount: constraintCount, constraintSum: constraintSum );
+
+                var blocks = constraints.Map( n => Sequence.Repeat( n, SquareState.FILLED ) );
+
+                foreach ( var spacing in spacings )
+                {
+                    var spaces = spacing.Map( n => Sequence.Repeat( n, SquareState.EMPTY ) );
+
+                    yield return spaces.Intersperse( blocks ).Flatten();
+                }
+            }
+        }
     }
 }

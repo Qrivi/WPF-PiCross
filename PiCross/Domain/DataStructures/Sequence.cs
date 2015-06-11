@@ -35,6 +35,16 @@ namespace PiCross.DataStructures
         {
             return new VirtualSequence<T>( length, function );
         }
+
+        public static ISequence<T> Repeat<T>( int length, T value )
+        {
+            return new VirtualSequence<T>( length, _ => value );
+        }
+
+        public static ISequence<char> FromString( string str )
+        {
+            return FromItems( str.ToCharArray() );
+        }
     }
 
     public static class SequenceExtensions
@@ -44,13 +54,13 @@ namespace PiCross.DataStructures
             return Sequence.FromFunction( xs.Length + ys.Length, i => i < xs.Length ? xs[i] : ys[i - xs.Length] );
         }
 
-        public static ISequence<T> Flatten<T>(this ISequence<ISequence<T>> xss)
+        public static ISequence<T> Flatten<T>( this ISequence<ISequence<T>> xss )
         {
             // TODO Binary approach will probably be more efficient
             return xss.Items.Aggregate( Sequence.CreateEmpty<T>(), ( xs, ys ) => xs.Concatenate( ys ) );
         }
 
-        public static ISequence<R> ZipWith<T1, T2, R>(this ISequence<T1> xs, ISequence<T2> ys, Func<T1, T2, R> zipper)
+        public static ISequence<R> ZipWith<T1, T2, R>( this ISequence<T1> xs, ISequence<T2> ys, Func<T1, T2, R> zipper )
         {
             if ( xs == null )
             {
@@ -72,6 +82,38 @@ namespace PiCross.DataStructures
             {
                 return Sequence.FromFunction( xs.Length, i => zipper( xs[i], ys[i] ) );
             }
+        }
+
+        public static ISequence<R> Map<T, R>( this ISequence<T> xs, Func<T, R> function )
+        {
+            // TODO Argument validation
+
+            return Sequence.FromFunction( xs.Length, i => function( xs[i] ) );
+        }
+
+        public static ISequence<T> Intersperse<T>( this ISequence<T> xs, ISequence<T> ys )
+        {
+            if ( xs == null )
+            {
+                throw new ArgumentNullException( "xs" );
+            }
+            else if ( ys == null )
+            {
+                throw new ArgumentNullException( "ys" );
+            }
+            else if ( xs.Length != ys.Length + 1 )
+            {
+                throw new ArgumentException( string.Format( "xs.Length (={0}) should be equal to ys.Length + 1 (={1} + 1)", xs.Length, ys.Length ) );
+            }
+            else
+            {
+                return Sequence.FromFunction( xs.Length + ys.Length, i => i % 2 == 0 ? xs[i / 2] : ys[( i - 1 ) / 2] );
+            }
+        }
+
+        public static string AsString(this ISequence<char> xs)
+        {
+            return new string( xs.Items.ToArray() );
         }
     }
 
