@@ -60,19 +60,19 @@ namespace PiCross.Tests
 
         private class Test
         {
-            private readonly List<ISequence<SquareState>> sequences;
+            private readonly List<Slice> sequences;
 
             public Test( int length, params int[] constraints )
             {
-                sequences = Solver.GeneratePatterns( length, Sequence.FromItems( constraints ) ).ToList();
+                sequences = new Constraints( Sequence.FromItems( constraints ) ).Generate( length ).ToList();
             }
 
             private void CheckSingle( string str )
             {
-                var seq = Sequence.FromString( str ).Map( SquareState.FromSymbol );
+                var slice = new Slice( Sequence.FromString( str ).Map( SquareState.FromSymbol ) );
 
-                Assert.IsTrue( sequences.Contains( seq ), "{0} should appear", seq.Map( x => x.Symbol ).AsString() );
-                sequences.Remove( seq );
+                Assert.IsTrue( sequences.Contains( slice ), "{0} should appear", slice.ToString() );
+                sequences.Remove( slice );
             }
 
             public void Check( params string[] ss )

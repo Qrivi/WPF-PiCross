@@ -74,6 +74,6 @@ namespace PiCross.Game
                     yield return spaces.Intersperse( blocks ).Flatten();
                 }
             }
-        }
+        }        
     }
 }
