@@ -50,7 +50,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="ConstraintsSatisfiedPrefix.cs" />
+    <Compile Include="Constraints_SatisfiedPrefix_Tests.cs" />
     <Compile Include="ConstraintsSatisfiedSuffixLengthTests.cs" />
     <Compile Include="ConstraintsGenerateSlicesTests.cs" />
     <Compile Include="PlayGridConstraints_IsSatisfied_Tests.cs" />
