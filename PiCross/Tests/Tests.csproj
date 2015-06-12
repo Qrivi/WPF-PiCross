@@ -50,7 +50,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="ConstraintSatisfiedPrefix.cs" />
+    <Compile Include="ConstraintsSatisfiedPrefix.cs" />
     <Compile Include="ConstraintsSatisfiedSuffixLengthTests.cs" />
     <Compile Include="ConstraintsGenerateSlicesTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
