@@ -58,7 +58,7 @@
     <Compile Include="SequenceTests.cs" />
     <Compile Include="Slice_DeriveConstraints_Tests.cs" />
     <Compile Include="Slice_Merge_Tests.cs" />
-    <Compile Include="SliceRefineTests.cs" />
+    <Compile Include="Slice_Refine_Tests.cs" />
     <Compile Include="Slice_KnownPrefix_Tests.cs" />
     <Compile Include="SolvingTests.cs" />
   </ItemGroup>

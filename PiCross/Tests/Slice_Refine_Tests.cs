@@ -5,7 +5,7 @@ using PiCross.Game;
 namespace PiCross.Tests
 {
     [TestClass]
-    public class SliceRefineTests
+    public class Slice_Refine_Tests
     {
         [TestMethod]
         [TestCategory( "Slice" )]
