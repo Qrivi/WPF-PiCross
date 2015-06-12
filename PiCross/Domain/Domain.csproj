@@ -50,6 +50,7 @@
     <Compile Include="Facade\Solving\Puzzle.cs" />
     <Compile Include="Game\Constraints.cs" />
     <Compile Include="Game\EditorGrid.cs" />
+    <Compile Include="Game\PlayGrid.cs" />
     <Compile Include="Game\SolverGrid.cs" />
     <Compile Include="Game\Slice.cs" />
     <Compile Include="Game\Square.cs" />

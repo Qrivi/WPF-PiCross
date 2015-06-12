@@ -133,13 +133,18 @@ namespace PiCross.DataStructures
             }
             else
             {
-                return Sequence.FromFunction( count, i => xs[i - from] );
+                return Sequence.FromFunction( count, i => xs[i + from] );
             }
         }
 
         public static ISequence<T> Prefix<T>( this ISequence<T> xs, int length )
         {
             return xs.Subsequence( 0, length );
+        }
+
+        public static ISequence<T> Suffix<T>( this ISequence<T> xs, int from )
+        {
+            return xs.Subsequence( from, xs.Length - from );
         }
 
         public static int FindFirstIndexOf<T>( this ISequence<T> xs, Func<T, bool> predicate )
@@ -172,6 +177,20 @@ namespace PiCross.DataStructures
             else
             {
                 return xs.Prefix( index );
+            }
+        }
+
+        public static ISequence<T> DropWhile<T>( this ISequence<T> xs, Func<T, bool> predicate )
+        {
+            var index = xs.FindFirstIndexOf( x => !predicate( x ) );
+
+            if ( index == -1 )
+            {
+                return Sequence.CreateEmpty<T>();
+            }
+            else
+            {
+                return xs.Suffix( index );
             }
         }
 

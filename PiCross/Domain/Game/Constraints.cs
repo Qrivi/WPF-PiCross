@@ -118,5 +118,13 @@ namespace PiCross.Game
         {
             return this.Reverse().SatisfiedPrefixLength( slice.Reverse() );
         }
+
+        public ISequence<int> Values
+        {
+            get
+            {
+                return this.values;
+            }
+        }
     }
 }

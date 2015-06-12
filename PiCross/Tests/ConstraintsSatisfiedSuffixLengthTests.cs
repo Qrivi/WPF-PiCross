@@ -14,7 +14,7 @@ namespace PiCross.Tests
             var constraints = CreateConstraints( 1, 1 );
             var slice = CreateSlice( "??x" );
             var actual = constraints.SatisfiedSuffixLength( slice );
-            var expected = 1;
+            var expected = 0;
 
             Assert.AreEqual( expected, actual );
         }
@@ -36,7 +36,7 @@ namespace PiCross.Tests
         public void SatisfiedSuffixLengthTest3()
         {
             var constraints = CreateConstraints( 1, 1 );
-            var slice = CreateSlice( "??x" );
+            var slice = CreateSlice( "?.x" );
             var actual = constraints.SatisfiedSuffixLength( slice );
             var expected = 1;
 
@@ -63,6 +63,18 @@ namespace PiCross.Tests
             var slice = CreateSlice( "?.xx." );
             var actual = constraints.SatisfiedSuffixLength( slice );
             var expected = 0;
+
+            Assert.AreEqual( expected, actual );
+        }
+
+        [TestMethod]
+        [TestCategory( "Constraints" )]
+        public void SatisfiedSuffixLengthTest6()
+        {
+            var constraints = CreateConstraints( 1, 1 );
+            var slice = CreateSlice( "x?.x" );
+            var actual = constraints.SatisfiedSuffixLength( slice );
+            var expected = 1;
 
             Assert.AreEqual( expected, actual );
         }

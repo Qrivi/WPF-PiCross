@@ -53,11 +53,13 @@
     <Compile Include="ConstraintsSatisfiedPrefix.cs" />
     <Compile Include="ConstraintsSatisfiedSuffixLengthTests.cs" />
     <Compile Include="ConstraintsGenerateSlicesTests.cs" />
+    <Compile Include="PlayGridConstraints_IsSatisfied_Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SequenceTests.cs" />
     <Compile Include="SliceDeriveConstraintsTests.cs" />
     <Compile Include="SliceMergingTests.cs" />
     <Compile Include="SliceRefineTests.cs" />
+    <Compile Include="Slice_KnownPrefix_Tests.cs" />
     <Compile Include="SolvingTests.cs" />
   </ItemGroup>
   <ItemGroup>

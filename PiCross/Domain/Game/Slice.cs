@@ -141,13 +141,30 @@ namespace PiCross.Game
             return new Constraints( constraints );
         }
 
+        public bool IsFullyKnown
+        {
+            get
+            {
+                return squares.Items.All( x => x != Square.UNKNOWN );
+            }
+        }
+
         public Slice KnownPrefix
         {
             get
             {
-                var prefix = squares.TakeWhile( sqr => sqr != Square.UNKNOWN );
+                var known = this.squares.TakeWhile( sqr => sqr != Square.UNKNOWN );
 
-                return new Slice( prefix );
+                if ( known.Length == this.squares.Length )
+                {
+                    return this;
+                }
+                else
+                {
+                    var sqrs = known.Reverse().DropWhile( sqr => sqr == Square.FILLED ).Reverse();
+
+                    return new Slice( sqrs );
+                }
             }
         }
 

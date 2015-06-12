@@ -38,7 +38,7 @@ namespace PiCross.Tests
             var constraints = CreateConstraints( 1, 1 );
             var slice = CreateSlice( "x??" );
             var actual = constraints.SatisfiedPrefixLength( slice );
-            var expected = 1;
+            var expected = 0;
 
             Assert.AreEqual( expected, actual );
         }
