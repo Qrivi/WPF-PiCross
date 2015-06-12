@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace PiCross.Game
 {
-    public abstract class SquareState
+    public abstract class Square
     {
-        public static readonly SquareState UNKNOWN = new Unknown();
+        public static readonly Square UNKNOWN = new Unknown();
 
-        public static readonly SquareState FILLED = new Filled();
+        public static readonly Square FILLED = new Filled();
 
-        public static readonly SquareState EMPTY = new Empty();
+        public static readonly Square EMPTY = new Empty();
 
-        public static SquareState FromSymbol( char symbol )
+        public static Square FromSymbol( char symbol )
         {
             if ( UNKNOWN.Symbol == symbol )
             {
@@ -34,14 +34,14 @@ namespace PiCross.Game
             }
         }
 
-        private SquareState()
+        private Square()
         {
             // NOP
         }
 
-        public abstract bool CompatibleWith( SquareState that );
+        public abstract bool CompatibleWith( Square that );
 
-        public abstract SquareState Merge( SquareState that );
+        public abstract Square Merge( Square that );
 
         public abstract char Symbol { get; }
 
@@ -60,14 +60,14 @@ namespace PiCross.Game
             return Symbol.ToString();
         }
 
-        private class Unknown : SquareState
+        private class Unknown : Square
         {
-            public override bool CompatibleWith( SquareState that )
+            public override bool CompatibleWith( Square that )
             {
                 return true;
             }
 
-            public override SquareState Merge( SquareState that )
+            public override Square Merge( Square that )
             {
                 return UNKNOWN;
             }
@@ -78,14 +78,14 @@ namespace PiCross.Game
             }
         }
 
-        private class Filled : SquareState
+        private class Filled : Square
         {
-            public override bool CompatibleWith( SquareState that )
+            public override bool CompatibleWith( Square that )
             {
                 return that != EMPTY;
             }
 
-            public override SquareState Merge( SquareState that )
+            public override Square Merge( Square that )
             {
                 if ( that == this )
                 {
@@ -103,14 +103,14 @@ namespace PiCross.Game
             }
         }
 
-        private class Empty : SquareState
+        private class Empty : Square
         {
-            public override bool CompatibleWith( SquareState that )
+            public override bool CompatibleWith( Square that )
             {
                 return that != FILLED;
             }
 
-            public override SquareState Merge( SquareState that )
+            public override Square Merge( Square that )
             {
                 if ( that == this )
                 {

@@ -67,7 +67,7 @@ namespace PiCross.Game
             return numbers.Select( ns => ns.ZipWith( deltas, ( x, y ) => x + y ) );
         }
 
-        private static IEnumerable<ISequence<SquareState>> GeneratePatterns( int totalSize, ISequence<int> constraints )
+        private static IEnumerable<ISequence<Square>> GeneratePatterns( int totalSize, ISequence<int> constraints )
         {
             if ( totalSize < 0 )
             {
@@ -84,11 +84,11 @@ namespace PiCross.Game
 
                 var spacings = GenerateSpacings( totalSize, constraintCount: constraintCount, constraintSum: constraintSum );
 
-                var blocks = constraints.Map( n => Sequence.Repeat( n, SquareState.FILLED ) );
+                var blocks = constraints.Map( n => Sequence.Repeat( n, Square.FILLED ) );
 
                 foreach ( var spacing in spacings )
                 {
-                    var spaces = spacing.Map( n => Sequence.Repeat( n, SquareState.EMPTY ) );
+                    var spaces = spacing.Map( n => Sequence.Repeat( n, Square.EMPTY ) );
 
                     yield return spaces.Intersperse( blocks ).Flatten();
                 }
