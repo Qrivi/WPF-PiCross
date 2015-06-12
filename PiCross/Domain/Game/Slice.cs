@@ -162,5 +162,10 @@ namespace PiCross.Game
                 return new Slice( suffix );
             }
         }
+
+        public Slice Reverse()
+        {
+            return new Slice( squares.Reverse() );
+        }
     }
 }

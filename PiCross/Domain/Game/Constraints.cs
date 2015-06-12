@@ -108,5 +108,15 @@ namespace PiCross.Game
 
             return this.values.CommonPrefixLength( knownConstraints.values );
         }
+
+        public Constraints Reverse()
+        {
+            return new Constraints( this.values.Reverse() );
+        }
+
+        public int SatisfiedSuffixLength( Slice slice )
+        {
+            return this.Reverse().SatisfiedPrefixLength( slice.Reverse() );
+        }
     }
 }
