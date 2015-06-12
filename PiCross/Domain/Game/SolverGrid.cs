@@ -111,12 +111,9 @@ namespace PiCross.Game
             OverwriteRow( y, refined );
         }
 
-        public int UnknownCount
+        public int CountUnknowns()
         {
-            get
-            {
-                return squares.Items.Count( var => var.Value == Square.UNKNOWN );
-            }
+            return squares.Items.Count( var => var.Value == Square.UNKNOWN );            
         }
 
         public int Width
@@ -160,7 +157,7 @@ namespace PiCross.Game
 
         public void Refine()
         {
-            var unknownCount = UnknownCount;
+            var unknownCount = CountUnknowns();
             var lastUnknownCount = unknownCount + 1;
 
             while ( unknownCount < lastUnknownCount )
@@ -168,7 +165,7 @@ namespace PiCross.Game
                 SinglePassRefine();
 
                 lastUnknownCount = unknownCount;
-                unknownCount = UnknownCount;
+                unknownCount = CountUnknowns();
             }
         }
 
