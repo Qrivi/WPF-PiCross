@@ -8,7 +8,7 @@ using PiCross.DataStructures;
 namespace PiCross.Tests
 {
     [TestClass]
-    public class ConstraintsGenerateSlicesTests
+    public class Constraints_GenerateSlices_Tests
     {
         [TestMethod]
         [TestCategory("Constraints")]

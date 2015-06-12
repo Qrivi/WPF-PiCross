@@ -52,7 +52,7 @@
   <ItemGroup>
     <Compile Include="Constraints_SatisfiedPrefix_Tests.cs" />
     <Compile Include="ConstraintsSatisfiedSuffixLengthTests.cs" />
-    <Compile Include="ConstraintsGenerateSlicesTests.cs" />
+    <Compile Include="Constraints_GenerateSlices_Tests.cs" />
     <Compile Include="PlayGridConstraints_IsSatisfied_Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SequenceTests.cs" />
