@@ -171,5 +171,13 @@ namespace PiCross.Game
                 unknownCount = UnknownCount;
             }
         }
+
+        public IGrid<Square> Squares
+        {
+            get
+            {
+                return squares.Map( var => var.Value );
+            }
+        }
     }
 }

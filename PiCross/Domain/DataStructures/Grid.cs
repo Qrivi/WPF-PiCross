@@ -60,6 +60,10 @@ namespace PiCross.DataStructures
         ISequence<T> Row( int index );
 
         ISequence<T> Column( int index );
+
+        IEnumerable<ISequence<T>> Rows { get; }
+
+        IEnumerable<ISequence<T>> Columns { get; }
     }
 
     /// <summary>
@@ -67,26 +71,14 @@ namespace PiCross.DataStructures
     /// </summary>
     public static class IGridExtensions
     {
-        /// <summary>
-        /// Enumerates all row indices.
-        /// </summary>
-        /// <typeparam name="T">Type of the elements of the grid.</typeparam>
-        /// <param name="grid">Grid.</param>
-        /// <returns>All row indices.</returns>
-        public static IEnumerable<int> RowIndices<T>( this IGrid<T> grid )
+        public static IGrid<R> Map<T, R>(this IGrid<T> grid, Func<T, R> function)
         {
-            return Enumerable.Range( 0, grid.Height );
+            return Grid.CreateVirtual( grid.Width, grid.Height, p => function( grid[p] ) );
         }
 
-        /// <summary>
-        /// Enumerates all column indices.
-        /// </summary>
-        /// <typeparam name="T">Type of the elements of the grid.</typeparam>
-        /// <param name="grid">Grid.</param>
-        /// <returns>All column indices.</returns>
-        public static IEnumerable<int> ColumnIndices<T>( this IGrid<T> grid )
+        public static IGrid<T> Copy<T>(this IGrid<T> grid)
         {
-            return Enumerable.Range( 0, grid.Width );
+            return Grid.Create( grid.Width, grid.Height, p => grid[p] );
         }
     }
 
@@ -95,6 +87,11 @@ namespace PiCross.DataStructures
         public static IGrid<T> Create<T>( int width, int height, Func<Vector2D, T> initializer )
         {
             return new Grid<T>( width, height, initializer );
+        }
+
+        public static IGrid<T> Create<T>( int width, int height, T initialValue = default(T) )
+        {
+            return Create( width, height, _ => initialValue );
         }
 
         public static IGrid<T> CreateVirtual<T>( int width, int height, Func<Vector2D, T> function )
@@ -215,14 +212,30 @@ namespace PiCross.DataStructures
             }
         }
 
-        public ISequence<T> Row(int y)
+        public ISequence<T> Row( int y )
         {
             return Sequence.FromFunction( Width, x => this[new Vector2D( x, y )] );
         }
 
-        public ISequence<T> Column(int x)
+        public ISequence<T> Column( int x )
         {
             return Sequence.FromFunction( Height, y => this[new Vector2D( x, y )] );
+        }
+
+        public IEnumerable<ISequence<T>> Rows
+        {
+            get
+            {
+                return RowIndices.Select( Column );
+            }
+        }
+
+        public IEnumerable<ISequence<T>> Columns
+        {
+            get
+            {
+                return ColumnIndices.Select( Row );
+            }
         }
     }
 

@@ -36,6 +36,11 @@ namespace PiCross.DataStructures
             return new VirtualSequence<T>( length, function );
         }
 
+        public static ISequence<T> FromEnumerable<T>(IEnumerable<T> xs)
+        {
+            return FromItems( xs.ToArray() );
+        }
+
         public static ISequence<T> Repeat<T>( int length, T value )
         {
             return new VirtualSequence<T>( length, _ => value );
