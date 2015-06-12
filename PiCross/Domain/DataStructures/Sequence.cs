@@ -36,7 +36,7 @@ namespace PiCross.DataStructures
             return new VirtualSequence<T>( length, function );
         }
 
-        public static ISequence<T> FromEnumerable<T>(IEnumerable<T> xs)
+        public static ISequence<T> FromEnumerable<T>( IEnumerable<T> xs )
         {
             return FromItems( xs.ToArray() );
         }
@@ -116,9 +116,80 @@ namespace PiCross.DataStructures
             }
         }
 
-        public static string AsString(this ISequence<char> xs)
+        public static string AsString( this ISequence<char> xs )
         {
             return new string( xs.Items.ToArray() );
+        }
+
+        public static ISequence<T> Subsequence<T>( this ISequence<T> xs, int from, int count )
+        {
+            if ( !xs.IsValidIndex( from ) )
+            {
+                throw new ArgumentOutOfRangeException( "from" );
+            }
+            else if ( count < 0 || ( count > 0 && from + count - 1 >= xs.Length ) )
+            {
+                throw new ArgumentOutOfRangeException( "count" );
+            }
+            else
+            {
+                return Sequence.FromFunction( count, i => xs[i - from] );
+            }
+        }
+
+        public static ISequence<T> Prefix<T>( this ISequence<T> xs, int length )
+        {
+            return xs.Subsequence( 0, length );
+        }
+
+        public static int FindFirstIndexOf<T>( this ISequence<T> xs, Func<T, bool> predicate )
+        {
+            var i = 0;
+
+            while ( i < xs.Length )
+            {
+                var current = xs[i];
+
+                if ( predicate( current ) )
+                {
+                    return i;
+                }
+
+                ++i;
+            }
+
+            return -1;
+        }
+
+        public static ISequence<T> TakeWhile<T>( this ISequence<T> xs, Func<T, bool> predicate )
+        {
+            var index = xs.FindFirstIndexOf( x => !predicate( x ) );
+
+            if ( index == -1 )
+            {
+                return xs;
+            }
+            else
+            {
+                return xs.Prefix( index );
+            }
+        }
+
+        public static ISequence<T> Reverse<T>( this ISequence<T> xs )
+        {
+            return Sequence.FromFunction( xs.Length, i => xs[xs.Length - i - 1] );
+        }
+
+        public static int CommonPrefixLength<T>( this ISequence<T> xs, ISequence<T> ys )
+        {
+            var i = 0;
+
+            while ( i < xs.Length && i < ys.Length && xs[i].Equals( ys[i] ) )
+            {
+                ++i;
+            }
+
+            return i;
         }
     }
 

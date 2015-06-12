@@ -100,5 +100,13 @@ namespace PiCross.Game
                 }
             }
         }
+
+        public int SatisfiedPrefixLength(Slice slice)
+        {
+            var knownPrefix = slice.KnownPrefix;
+            var knownConstraints = knownPrefix.DeriveConstraints();
+
+            return this.values.CommonPrefixLength( knownConstraints.values );
+        }
     }
 }
