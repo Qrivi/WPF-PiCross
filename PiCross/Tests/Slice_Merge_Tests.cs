@@ -5,7 +5,7 @@ using PiCross.Game;
 namespace PiCross.Tests
 {
     [TestClass]   
-    public class SliceMergingTests
+    public class Slice_Merge_Tests
     {
         [TestMethod]
         [TestCategory("Slice")]
