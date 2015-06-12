@@ -4,11 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using G = PiCross.DataStructures.Grid;
 
 namespace PiCross.Game
 {
-    public class Grid
+    public class SolverGrid
     {
         private readonly IGrid<IVar<Square>> squares;
 
@@ -16,7 +15,7 @@ namespace PiCross.Game
 
         private readonly ISequence<Constraints> rowConstraints;
 
-        public Grid( ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints )
+        public SolverGrid( ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints )
         {
             if ( columnConstraints == null )
             {
@@ -41,7 +40,7 @@ namespace PiCross.Game
 
                 var width = columnConstraints.Length;
                 var height = rowConstraints.Length;
-                this.squares = G.Create( width, height, p => new Var<Square>( Square.UNKNOWN ) );
+                this.squares = Grid.Create( width, height, p => new Var<Square>( Square.UNKNOWN ) );
             }
         }
 
