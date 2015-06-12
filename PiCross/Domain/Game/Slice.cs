@@ -106,5 +106,39 @@ namespace PiCross.Game
                 return Merge( constraints.GenerateSlices( squares.Length ).Where( CompatibleWith ) );
             }
         }
+
+        public Constraints DeriveConstraints()
+        {
+            var fillCount = 0;
+            var constraints = new List<int>();
+            
+            foreach ( var square in this.squares.Items )
+            {
+                if ( square == Square.FILLED )
+                {
+                    fillCount++;
+                }
+                else if ( square == Square.EMPTY )
+                {
+                    if ( fillCount > 0 )
+                    {
+                        constraints.Add( fillCount );
+                    }
+
+                    fillCount = 0;
+                }
+                else
+                {
+                    throw new InvalidOperationException( "Slice contained invalid square" );
+                }
+            }
+
+            if ( fillCount > 0 )
+            {
+                constraints.Add( fillCount );
+            }
+
+            return new Constraints( constraints );
+        }
     }
 }

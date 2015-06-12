@@ -53,6 +53,7 @@
     <Compile Include="ConstraintsGenerateSlicesTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SequenceTests.cs" />
+    <Compile Include="SliceDeriveConstraintsTests.cs" />
     <Compile Include="SliceMergingTests.cs" />
     <Compile Include="SliceRefineTests.cs" />
   </ItemGroup>

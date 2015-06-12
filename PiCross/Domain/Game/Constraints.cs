@@ -24,6 +24,12 @@ namespace PiCross.Game
             // NOP
         }
 
+        public Constraints(IEnumerable<int> values)
+            : this( values.ToArray() )
+        {
+            // NOP
+        }
+
         public IEnumerable<Slice> GenerateSlices( int sliceLength )
         {
             return GeneratePatterns( sliceLength, values ).Select( x => new Slice( x ) );
