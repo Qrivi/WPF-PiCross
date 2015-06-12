@@ -8,54 +8,63 @@ namespace PiCross.Tests
     public class SliceMergingTests
     {
         [TestMethod]
+        [TestCategory("Slice")]
         public void Merge_E_E()
         {
             Test( ".", ".", "." );
         }
 
         [TestMethod]
+        [TestCategory( "Slice" )]
         public void Merge_X_X()
         {
             Test( "x", "x", "x" );
         }
 
         [TestMethod]
+        [TestCategory( "Slice" )]
         public void Merge_X_E()
         {
             Test( "x", ".", "?" );
         }
 
         [TestMethod]
+        [TestCategory( "Slice" )]
         public void Merge_E_X()
         {
             Test( ".", "x", "?" );
         }
 
         [TestMethod]
+        [TestCategory( "Slice" )]
         public void Merge_U_X()
         {
             Test( "?", "x", "?" );
         }
 
         [TestMethod]
+        [TestCategory( "Slice" )]
         public void Merge_U_E()
         {
             Test( "?", ".", "?" );
         }
 
         [TestMethod]
+        [TestCategory( "Slice" )]
         public void Merge_X_U()
         {
             Test( "x", "?", "?" );
         }
 
         [TestMethod]
+        [TestCategory( "Slice" )]
         public void Merge_E_U()
         {
             Test( ".", "?", "?" );
         }
 
         [TestMethod]
+        [TestCategory( "Slice" )]
         public void Merge_XXXEEEUUU_XEUXEUXEU()
         {
             Test( "xxx...???", "x.?x.?x.?", "x???.????" );

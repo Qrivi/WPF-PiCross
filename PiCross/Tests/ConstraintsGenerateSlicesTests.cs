@@ -11,49 +11,57 @@ namespace PiCross.Tests
     public class ConstraintsGenerateSlicesTests
     {
         [TestMethod]
-        public void Length_1_No_Constraints()
+        [TestCategory("Constraints")]
+        public void GenerateSlices_Length_1_No_Constraints()
         {
             new Test( 1 ).Check( "." );
         }
 
         [TestMethod]
-        public void Length_5_No_Constraints()
+        [TestCategory( "Constraints" )]
+        public void GenerateSlices_Length_5_No_Constraints()
         {
             new Test( 5 ).Check( "....." );
         }
 
         [TestMethod]
-        public void Length_1_Constraints_1()
+        [TestCategory( "Constraints" )]
+        public void GenerateSlices_Length_1_Constraints_1()
         {
             new Test( 1, 1 ).Check( "x" );
         }
 
         [TestMethod]
-        public void Length_2_Constraints_1()
+        [TestCategory( "Constraints" )]
+        public void GenerateSlices_Length_2_Constraints_1()
         {
             new Test( 2, 1 ).Check( "x.", ".x" );
         }
 
         [TestMethod]
-        public void Length_3_Constraints_1_1()
+        [TestCategory( "Constraints" )]
+        public void GenerateSlices_Length_3_Constraints_1_1()
         {
             new Test( 3, 1, 1 ).Check( "x.x" );
         }
 
         [TestMethod]
-        public void Length_4_Constraints_1_1()
+        [TestCategory( "Constraints" )]
+        public void GenerateSlices_Length_4_Constraints_1_1()
         {
             new Test( 4, 1, 1 ).Check( "x..x", "x.x.", ".x.x" );
         }
 
         [TestMethod]
-        public void Length_5_Constraints_1_1_1()
+        [TestCategory( "Constraints" )]
+        public void GenerateSlices_Length_5_Constraints_1_1_1()
         {
             new Test( 5, 1, 1, 1 ).Check( "x.x.x" );
         }
 
         [TestMethod]
-        public void Length_4_Constraints_1_1_1()
+        [TestCategory( "Constraints" )]
+        public void GenerateSlices_Length_4_Constraints_1_1_1()
         {
             new Test( 4, 1, 1, 1 ).Check();
         }

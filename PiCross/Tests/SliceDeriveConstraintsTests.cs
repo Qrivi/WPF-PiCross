@@ -8,83 +8,96 @@ namespace PiCross.Tests
     public class SliceDeriveConstraintsTests
     {
         [TestMethod]
-        public void E()
+        [TestCategory( "Slice" )]
+        public void DeriveConstraints_E()
         {
             new Test() { Slice = ".", Expected = CreateConstraints() };
         }
 
         [TestMethod]
-        public void EE()
+        [TestCategory( "Slice" )]
+        public void DeriveConstraints_EE()
         {
             new Test() { Slice = "..", Expected = CreateConstraints() };
         }
 
         [TestMethod]
-        public void X()
+        [TestCategory( "Slice" )]
+        public void DeriveConstraints_X()
         {
             new Test() { Slice = "x", Expected = CreateConstraints( 1 ) };
         }
 
         [TestMethod]
-        public void UX()
+        [TestCategory( "Slice" )]
+        public void DeriveConstraints_UX()
         {
             new Test() { Slice = ".x", Expected = CreateConstraints( 1 ) };
         }
 
         [TestMethod]
-        public void XU()
+        [TestCategory( "Slice" )]
+        public void DeriveConstraints_XU()
         {
             new Test() { Slice = "x.", Expected = CreateConstraints( 1 ) };
         }
 
         [TestMethod]
-        public void XX()
+        [TestCategory( "Slice" )]
+        public void DeriveConstraints_XX()
         {
             new Test() { Slice = "xx", Expected = CreateConstraints( 2 ) };
         }
 
         [TestMethod]
-        public void UXX()
+        [TestCategory( "Slice" )]
+        public void DeriveConstraints_UXX()
         {
             new Test() { Slice = ".xx", Expected = CreateConstraints( 2 ) };
         }
 
         [TestMethod]
-        public void XXU()
+        [TestCategory( "Slice" )]
+        public void DeriveConstraints_XXU()
         {
             new Test() { Slice = "xx.", Expected = CreateConstraints( 2 ) };
         }
 
         [TestMethod]
-        public void XXEXX()
+        [TestCategory( "Slice" )]
+        public void DeriveConstraints_XXEXX()
         {
             new Test() { Slice = "xx.xx", Expected = CreateConstraints( 2, 2 ) };
         }
 
 
         [TestMethod]
-        public void XXEXXE()
+        [TestCategory( "Slice" )]
+        public void DeriveConstraints_XXEXXE()
         {
             new Test() { Slice = "xx.xx.", Expected = CreateConstraints( 2, 2 ) };
         }
 
 
         [TestMethod]
-        public void EXXEXX()
+        [TestCategory( "Slice" )]
+        public void DeriveConstraints_EXXEXX()
         {
             new Test() { Slice = ".xx.xx", Expected = CreateConstraints( 2, 2 ) };
         }
 
 
         [TestMethod]
-        public void EXXEXXE()
+        [TestCategory( "Slice" )]
+        public void DeriveConstraints_EXXEXXE()
         {
             new Test() { Slice = ".xx.xx.", Expected = CreateConstraints( 2, 2 ) };
         }
 
 
         [TestMethod]
-        public void XXEEEXX()
+        [TestCategory( "Slice" )]
+        public void DeriveConstraints_XXEEEXX()
         {
             new Test() { Slice = "xx...xx", Expected = CreateConstraints( 2, 2 ) };
         }

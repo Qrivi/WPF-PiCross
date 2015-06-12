@@ -8,6 +8,7 @@ namespace PiCross.Tests
     public class SequenceTests
     {
         [TestMethod]
+        [TestCategory( "Sequence" )]
         public void CreateEmpty()
         {
             var seq = Sequence.CreateEmpty<int>();
@@ -16,6 +17,7 @@ namespace PiCross.Tests
         }
 
         [TestMethod]
+        [TestCategory("Sequence")]
         public void Concatenation()
         {
             var xs = Sequence.FromItems( 1, 2, 3 );

@@ -9,37 +9,43 @@ namespace PiCross.Tests
     public class SolvingTests
     {
         [TestMethod]
-        public void Test1()
+        [TestCategory("SolverGrid")]
+        public void Solve1()
         {
             Check( "x" );
         }
 
         [TestMethod]
-        public void Test2()
+        [TestCategory( "SolverGrid" )]
+        public void Solve2()
         {
             Check( "." );
         }
 
         [TestMethod]
-        public void Test3()
+        [TestCategory( "SolverGrid" )]
+        public void Solve3()
         {
             Check( ".." );
         }
 
         [TestMethod]
-        public void Test4()
+        [TestCategory( "SolverGrid" )]
+        public void Solve4()
         {
             Check( ".x" );
         }
 
         [TestMethod]
-        public void Test5()
+        [TestCategory( "SolverGrid" )]
+        public void Solve5()
         {
             Check( "x." );
         }
 
         [TestMethod]
-        public void Test6()
+        [TestCategory( "SolverGrid" )]
+        public void Solve6()
         {
             Check( 
                 "..",
@@ -47,7 +53,8 @@ namespace PiCross.Tests
         }
 
         [TestMethod]
-        public void Test7()
+        [TestCategory( "SolverGrid" )]
+        public void Solve7()
         {
             Check(
                 "x.",
@@ -55,7 +62,8 @@ namespace PiCross.Tests
         }
 
         [TestMethod]
-        public void Test8()
+        [TestCategory( "SolverGrid" )]
+        public void Solve8()
         {
             Check(
                 "..",
@@ -63,7 +71,8 @@ namespace PiCross.Tests
         }
 
         [TestMethod]
-        public void Test9()
+        [TestCategory( "SolverGrid" )]
+        public void Solve9()
         {
             Check(
                 "xx",
@@ -71,7 +80,8 @@ namespace PiCross.Tests
         }
 
         [TestMethod]
-        public void Test10()
+        [TestCategory( "SolverGrid" )]
+        public void Solve10()
         {
             Check(
                 "..........",
@@ -87,7 +97,8 @@ namespace PiCross.Tests
         }
 
         [TestMethod]
-        public void Test11()
+        [TestCategory( "SolverGrid" )]
+        public void Solve11()
         {
             Check(
                 "..........",
@@ -103,7 +114,8 @@ namespace PiCross.Tests
         }
 
         [TestMethod]
-        public void Test12()
+        [TestCategory( "SolverGrid" )]
+        public void Solve12()
         {
             Check(
                 ".xxx..xx..",

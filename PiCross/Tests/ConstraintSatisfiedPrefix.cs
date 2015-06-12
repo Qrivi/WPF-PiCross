@@ -8,7 +8,8 @@ namespace PiCross.Tests
     public class ConstraintSatisfiedPrefixLengthTests
     {
         [TestMethod]
-        public void Test1()
+        [TestCategory( "Constraints" )]
+        public void SatisfiedPrefixLengthTest1()
         {
             var constraints = CreateConstraints( 1, 1 );
             var slice = CreateSlice( "x.?" );
@@ -19,7 +20,8 @@ namespace PiCross.Tests
         }
 
         [TestMethod]
-        public void Test2()
+        [TestCategory( "Constraints" )]
+        public void SatisfiedPrefixLengthTest2()
         {
             var constraints = CreateConstraints( 1, 1 );
             var slice = CreateSlice( "???" );
@@ -30,7 +32,8 @@ namespace PiCross.Tests
         }
 
         [TestMethod]
-        public void Test3()
+        [TestCategory( "Constraints" )]
+        public void SatisfiedPrefixLengthTest3()
         {
             var constraints = CreateConstraints( 1, 1 );
             var slice = CreateSlice( "x??" );
@@ -41,7 +44,8 @@ namespace PiCross.Tests
         }
 
         [TestMethod]
-        public void Test4()
+        [TestCategory( "Constraints" )]
+        public void SatisfiedPrefixLengthTest4()
         {
             var constraints = CreateConstraints( 1, 1 );
             var slice = CreateSlice( ".x.?" );
@@ -52,7 +56,8 @@ namespace PiCross.Tests
         }
 
         [TestMethod]
-        public void Test5()
+        [TestCategory( "Constraints" )]
+        public void SatisfiedPrefixLengthTest5()
         {
             var constraints = CreateConstraints( 1, 1 );
             var slice = CreateSlice( ".xx.?" );
