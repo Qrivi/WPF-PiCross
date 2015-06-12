@@ -5,7 +5,7 @@ using PiCross.Game;
 namespace PiCross.Tests
 {
     [TestClass]
-    public class ConstraintsSatisfiedSuffixLengthTests
+    public class Constraints_SatisfiedSuffixLength_Tests
     {
         [TestMethod]
         [TestCategory( "Constraints" )]
