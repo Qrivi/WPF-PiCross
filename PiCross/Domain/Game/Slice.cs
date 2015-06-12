@@ -9,16 +9,16 @@ namespace PiCross.Game
 {
     public class Slice
     {
-        private readonly ISequence<SquareState> squares;
+        private readonly ISequence<Square> squares;
 
-        public Slice( ISequence<SquareState> squares )
+        public Slice( ISequence<Square> squares )
         {
             // TODO Validate
 
             this.squares = squares;
         }
 
-        public ISequence<SquareState> Squares
+        public ISequence<Square> Squares
         {
             get
             {
@@ -87,7 +87,7 @@ namespace PiCross.Game
 
         public static Slice FromString(string str)
         {
-            return new Slice( Sequence.FromString( str ).Map( SquareState.FromSymbol ) );
+            return new Slice( Sequence.FromString( str ).Map( Square.FromSymbol ) );
         }
 
         public static Slice Merge(IEnumerable<Slice> slices)

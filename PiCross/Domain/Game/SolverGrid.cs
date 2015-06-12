@@ -4,19 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using G = PiCross.DataStructures.Grid;
 
 namespace PiCross.Game
 {
-    public class Grid
+    public class SolverGrid
     {
-        private readonly IGrid<IVar<SquareState>> squares;
+        private readonly IGrid<IVar<Square>> squares;
 
         private readonly ISequence<Constraints> columnConstraints;
 
         private readonly ISequence<Constraints> rowConstraints;
 
-        public Grid( ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints )
+        public SolverGrid( ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints )
         {
             if ( columnConstraints == null )
             {
@@ -41,16 +40,16 @@ namespace PiCross.Game
 
                 var width = columnConstraints.Length;
                 var height = rowConstraints.Length;
-                this.squares = G.Create( width, height, p => new Var<SquareState>( SquareState.UNKNOWN ) );
+                this.squares = Grid.Create( width, height, p => new Var<Square>( Square.UNKNOWN ) );
             }
         }
 
-        private ISequence<IVar<SquareState>> Column( int x )
+        private ISequence<IVar<Square>> Column( int x )
         {
             return this.squares.Column( x );
         }
 
-        private ISequence<IVar<SquareState>> Row( int y )
+        private ISequence<IVar<Square>> Row( int y )
         {
             return this.squares.Row( y );
         }
@@ -65,7 +64,7 @@ namespace PiCross.Game
             return new Slice( Row( y ).Map( v => v.Value ) );
         }
 
-        private void Overwrite( ISequence<IVar<SquareState>> target, ISequence<SquareState> source )
+        private void Overwrite( ISequence<IVar<Square>> target, ISequence<Square> source )
         {
             if ( target == null )
             {
@@ -116,7 +115,7 @@ namespace PiCross.Game
         {
             get
             {
-                return squares.Items.Count( var => var.Value == SquareState.UNKNOWN );
+                return squares.Items.Count( var => var.Value == Square.UNKNOWN );
             }
         }
 
