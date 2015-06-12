@@ -50,7 +50,7 @@
     <Compile Include="Game\Constraints.cs" />
     <Compile Include="Game\SolverGrid.cs" />
     <Compile Include="Game\Slice.cs" />
-    <Compile Include="Game\SquareState.cs" />
+    <Compile Include="Game\Square.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
