@@ -5,7 +5,7 @@ using PiCross.Game;
 namespace PiCross.Tests
 {
     [TestClass]
-    public class SliceDeriveConstraintsTests
+    public class Slice_DeriveConstraints_Tests
     {
         [TestMethod]
         [TestCategory( "Slice" )]
