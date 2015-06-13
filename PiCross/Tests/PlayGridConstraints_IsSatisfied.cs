@@ -5,7 +5,7 @@ using PiCross.Game;
 namespace PiCross.Tests
 {
     [TestClass]
-    public class PlayGridConstraints_IsSatisfied_Tests
+    public class PlayGridConstraints_IsSatisfied
     {
         [TestMethod]
         [TestCategory( "PlayGridConstraints" )]

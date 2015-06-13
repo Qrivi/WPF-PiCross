@@ -5,7 +5,7 @@ using PiCross.Game;
 namespace PiCross.Tests
 {
     [TestClass]
-    public class Slice_KnownPrefix_Tests
+    public class Slice_KnownPrefix
     {
         [TestMethod]
         [TestCategory("Slice")]
