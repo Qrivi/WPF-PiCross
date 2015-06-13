@@ -166,7 +166,7 @@ namespace PiCross.Facade.Solving
                 this.isSatisfied = new ReadonlyManualCell<bool>( () => constraints.IsSatisfied );
             }
 
-            ISequence<IPuzzleConstraintsValue> IPuzzleConstraints.Constraints
+            ISequence<IPuzzleConstraintsValue> IPuzzleConstraints.Values
             {
                 get
                 {

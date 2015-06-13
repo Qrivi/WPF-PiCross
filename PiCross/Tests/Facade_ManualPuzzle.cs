@@ -68,9 +68,9 @@ namespace PiCross.Tests
                 );
             var square = puzzle[new Vector2D( 0, 0 )];
             var constraints = puzzle.RowConstraints( 0 );
-            var value = constraints.Constraints[0];
+            var value = constraints.Values[0];
 
-            var flag = Flag.Create( constraints.Constraints[0].IsSatisfied );
+            var flag = Flag.Create( constraints.Values[0].IsSatisfied );
 
             Assert.IsFalse( flag.Status );
             Assert.IsFalse( value.IsSatisfied.Value );
