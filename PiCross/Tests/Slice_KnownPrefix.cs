@@ -5,7 +5,7 @@ using PiCross.Game;
 namespace PiCross.Tests
 {
     [TestClass]
-    public class Slice_KnownPrefix
+    public class Slice_KnownPrefix : TestBase
     {
         [TestMethod]
         [TestCategory("Slice")]
@@ -38,11 +38,6 @@ namespace PiCross.Tests
             var actual = slice.KnownPrefix;
 
             Assert.AreEqual( expected, actual );
-        }
-
-        private static Slice CreateSlice( string str )
-        {
-            return Slice.FromString( str );
-        }
+        }        
     }
 }

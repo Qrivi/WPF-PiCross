@@ -5,7 +5,7 @@ using PiCross.Game;
 namespace PiCross.Tests
 {
     [TestClass]
-    public class Slice_Refine
+    public class Slice_Refine : TestBase
     {
         [TestMethod]
         [TestCategory( "Slice" )]
@@ -65,16 +65,6 @@ namespace PiCross.Tests
             var actual = slice.Refine( constraints );
 
             Assert.AreEqual( expected, actual );
-        }
-
-        private Constraints CreateConstraints( params int[] values )
-        {
-            return new Constraints( values );
-        }
-
-        private Slice CreateSlice( string str )
-        {
-            return Slice.FromString( str );
         }
     }
 }

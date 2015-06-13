@@ -7,7 +7,7 @@ using System.Linq;
 namespace PiCross.Tests
 {
     [TestClass]
-    public class PlayGridTests
+    public class PlayGridTests : TestBase
     {
         [TestMethod]
         [TestCategory( "PlayGrid" )]
@@ -106,71 +106,7 @@ namespace PiCross.Tests
                 Assert.AreEqual( CreateBooleans( expected ), actual.Values.Map( x => x.IsSatisfied ) );
             }
         }
-
-        private static ISequence<bool> CreateBooleans( string str )
-        {
-            return Sequence.FromString( str ).Map( c =>
-            {
-                switch ( c )
-                {
-                    case 't':
-                        return true;
-
-                    case 'f':
-                        return false;
-
-                    default:
-                        throw new ArgumentException( "Invalid character" );
-                }
-            } );
-        }
-
-        private static PlayGrid CreatePlayGrid( params string[] rows )
-        {
-            var grid = Grid.CreateCharacterGrid( rows );
-
-            var editorGridData = grid.Map( c =>
-                {
-                    switch ( c )
-                    {
-                        case '.':
-                        case ' ':
-                            return '.';
-
-                        case 'x':
-                        case 'X':
-                            return 'x';
-
-                        default:
-                            throw new ArgumentException( "Invalid character" );
-                    }
-                } );
-
-            var editorGrid = new EditorGrid( Square.CreateGrid( editorGridData ) );
-
-            var playGridData = Square.CreateGrid( grid.Map( c =>
-                {
-                    switch ( c )
-                    {
-                        case 'x':
-                        case '.':
-                            return '?';
-
-                        case 'X':
-                            return 'x';
-
-                        case ' ':
-                            return '.';
-
-                        default:
-                            throw new ArgumentException( "Invalid character" );
-                    }
-                } ) );
-
-            var playGrid = editorGrid.CreatePlayGrid();
-            playGrid.Squares.Overwrite<Square>( playGridData );
-
-            return playGrid;
-        }
+        
+        
     }
 }

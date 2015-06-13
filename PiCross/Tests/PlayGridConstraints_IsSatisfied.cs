@@ -5,7 +5,7 @@ using PiCross.Game;
 namespace PiCross.Tests
 {
     [TestClass]
-    public class PlayGridConstraints_IsSatisfied
+    public class PlayGridConstraints_IsSatisfied : TestBase
     {
         [TestMethod]
         [TestCategory( "PlayGridConstraints" )]
@@ -67,16 +67,6 @@ namespace PiCross.Tests
             Assert.IsTrue( pgc.Values[1].IsSatisfied );
             Assert.IsFalse( pgc.Values[2].IsSatisfied );
             Assert.IsTrue( pgc.Values[3].IsSatisfied );
-        }
-
-        private static Slice CreateSlice( string str )
-        {
-            return Slice.FromString( str );
-        }
-
-        private static Constraints CreateConstraints( params int[] constraints )
-        {
-            return new Constraints( constraints );
         }
 
         private static PlayGridConstraints CreatePGConstraints( string str, params int[] constraints )

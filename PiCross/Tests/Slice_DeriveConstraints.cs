@@ -5,7 +5,7 @@ using PiCross.Game;
 namespace PiCross.Tests
 {
     [TestClass]
-    public class Slice_DeriveConstraints
+    public class Slice_DeriveConstraints : TestBase
     {
         [TestMethod]
         [TestCategory( "Slice" )]
@@ -100,16 +100,6 @@ namespace PiCross.Tests
         public void DeriveConstraints_XXEEEXX()
         {
             new Test() { Slice = "xx...xx", Expected = CreateConstraints( 2, 2 ) };
-        }
-
-        private static Slice CreateSlice( string str )
-        {
-            return Slice.FromString( str );
-        }
-
-        private static Constraints CreateConstraints( params int[] values )
-        {
-            return new Constraints( values );
         }
 
         private class Test

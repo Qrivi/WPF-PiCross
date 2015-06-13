@@ -5,7 +5,7 @@ using PiCross.Game;
 namespace PiCross.Tests
 {
     [TestClass]
-    public class Constraints_SatisfiedSuffixLength
+    public class Constraints_SatisfiedSuffixLength : TestBase
     {
         [TestMethod]
         [TestCategory( "Constraints" )]
@@ -77,16 +77,6 @@ namespace PiCross.Tests
             var expected = 1;
 
             Assert.AreEqual( expected, actual );
-        }
-
-        private static Slice CreateSlice( string str )
-        {
-            return Slice.FromString( str );
-        }
-
-        private static Constraints CreateConstraints( params int[] constraints )
-        {
-            return new Constraints( constraints );
         }
     }
 }

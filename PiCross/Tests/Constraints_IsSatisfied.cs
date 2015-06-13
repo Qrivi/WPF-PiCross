@@ -5,7 +5,7 @@ using PiCross.Game;
 namespace PiCross.Tests
 {
     [TestClass]
-    public class Constraints_IsSatisfied
+    public class Constraints_IsSatisfied : TestBase
     {
         [TestMethod]
         [TestCategory( "Constraints" )]
@@ -45,16 +45,6 @@ namespace PiCross.Tests
             var constraints = CreateConstraints( 1 );
 
             Assert.IsFalse( constraints.IsSatisfied( slice ) );
-        }
-
-        private static Slice CreateSlice( string str )
-        {
-            return Slice.FromString( str );
-        }
-
-        private static Constraints CreateConstraints( params int[] constraints )
-        {
-            return new Constraints( constraints );
         }
     }
 }

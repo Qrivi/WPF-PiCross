@@ -5,7 +5,7 @@ using PiCross.Game;
 namespace PiCross.Tests
 {
     [TestClass]   
-    public class Slice_Merge
+    public class Slice_Merge : TestBase
     {
         [TestMethod]
         [TestCategory("Slice")]
@@ -72,10 +72,10 @@ namespace PiCross.Tests
 
         private void Test(string sliceString1, string sliceString2, string expectedString)
         {
-            var slice1 = Slice.FromString( sliceString1 );
-            var slice2 = Slice.FromString( sliceString2 );
+            var slice1 = CreateSlice( sliceString1 );
+            var slice2 = CreateSlice( sliceString2 );
             var actual = slice1.Merge( slice2 );
-            var expected  = Slice.FromString( expectedString );
+            var expected = CreateSlice( expectedString );
 
             Assert.AreEqual( expected, actual );
         }
