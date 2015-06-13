@@ -126,5 +126,10 @@ namespace PiCross.Game
                 return this.values;
             }
         }
+
+        public bool IsSatisfied( Slice slice )
+        {
+            return slice.IsFullyKnown && slice.DeriveConstraints().Equals( this );
+        }
     }
 }

@@ -54,8 +54,14 @@ namespace PiCross.Game
     {
         private readonly ISequence<PlayGridConstraintValue> values;
 
+        private readonly Slice slice;
+
+        private readonly Constraints constraints;
+
         public PlayGridConstraints( Slice slice, Constraints constraints )
         {
+            this.slice = slice;
+            this.constraints = constraints;
             this.values = Sequence.FromFunction( constraints.Values.Length, i => new PlayGridConstraintValue( slice, constraints, i ) );
         }
 
@@ -64,6 +70,14 @@ namespace PiCross.Game
             get
             {
                 return values;
+            }
+        }
+
+        public bool IsSatisfied
+        {
+            get
+            {
+                return constraints.IsSatisfied( slice );
             }
         }
     }
