@@ -6,7 +6,7 @@ using PiCross.Game;
 namespace PiCross.Tests
 {
     [TestClass]
-    public class Facade_ManualPuzzle : TestBase
+    public class Facade_ObservablePlayGrid : TestBase
     {
         [TestMethod]
         [TestCategory( "ManualPuzzle" )]

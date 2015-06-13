@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace PiCross.Facade.Solving
 {
     // TODO Rename it to something Wrapper
-    public class ManualPuzzle : IPuzzle
+    public class ObservablePlayGrid : IPuzzle
     {
         private readonly PlayGrid playGrid;
 
@@ -19,13 +19,13 @@ namespace PiCross.Facade.Solving
 
         private readonly ISequence<PuzzleConstraints> rowConstraints;
 
-        public ManualPuzzle( ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints )
+        public ObservablePlayGrid( ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints )
             : this( new PlayGrid( columnConstraints: columnConstraints, rowConstraints: rowConstraints ) )
         {
             // NOP            
         }
 
-        public ManualPuzzle( PlayGrid playGrid )
+        public ObservablePlayGrid( PlayGrid playGrid )
         {
             if ( playGrid == null )
             {

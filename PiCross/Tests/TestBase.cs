@@ -98,11 +98,11 @@ namespace PiCross.Tests
             return playGrid;
         }
 
-        protected static ManualPuzzle CreateManualPuzzle( params string[] rows )
+        protected static ObservablePlayGrid CreateManualPuzzle( params string[] rows )
         {
             var playGrid = CreatePlayGrid( rows );
 
-            return new ManualPuzzle( playGrid );
+            return new ObservablePlayGrid( playGrid );
         }
     }
 }
