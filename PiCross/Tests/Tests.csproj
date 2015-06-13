@@ -53,7 +53,7 @@
     <Compile Include="Constraints_IsSatisfied.cs" />
     <Compile Include="Constraints_SatisfiedPrefix_Tests.cs" />
     <Compile Include="Constraints_SatisfiedSuffixLength_Tests.cs" />
-    <Compile Include="Constraints_GenerateSlices_Tests.cs" />
+    <Compile Include="Constraints_GenerateSlices.cs" />
     <Compile Include="PlayGridConstraints_IsSatisfied_Tests.cs" />
     <Compile Include="PlayGridTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
