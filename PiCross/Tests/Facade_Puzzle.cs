@@ -6,10 +6,10 @@ using PiCross.Game;
 namespace PiCross.Tests
 {
     [TestClass]
-    public class Facade_ObservablePlayGrid : TestBase
+    public class Facade_Puzzle : TestBase
     {
         [TestMethod]
-        [TestCategory( "ManualPuzzle" )]
+        [TestCategory( "Facade/Puzzle" )]
         public void ContentsChangeNotification()
         {
             var puzzle = CreateManualPuzzle(
@@ -24,17 +24,12 @@ namespace PiCross.Tests
 
             square.Contents.Value = Square.EMPTY;
 
-            Assert.IsFalse( flag.Status );
-            Assert.AreSame( Square.EMPTY, square.Contents.Value );
-
-            puzzle.Refresh();
-
             Assert.IsTrue( flag.Status );
             Assert.AreSame( Square.EMPTY, square.Contents.Value );
         }
 
         [TestMethod]
-        [TestCategory( "ManualPuzzle" )]
+        [TestCategory( "Facade/Puzzle" )]
         public void ConstraintsSatisfactionChangeNotification()
         {
             var puzzle = CreateManualPuzzle(
@@ -50,17 +45,12 @@ namespace PiCross.Tests
 
             square.Contents.Value = Square.FILLED;
 
-            Assert.IsFalse( flag.Status );
-            Assert.IsTrue( constraint.IsSatisfied.Value );
-
-            puzzle.Refresh();
-
             Assert.IsTrue( flag.Status );
             Assert.IsTrue( constraint.IsSatisfied.Value );
         }
 
         [TestMethod]
-        [TestCategory( "ManualPuzzle" )]
+        [TestCategory( "Facade/Puzzle" )]
         public void ConstraintValueSatisfactionChangeNotification()
         {
             var puzzle = CreateManualPuzzle(
@@ -76,11 +66,6 @@ namespace PiCross.Tests
             Assert.IsFalse( value.IsSatisfied.Value );
 
             square.Contents.Value = Square.FILLED;
-
-            Assert.IsFalse( flag.Status );
-            Assert.IsTrue( value.IsSatisfied.Value );
-
-            puzzle.Refresh();
 
             Assert.IsTrue( flag.Status );
             Assert.IsTrue( value.IsSatisfied.Value );

@@ -8,35 +8,236 @@ using System.Threading.Tasks;
 
 namespace PiCross.Facade.Solving
 {
-    public interface IPuzzle
+    public class Puzzle : IPuzzle
     {
-        int Width { get; }
+        private readonly PlayGrid playGrid;
 
-        int Height { get; }
+        private readonly IGrid<PuzzleSquare> puzzleSquares;
 
-        IPuzzleSquare this[Vector2D position] { get; }
+        private readonly ISequence<PuzzleConstraints> columnConstraints;
 
-        IPuzzleConstraints ColumnConstraints( int x );
+        private readonly ISequence<PuzzleConstraints> rowConstraints;
 
-        IPuzzleConstraints RowConstraints( int y );
-    }
+        public Puzzle( ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints )
+            : this( new PlayGrid( columnConstraints: columnConstraints, rowConstraints: rowConstraints ) )
+        {
+            // NOP            
+        }
 
-    public interface IPuzzleSquare
-    {
-        ICell<Square> Contents { get; }
-    }
+        public Puzzle( PlayGrid playGrid )
+        {
+            if ( playGrid == null )
+            {
+                throw new ArgumentNullException( "playGrid" );
+            }
+            else
+            {
+                this.playGrid = playGrid;
+                this.puzzleSquares = playGrid.Squares.Map( var => new PuzzleSquare( this, var ) ).Copy();
+                this.columnConstraints = this.playGrid.ColumnConstraints.Map( constraints => new PuzzleConstraints( constraints ) ).Copy();
+                this.rowConstraints = this.playGrid.RowConstraints.Map( constraints => new PuzzleConstraints( constraints ) ).Copy();
+            }
+        }
 
-    public interface IPuzzleConstraints
-    {
-        ISequence<IPuzzleConstraintsValue> Values { get; }
+        public int Width
+        {
+            get
+            {
+                return playGrid.Squares.Width;
+            }
+        }
 
-        ICell<bool> IsSatisfied { get; }
-    }
+        public int Height
+        {
+            get
+            {
+                return playGrid.Squares.Height;
+            }
+        }
 
-    public interface IPuzzleConstraintsValue
-    {
-        int Value { get; }
+        public IPuzzleSquare this[DataStructures.Vector2D position]
+        {
+            get
+            {
+                return puzzleSquares[position];
+            }
+        }
 
-        ICell<bool> IsSatisfied { get; }
+        public IPuzzleConstraints ColumnConstraints( int x )
+        {
+            return this.rowConstraints[x];
+        }
+
+        public IPuzzleConstraints RowConstraints( int y )
+        {
+            return this.columnConstraints[y];
+        }
+
+        private void Refresh()
+        {
+            RefreshSquares();
+            RefreshConstraints();
+        }
+
+        private void RefreshSquares()
+        {
+            foreach ( var square in this.puzzleSquares.Items )
+            {
+                square.Contents.Refresh();
+            }
+        }
+
+        private void RefreshConstraints()
+        {
+            RefreshConstraints( columnConstraints );
+            RefreshConstraints( rowConstraints );
+        }
+
+        private static void RefreshConstraints(ISequence<PuzzleConstraints> constraints)
+        {
+            foreach ( var constraint in constraints.Items )
+            {
+                constraint.IsSatisfied.Refresh();
+
+                foreach ( var value in constraint.Constraints.Items )
+                {
+                    value.IsSatisfied.Refresh();
+                }
+            }
+        }
+
+        private class PuzzleSquare : IPuzzleSquare
+        {
+            private readonly PuzzleSquareContentsCell contents;
+
+            public PuzzleSquare( Puzzle parent, IVar<Square> contents )
+            {
+                this.contents = new PuzzleSquareContentsCell( parent, contents );
+            }
+
+            ICell<Square> IPuzzleSquare.Contents
+            {
+                get
+                {
+                    return contents;
+                }
+            }
+
+            public PuzzleSquareContentsCell Contents
+            {
+                get
+                {
+                    return contents;
+                }
+            }
+        }
+
+        private class PuzzleSquareContentsCell : ManualCell<Square>
+        {
+            private readonly Puzzle parent;
+
+            private readonly IVar<Square> contents;
+
+            public PuzzleSquareContentsCell( Puzzle parent, IVar<Square> contents )
+                : base( contents.Value )
+            {
+                this.parent = parent;
+                this.contents = contents;
+            }
+
+            protected override Square ReadValue()
+            {
+                return this.contents.Value;
+            }
+
+            protected override void WriteValue( Square value )
+            {
+                this.contents.Value = value;
+
+                parent.Refresh();
+            }
+        }
+
+        private class PuzzleConstraints : IPuzzleConstraints
+        {
+            private readonly ISequence<PuzzleConstraintsValue> constraints;
+
+            private readonly ReadonlyManualCell<bool> isSatisfied;
+
+            public PuzzleConstraints( PlayGridConstraints constraints )
+            {
+                this.constraints = constraints.Values.Map( constraint => new PuzzleConstraintsValue( constraint ) ).Copy();
+                this.isSatisfied = new ReadonlyManualCell<bool>( () => constraints.IsSatisfied );
+            }
+
+            ISequence<IPuzzleConstraintsValue> IPuzzleConstraints.Values
+            {
+                get
+                {
+                    return constraints;
+                }
+            }
+
+            public ISequence<PuzzleConstraintsValue> Constraints
+            {
+                get
+                {
+                    return constraints;
+                }
+            }
+
+            ICell<bool> IPuzzleConstraints.IsSatisfied
+            {
+                get
+                {
+                    return isSatisfied;
+                }
+            }
+
+            public ReadonlyManualCell<bool> IsSatisfied
+            {
+                get
+                {
+                    return isSatisfied;
+                }
+            }
+        }
+
+        private class PuzzleConstraintsValue : IPuzzleConstraintsValue
+        {
+            private readonly ReadonlyManualCell<bool> isSatisfied;
+
+            private readonly PlayGridConstraintValue constraint;
+
+            public PuzzleConstraintsValue( PlayGridConstraintValue constraint )
+            {
+                this.constraint = constraint;
+                this.isSatisfied = new ReadonlyManualCell<bool>( () => constraint.IsSatisfied );
+            }
+
+            public int Value
+            {
+                get
+                {
+                    return constraint.Value;
+                }
+            }
+
+            ICell<bool> IPuzzleConstraintsValue.IsSatisfied
+            {
+                get
+                {
+                    return isSatisfied;
+                }
+            }
+
+            public ReadonlyManualCell<bool> IsSatisfied
+            {
+                get
+                {
+                    return isSatisfied;
+                }
+            }
+        }
     }
 }

@@ -48,8 +48,8 @@
     <Compile Include="DataStructures\Sequence.cs" />
     <Compile Include="DataStructures\Var.cs" />
     <Compile Include="DataStructures\Vector2D.cs" />
-    <Compile Include="Facade\Solving\ObservablePlayGrid.cs" />
     <Compile Include="Facade\Solving\Puzzle.cs" />
+    <Compile Include="Facade\Solving\IPuzzle.cs" />
     <Compile Include="Game\Constraints.cs" />
     <Compile Include="Game\EditorGrid.cs" />
     <Compile Include="Game\PlayGrid.cs" />
