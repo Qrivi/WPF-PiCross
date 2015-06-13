@@ -49,14 +49,11 @@ namespace PiCross.DataStructures
             }
         }
 
-        /// <summary>
-        /// Event fired whenever the cell's value changes.
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public override string ToString()
         {
             return string.Format( "CELL[{0}]", this.Value != null ? this.Value.ToString() : "null" );
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

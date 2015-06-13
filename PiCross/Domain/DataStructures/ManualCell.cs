@@ -22,10 +22,7 @@ namespace PiCross.DataStructures
             }
             set
             {
-                if ( !AreEqual( base.Value, value ) )
-                {
-                    WriteValue( value );
-                }
+                WriteValue( value );
             }
         }
 
@@ -53,6 +50,52 @@ namespace PiCross.DataStructures
         protected abstract T ReadValue();
 
         protected abstract void WriteValue( T value );
+
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+    }
+
+    internal class ReadonlyManualCell<T> : Var<T>, ICell<T>
+    {
+        private readonly Func<T> function;
+
+        public ReadonlyManualCell( Func<T> function )
+            : base( function() )
+        {
+            this.function = function;
+        }
+
+        public override T Value
+        {
+            get
+            {
+                return function();
+            }
+            set
+            {
+                throw new InvalidOperationException();
+            }
+        }
+
+        public bool IsDirty
+        {
+            get
+            {
+                return !AreEqual( function(), base.Value );
+            }
+        }
+
+        public void Refresh()
+        {
+            if ( IsDirty )
+            {
+                base.Value = function();
+
+                if ( PropertyChanged != null )
+                {
+                    PropertyChanged( this, new System.ComponentModel.PropertyChangedEventArgs( "Value" ) );
+                }
+            }
+        }
 
         public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
     }

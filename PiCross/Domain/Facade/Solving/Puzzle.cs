@@ -18,7 +18,7 @@ namespace PiCross.Facade.Solving
 
         IPuzzleConstraints ColumnConstraints( int x );
 
-        IPuzzleConstraints RowConstraints( int x );
+        IPuzzleConstraints RowConstraints( int y );
     }
 
     public interface IPuzzleSquare

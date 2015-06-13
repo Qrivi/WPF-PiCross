@@ -89,6 +89,36 @@ namespace PiCross.Tests
             CheckSatisfactions( playGrid.ColumnConstraints, "ff", "", "", "tt", "ft" );
         }
 
+        [TestMethod]
+        [TestCategory( "PlayGrid" )]
+        public void ConstraintSatisfation4()
+        {
+            var playGrid = CreatePlayGrid(
+                "x"
+                );
+
+            CheckSatisfaction( playGrid.ColumnConstraints, "f" );
+            CheckSatisfaction( playGrid.RowConstraints, "f" );
+
+            CheckSatisfactions( playGrid.RowConstraints, "f" );
+            CheckSatisfactions( playGrid.ColumnConstraints, "f" );
+        }
+
+        [TestMethod]
+        [TestCategory( "PlayGrid" )]
+        public void ConstraintSatisfation5()
+        {
+            var playGrid = CreatePlayGrid(
+                "X"
+                );
+
+            CheckSatisfaction( playGrid.ColumnConstraints, "t" );
+            CheckSatisfaction( playGrid.RowConstraints, "t" );
+
+            CheckSatisfactions( playGrid.RowConstraints, "t" );
+            CheckSatisfactions( playGrid.ColumnConstraints, "t" );
+        }
+
         private static void CheckSatisfaction( ISequence<PlayGridConstraints> constraints, string expected )
         {
             Assert.AreEqual( CreateBooleans( expected ), constraints.Map( c => c.IsSatisfied ) );
@@ -105,8 +135,6 @@ namespace PiCross.Tests
 
                 Assert.AreEqual( CreateBooleans( expected ), actual.Values.Map( x => x.IsSatisfied ) );
             }
-        }
-        
-        
+        }        
     }
 }
