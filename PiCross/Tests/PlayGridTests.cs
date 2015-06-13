@@ -66,11 +66,45 @@ namespace PiCross.Tests
 
             CheckSatisfaction( playGrid.ColumnConstraints, "ffffffffff" );
             CheckSatisfaction( playGrid.RowConstraints, "ff" );
+
+            CheckSatisfactions( playGrid.RowConstraints, "ttff", "f" );
+            CheckSatisfactions( playGrid.ColumnConstraints, "f", "", "f", "f", "", "f", "f", "f", "", "f" );
+        }
+
+        [TestMethod]
+        [TestCategory( "PlayGrid" )]
+        public void ConstraintSatisfation3()
+        {
+            var playGrid = CreatePlayGrid(
+                "x. XX",
+                "x.. .",
+                "...  ",
+                "X..X ",
+                "X..XX" );
+
+            CheckSatisfaction( playGrid.ColumnConstraints, "ffftf" );
+            CheckSatisfaction( playGrid.RowConstraints, "fffff" );
+
+            CheckSatisfactions( playGrid.RowConstraints, "ft", "f", "", "ff", "ff" );
+            CheckSatisfactions( playGrid.ColumnConstraints, "ff", "", "", "tt", "ft" );
         }
 
         private static void CheckSatisfaction( ISequence<PlayGridConstraints> constraints, string expected )
         {
             Assert.AreEqual( CreateBooleans( expected ), constraints.Map( c => c.IsSatisfied ) );
+        }
+
+        private static void CheckSatisfactions( ISequence<PlayGridConstraints> constraints, params string[] expecteds )
+        {
+            Assert.AreEqual( constraints.Length, expecteds.Length );
+
+            foreach ( var i in constraints.Indices )
+            {
+                var actual = constraints[i];
+                var expected = expecteds[i];
+
+                Assert.AreEqual( CreateBooleans( expected ), actual.Values.Map( x => x.IsSatisfied ) );
+            }
         }
 
         private static ISequence<bool> CreateBooleans( string str )
