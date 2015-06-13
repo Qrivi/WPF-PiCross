@@ -13,18 +13,27 @@ namespace PiCross.Game
 
         public Constraints( ISequence<int> values )
         {
-            // TODO Validation
-
-            this.values = values;
+            if ( values == null )
+            {
+                throw new ArgumentNullException( "values" );
+            }
+            else if ( values.Items.Any( n => n <= 0 ) )
+            {
+                throw new ArgumentOutOfRangeException( "values must all be strictly positive" );
+            }
+            else
+            {
+                this.values = values;
+            }
         }
 
-        public Constraints(params int[] values)
-            : this( Sequence.FromItems(values))
+        public Constraints( params int[] values )
+            : this( Sequence.FromItems( values ) )
         {
             // NOP
         }
 
-        public Constraints(IEnumerable<int> values)
+        public Constraints( IEnumerable<int> values )
             : this( values.ToArray() )
         {
             // NOP
@@ -101,7 +110,7 @@ namespace PiCross.Game
             }
         }
 
-        public int SatisfiedPrefixLength(Slice slice)
+        public int SatisfiedPrefixLength( Slice slice )
         {
             var knownPrefix = slice.KnownPrefix;
             var knownConstraints = knownPrefix.DeriveConstraints();
@@ -129,7 +138,31 @@ namespace PiCross.Game
 
         public bool IsSatisfied( Slice slice )
         {
-            return slice.IsFullyKnown && slice.DeriveConstraints().Equals( this );
+            if ( slice.IsFullyKnown )
+            {
+                var derivedConstraints = slice.DeriveConstraints();
+
+                return derivedConstraints.Equals( this );
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public override bool Equals( object obj )
+        {
+            return Equals( obj as Constraints );
+        }
+
+        public bool Equals( Constraints that )
+        {
+            return that != null && this.values.Equals( that.values );
+        }
+
+        public override int GetHashCode()
+        {
+            return this.values.GetHashCode();
         }
     }
 }

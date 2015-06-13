@@ -41,18 +41,6 @@ namespace PiCross.DataStructures
             }
         }
 
-        private static bool AreEqual( T oldValue, T newValue )
-        {
-            if ( oldValue == null )
-            {
-                return newValue == null;
-            }
-            else
-            {
-                return oldValue.Equals( newValue );
-            }
-        }
-
         protected void NotifyObservers( [CallerMemberName] string propertyName = null )
         {
             if ( PropertyChanged != null )

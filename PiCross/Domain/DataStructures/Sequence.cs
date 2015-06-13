@@ -54,6 +54,11 @@ namespace PiCross.DataStructures
 
     public static class SequenceExtensions
     {
+        public static ISequence<T> ToSequence<T>( this IEnumerable<T> enumerable )
+        {
+            return Sequence.FromEnumerable( enumerable );
+        }
+
         public static ISequence<T> Concatenate<T>( this ISequence<T> xs, ISequence<T> ys )
         {
             return Sequence.FromFunction( xs.Length + ys.Length, i => i < xs.Length ? xs[i] : ys[i - xs.Length] );
@@ -209,6 +214,16 @@ namespace PiCross.DataStructures
             }
 
             return i;
+        }
+
+        public static ISequence<T> Copy<T>( this ISequence<T> xs )
+        {
+            return new ArraySequence<T>( xs.Length, i => xs[i] );
+        }
+
+        public static string Join( this ISequence<char> cs, string infix = "" )
+        {
+            return string.Join( infix, cs.Items.ToArray() );
         }
     }
 

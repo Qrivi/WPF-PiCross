@@ -30,9 +30,7 @@ namespace PiCross.Game
 
         public static EditorGrid FromStrings( params string[] rows )
         {
-            var grid = Grid.CreateCharacterGrid( rows ).Map( Square.FromSymbol );
-
-            return new EditorGrid( grid );
+            return new EditorGrid( Square.CreateGrid( rows ) );
         }
 
         public IGrid<IVar<Square>> Contents
@@ -85,6 +83,16 @@ namespace PiCross.Game
         public ISequence<Constraints> DeriveRowConstraints()
         {
             return Sequence.FromEnumerable( Rows.Select( row => row.DeriveConstraints() ) );
+        }
+
+        public PlayGrid CreatePlayGrid()
+        {
+            return new PlayGrid( columnConstraints: DeriveColumnConstraints(), rowConstraints: DeriveRowConstraints() );
+        }
+
+        public SolverGrid CreateSolverGrid()
+        {
+            return new SolverGrid( columnConstraints: DeriveColumnConstraints(), rowConstraints: DeriveRowConstraints() );
         }
     }
 }

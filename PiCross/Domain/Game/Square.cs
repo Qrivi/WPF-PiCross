@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PiCross.DataStructures;
 
 namespace PiCross.Game
 {
@@ -32,6 +33,16 @@ namespace PiCross.Game
             {
                 throw new ArgumentOutOfRangeException( "symbol" );
             }
+        }
+
+        public static IGrid<Square> CreateGrid(params string[] rows)
+        {
+            return CreateGrid( Grid.CreateCharacterGrid( rows ) );
+        }
+
+        public static IGrid<Square> CreateGrid( IGrid<char> grid )
+        {
+            return grid.Map( Square.FromSymbol );
         }
 
         private Square()

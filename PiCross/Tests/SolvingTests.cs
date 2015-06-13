@@ -134,9 +134,7 @@ namespace PiCross.Tests
         private static void Check(params string[] rows)
         {
             var editorGrid = EditorGrid.FromStrings( rows );
-            var columnConstraints = editorGrid.DeriveColumnConstraints();
-            var rowConstraints = editorGrid.DeriveRowConstraints();
-            var solverGrid = new SolverGrid( columnConstraints: columnConstraints, rowConstraints: rowConstraints );
+            var solverGrid = editorGrid.CreateSolverGrid();
 
             solverGrid.Refine();
 
