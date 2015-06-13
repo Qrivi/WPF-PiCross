@@ -28,12 +28,12 @@ namespace PiCross.Facade.Solving
 
     public interface IPuzzleConstraints
     {
-        ISequence<IPuzzleConstraint> Constraints { get; }
+        ISequence<IPuzzleConstraintsValue> Constraints { get; }
 
         ICell<bool> IsSatisfied { get; }
     }
 
-    public interface IPuzzleConstraint
+    public interface IPuzzleConstraintsValue
     {
         int Value { get; }
 
