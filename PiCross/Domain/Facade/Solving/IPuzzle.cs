@@ -16,9 +16,9 @@ namespace PiCross.Facade.Solving
 
         IPuzzleSquare this[Vector2D position] { get; }
 
-        IPuzzleConstraints ColumnConstraints( int x );
+        ISequence<IPuzzleConstraints> ColumnConstraints { get; }
 
-        IPuzzleConstraints RowConstraints( int y );
+        ISequence<IPuzzleConstraints> RowConstraints { get; }
     }
 
     public interface IPuzzleSquare

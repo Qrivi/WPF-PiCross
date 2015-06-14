@@ -63,14 +63,20 @@ namespace PiCross.Facade.Solving
             }
         }
 
-        public IPuzzleConstraints ColumnConstraints( int x )
+        public ISequence<IPuzzleConstraints> ColumnConstraints
         {
-            return this.rowConstraints[x];
+            get
+            {
+                return this.columnConstraints;
+            }
         }
 
-        public IPuzzleConstraints RowConstraints( int y )
+        public ISequence<IPuzzleConstraints> RowConstraints
         {
-            return this.columnConstraints[y];
+            get
+            {
+                return this.rowConstraints;
+            }
         }
 
         private void Refresh()
@@ -93,7 +99,7 @@ namespace PiCross.Facade.Solving
             RefreshConstraints( rowConstraints );
         }
 
-        private static void RefreshConstraints(ISequence<PuzzleConstraints> constraints)
+        private static void RefreshConstraints( ISequence<PuzzleConstraints> constraints )
         {
             foreach ( var constraint in constraints.Items )
             {
