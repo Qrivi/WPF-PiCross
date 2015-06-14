@@ -31,7 +31,7 @@ namespace PiCross.Game
             return Equals( obj as Slice );
         }
 
-        public bool Equals(Slice that)
+        public bool Equals( Slice that )
         {
             if ( that == null )
             {
@@ -53,7 +53,7 @@ namespace PiCross.Game
             return squares.Map( x => x.Symbol ).AsString();
         }
 
-        public bool CompatibleWith(Slice that)
+        public bool CompatibleWith( Slice that )
         {
             if ( that == null )
             {
@@ -69,7 +69,7 @@ namespace PiCross.Game
             }
         }
 
-        public Slice Merge(Slice that)
+        public Slice Merge( Slice that )
         {
             if ( that == null )
             {
@@ -85,17 +85,17 @@ namespace PiCross.Game
             }
         }
 
-        public static Slice FromString(string str)
+        public static Slice FromString( string str )
         {
             return new Slice( Sequence.FromString( str ).Map( Square.FromSymbol ) );
         }
 
-        public static Slice Merge(IEnumerable<Slice> slices)
+        public static Slice Merge( IEnumerable<Slice> slices )
         {
             return slices.Aggregate( ( x, y ) => x.Merge( y ) );
         }
-        
-        public Slice Refine(Constraints constraints)
+
+        public Slice Refine( Constraints constraints )
         {
             if ( constraints == null )
             {
@@ -111,7 +111,7 @@ namespace PiCross.Game
         {
             var fillCount = 0;
             var constraints = new List<int>();
-            
+
             foreach ( var square in this.squares.Items )
             {
                 if ( square == Square.FILLED )
@@ -182,7 +182,22 @@ namespace PiCross.Game
 
         public Slice Reverse()
         {
-            return new Slice( squares.Reverse() );
+            return Lift( ns => ns.Reverse() );
+        }
+
+        public Slice Prefix( int length )
+        {
+            return Lift( ns => ns.Prefix( length ) );
+        }
+
+        public Slice Suffix( int length )
+        {
+            return Lift( ns => ns.Suffix( length ) );
+        }
+
+        public Slice Lift( Func<ISequence<Square>, ISequence<Square>> function )
+        {
+            return new Slice( function( squares ) );
         }
     }
 }

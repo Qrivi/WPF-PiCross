@@ -119,6 +119,23 @@ namespace PiCross.Tests
             CheckSatisfactions( playGrid.ColumnConstraints, "t" );
         }
 
+        [TestMethod]
+        [TestCategory( "PlayGrid" )]
+        public void ConstraintSatisfation6()
+        {
+            var playGrid = CreatePlayGrid(
+                "x.x"
+                );
+
+            OverwritePlayGrid( playGrid, "x.." );
+
+            CheckSatisfaction( playGrid.ColumnConstraints, "ttf" );
+            CheckSatisfaction( playGrid.RowConstraints, "f" );
+
+            CheckSatisfactions( playGrid.RowConstraints, "tf" );
+            CheckSatisfactions( playGrid.ColumnConstraints, "t", "", "f" );
+        }
+
         private static void CheckSatisfaction( ISequence<PlayGridConstraints> constraints, string expected )
         {
             Assert.AreEqual( CreateBooleans( expected ), constraints.Map( c => c.IsSatisfied ) );

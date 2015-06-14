@@ -135,7 +135,11 @@ namespace PiCross.Game
         {
             get
             {
-                return index < constraints.SatisfiedPrefixLength( slice ) || index >= constraints.Values.Length - constraints.SatisfiedSuffixLength( slice );
+                var satisfiedPrefixLength = constraints.SatisfiedPrefixLength( slice );
+                var suffix = slice.Lift( ns => ns.DropPrefix( satisfiedPrefixLength ) );
+                var satisfiedSuffixLength = constraints.SatisfiedSuffixLength( suffix );
+
+                return index < satisfiedPrefixLength || index >= constraints.Values.Length - satisfiedSuffixLength;
             }
         }
 

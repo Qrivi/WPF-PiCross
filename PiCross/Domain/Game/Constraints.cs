@@ -164,5 +164,10 @@ namespace PiCross.Game
         {
             return this.values.GetHashCode();
         }
+
+        public override string ToString()
+        {
+            return string.Format( "Constraints[{0}]", this.values.Map( x => x.ToString() ).Join( "-" ) );
+        }
     }
 }

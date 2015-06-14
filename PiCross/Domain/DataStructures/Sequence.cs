@@ -144,12 +144,51 @@ namespace PiCross.DataStructures
 
         public static ISequence<T> Prefix<T>( this ISequence<T> xs, int length )
         {
-            return xs.Subsequence( 0, length );
+            if ( xs == null )
+            {
+                throw new ArgumentNullException( "xs" );
+            }
+            else if ( length > xs.Length )
+            {
+                throw new ArgumentOutOfRangeException( "length" );
+            }
+            else
+            {
+                return xs.Subsequence( 0, length );
+            }
         }
 
         public static ISequence<T> Suffix<T>( this ISequence<T> xs, int from )
         {
-            return xs.Subsequence( from, xs.Length - from );
+            if ( xs == null )
+            {
+                throw new ArgumentNullException( "xs" );
+            }
+            else if ( from > xs.Length )
+            {
+                throw new ArgumentOutOfRangeException( "from", string.Format( "from = {0}, length = {1}", from, xs.Length ) );
+            }
+            else
+            {
+                if ( from == xs.Length )
+                {
+                    return Sequence.CreateEmpty<T>();
+                }
+                else
+                {
+                    return xs.Subsequence( from, xs.Length - from );
+                }
+            }
+        }
+
+        public static ISequence<T> DropPrefix<T>( this ISequence<T> xs, int length )
+        {
+            return xs.Suffix( length );
+        }
+
+        public static ISequence<T> DropSuffix<T>( this ISequence<T> xs, int length )
+        {
+            return xs.Prefix( xs.Length - length - 1 );
         }
 
         public static int FindFirstIndexOf<T>( this ISequence<T> xs, Func<T, bool> predicate )
@@ -222,6 +261,11 @@ namespace PiCross.DataStructures
         }
 
         public static string Join( this ISequence<char> cs, string infix = "" )
+        {
+            return string.Join( infix, cs.Items.ToArray() );
+        }
+
+        public static string Join( this ISequence<string> cs, string infix = "" )
         {
             return string.Join( infix, cs.Items.ToArray() );
         }

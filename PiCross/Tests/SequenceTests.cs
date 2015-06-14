@@ -93,5 +93,49 @@ namespace PiCross.Tests
 
             Assert.AreEqual( expected, actual );
         }
+
+        [TestMethod]
+        [TestCategory( "Sequence" )]
+        public void Prefix_Full()
+        {
+            var seq = Sequence.FromItems( 1, 2, 3, 4, 5 );
+            var expected = seq;
+            var actual = seq.Prefix( 5 );
+
+            Assert.AreEqual( expected, actual );
+        }
+
+        [TestMethod]
+        [TestCategory( "Sequence" )]
+        public void Suffix_Full()
+        {
+            var seq = Sequence.FromItems( 1, 2, 3, 4, 5 );
+            var expected = seq;
+            var actual = seq.Suffix( 0 );
+
+            Assert.AreEqual( expected, actual );
+        }
+
+        [TestMethod]
+        [TestCategory( "Sequence" )]
+        public void Prefix_Empty()
+        {
+            var seq = Sequence.FromItems( 1, 2, 3, 4, 5 );
+            var expected = Sequence.CreateEmpty<int>();
+            var actual = seq.Prefix(0);
+
+            Assert.AreEqual( expected, actual );
+        }
+
+        [TestMethod]
+        [TestCategory( "Sequence" )]
+        public void Suffix_Empty()
+        {
+            var seq = Sequence.FromItems( 1, 2, 3, 4, 5 );
+            var expected = Sequence.CreateEmpty<int>();
+            var actual = seq.Suffix( 5 );
+
+            Assert.AreEqual( expected, actual );
+        }
     }
 }

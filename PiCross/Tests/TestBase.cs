@@ -104,5 +104,10 @@ namespace PiCross.Tests
 
             return new Puzzle( playGrid );
         }
+
+        protected static void OverwritePlayGrid( PlayGrid grid, params string[] rows)
+        {
+            grid.Squares.Overwrite( Square.CreateGrid( rows ) );
+        }
     }
 }
