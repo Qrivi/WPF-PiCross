@@ -15,7 +15,7 @@ namespace PiCross.DataStructures
             // NOP
         }
 
-        private PropertyChangedEventHandler PropertyChanged;
+        private PropertyChangedEventHandler PropertyChanged = ( obj, sender ) => { };
 
         event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
         {
