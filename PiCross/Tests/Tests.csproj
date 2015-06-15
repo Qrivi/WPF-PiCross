@@ -55,6 +55,7 @@
     <Compile Include="Constraints_SatisfiedPrefix.cs" />
     <Compile Include="Constraints_SatisfiedSuffixLength.cs" />
     <Compile Include="Constraints_GenerateSlices.cs" />
+    <Compile Include="Constraints_UnsatisfiedValueRange.cs" />
     <Compile Include="Facade_Puzzle.cs" />
     <Compile Include="PlayGridConstraints_IsSatisfied.cs" />
     <Compile Include="PlayGridTests.cs" />

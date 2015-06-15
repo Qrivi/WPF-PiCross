@@ -14,7 +14,7 @@ namespace PiCross.Game
 
         private readonly ISequence<PlayGridConstraints> columnConstraints;
 
-        private readonly ISequence<PlayGridConstraints> rowConstraints;        
+        private readonly ISequence<PlayGridConstraints> rowConstraints;
 
         public PlayGrid( ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints, IGrid<Square> squares )
         {
@@ -97,7 +97,9 @@ namespace PiCross.Game
         {
             this.slice = slice;
             this.constraints = constraints;
-            this.values = Sequence.FromFunction( constraints.Values.Length, i => new PlayGridConstraintValue( slice, constraints, i ) );
+
+            this.values = Sequence.FromFunction( constraints.Values.Length,
+                                                 i => new PlayGridConstraintValue( slice, constraints, i ) );
         }
 
         public ISequence<PlayGridConstraintValue> Values
@@ -136,11 +138,7 @@ namespace PiCross.Game
         {
             get
             {
-                var satisfiedPrefixLength = constraints.SatisfiedPrefixLength( slice );
-                var suffix = slice.Lift( ns => ns.DropPrefix( satisfiedPrefixLength ) );
-                var satisfiedSuffixLength = constraints.SatisfiedSuffixLength( suffix );
-
-                return index < satisfiedPrefixLength || index >= constraints.Values.Length - satisfiedSuffixLength;
+                return !constraints.UnsatisfiedValueRange( slice ).Contains( index );
             }
         }
 

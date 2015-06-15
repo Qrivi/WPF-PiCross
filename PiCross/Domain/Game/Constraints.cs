@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PiCross.Cells;
 
 namespace PiCross.Game
 {
@@ -150,6 +151,18 @@ namespace PiCross.Game
             }
         }
 
+        public Range UnsatisfiedValueRange( Slice slice )
+        {
+            var knownPrefix = slice.KnownPrefix;
+            var rest = slice.Lift( xs => xs.DropPrefix( knownPrefix.Squares.Length ) );
+            var knownSuffix = rest.KnownSuffix;
+
+            var left = this.SatisfiedPrefixLength( knownPrefix );
+            var right = this.values.Length - this.Lift( x => x.DropPrefix( left ) ).SatisfiedSuffixLength( knownSuffix );
+
+            return Range.FromStartAndEndExclusive( left, right );
+        }
+
         public override bool Equals( object obj )
         {
             return Equals( obj as Constraints );
@@ -168,6 +181,11 @@ namespace PiCross.Game
         public override string ToString()
         {
             return string.Format( "Constraints[{0}]", this.values.Map( x => x.ToString() ).Join( "-" ) );
+        }
+
+        public Constraints Lift( Func<ISequence<int>, ISequence<int>> function )
+        {
+            return new Constraints( function( values ) );
         }
     }
 }

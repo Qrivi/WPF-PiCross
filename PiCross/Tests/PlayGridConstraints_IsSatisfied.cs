@@ -62,6 +62,24 @@ namespace PiCross.Tests
             Check( pgc, "ttft" );
         }
 
+        [TestMethod]
+        [TestCategory( "PlayGridConstraints" )]
+        public void IsSatisfied7()
+        {
+            var pgc = CreatePGConstraints( "x.x.x", 1, 1, 1 );
+
+            Check( pgc, "ttt" );
+        }
+
+        [TestMethod]
+        [TestCategory( "PlayGridConstraints" )]
+        public void IsSatisfied8()
+        {
+            var pgc = CreatePGConstraints( "..x.x", 1, 1, 1 );
+
+            Check( pgc, "ttf" );
+        }
+
         private static PlayGridConstraints CreatePGConstraints( string str, params int[] constraints )
         {
             return new PlayGridConstraints( CreateSlice( str ), CreateConstraints( constraints ) );

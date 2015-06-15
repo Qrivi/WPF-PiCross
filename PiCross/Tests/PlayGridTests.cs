@@ -69,7 +69,7 @@ namespace PiCross.Tests
 
             CheckSatisfactions( playGrid.RowConstraints, "ttff", "f" );
             CheckSatisfactions( playGrid.ColumnConstraints, "f", "", "f", "f", "", "f", "f", "f", "", "f" );
-        }
+        }        
 
         [TestMethod]
         [TestCategory( "PlayGrid" )]
@@ -134,6 +134,33 @@ namespace PiCross.Tests
 
             CheckSatisfactions( playGrid.RowConstraints, "tf" );
             CheckSatisfactions( playGrid.ColumnConstraints, "t", "", "f" );
+        }
+
+        [TestMethod]
+        [TestCategory( "PlayGrid" )]
+        public void ConstraintSatisfation7()
+        {
+            var playGrid = CreatePlayGrid( "X XX xxx.x" );
+
+            CheckSatisfactions( playGrid.RowConstraints, "ttff" );
+        }
+
+        [TestMethod]
+        [TestCategory( "PlayGrid" )]
+        public void ConstraintSatisfation8()
+        {
+            var playGrid = CreatePlayGrid( "X XX x" );
+
+            CheckSatisfactions( playGrid.RowConstraints, "ttf" );
+        }
+
+        [TestMethod]
+        [TestCategory( "PlayGrid" )]
+        public void ConstraintSatisfation9()
+        {
+            var playGrid = CreatePlayGrid( "X x" );
+
+            CheckSatisfactions( playGrid.RowConstraints, "tf" );
         }
 
         private static void CheckSatisfaction( ISequence<PlayGridConstraints> constraints, string expected )

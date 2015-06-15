@@ -47,6 +47,7 @@
     <Compile Include="Cells\IVar.cs" />
     <Compile Include="Cells\ManualCell.cs" />
     <Compile Include="Cells\ReadonlyWrapper.cs" />
+    <Compile Include="DataStructures\Range.cs" />
     <Compile Include="DataStructures\Sequence.cs" />
     <Compile Include="Cells\Var.cs" />
     <Compile Include="DataStructures\Vector2D.cs" />

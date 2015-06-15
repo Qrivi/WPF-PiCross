@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace PiCross.Game
 {
@@ -107,13 +108,52 @@ namespace PiCross.Game
             }
         }
 
+        public ISequence<Range> FindBlocks()
+        {
+            var blocks = new List<Range>();
+            var start = -1;
+
+            var squares = this.squares.Concatenate( Sequence.FromItems( Square.EMPTY ) );
+
+            for ( var i = 0; i != this.squares.Length; ++i )
+            {
+                var square = this.squares[i];
+
+                Debug.Assert( square != null );
+
+                if ( square == Square.UNKNOWN )
+                {
+                    throw new InvalidOperationException( "Slice must be fully known" );
+                }
+                else if ( square == Square.EMPTY )
+                {
+                    if ( start != -1 )
+                    {
+                        blocks.Add( Range.FromStartAndEndExclusive( start, i - 1 ) );
+                        start = -1;
+                    }
+                }
+                else // square == Square.FILLED
+                {
+                    if ( start == -1 )
+                    {
+                        start = i;
+                    }
+                }
+            }
+
+            return Sequence.FromEnumerable( blocks );
+        }
+
         public Constraints DeriveConstraints()
         {
             var fillCount = 0;
             var constraints = new List<int>();
 
-            foreach ( var square in this.squares.Items )
+            for ( var i = 0; i != this.squares.Length; ++i )
             {
+                var square = this.squares[i];
+
                 if ( square == Square.FILLED )
                 {
                     fillCount++;
@@ -172,11 +212,7 @@ namespace PiCross.Game
         {
             get
             {
-                var reversed = this.squares.Reverse();
-                var suffix = reversed.TakeWhile( sqr => sqr != Square.UNKNOWN );
-                var reversedSuffix = suffix.Reverse();
-
-                return new Slice( suffix );
+                return Reverse().KnownPrefix.Reverse();
             }
         }
 

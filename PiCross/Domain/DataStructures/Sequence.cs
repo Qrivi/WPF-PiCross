@@ -44,7 +44,7 @@ namespace PiCross.DataStructures
         public static ISequence<T> Repeat<T>( int length, T value )
         {
             return new VirtualSequence<T>( length, _ => value );
-        }
+        }        
 
         public static ISequence<char> FromString( string str )
         {
