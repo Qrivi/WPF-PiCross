@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PiCross.Game;
+using PiCross.DataStructures;
 
 namespace PiCross.Tests
 {
@@ -13,8 +14,7 @@ namespace PiCross.Tests
         {
             var pgc = CreatePGConstraints( "???", 1, 1 );
 
-            Assert.IsFalse( pgc.Values[0].IsSatisfied );
-            Assert.IsFalse( pgc.Values[1].IsSatisfied );
+            Check( pgc, "ff" );
         }
 
         [TestMethod]
@@ -23,8 +23,7 @@ namespace PiCross.Tests
         {
             var pgc = CreatePGConstraints( "x.x", 1, 1 );
 
-            Assert.IsTrue( pgc.Values[0].IsSatisfied );
-            Assert.IsTrue( pgc.Values[1].IsSatisfied );
+            Check( pgc, "tt" );
         }
 
         [TestMethod]
@@ -33,8 +32,7 @@ namespace PiCross.Tests
         {
             var pgc = CreatePGConstraints( "x?x", 1, 1 );
 
-            Assert.IsFalse( pgc.Values[0].IsSatisfied );
-            Assert.IsFalse( pgc.Values[1].IsSatisfied );
+            Check( pgc, "ff" );
         }
 
         [TestMethod]
@@ -43,8 +41,7 @@ namespace PiCross.Tests
         {
             var pgc = CreatePGConstraints( "x?.x", 1, 1 );
 
-            Assert.IsFalse( pgc.Values[0].IsSatisfied );
-            Assert.IsTrue( pgc.Values[1].IsSatisfied );
+            Check( pgc, "ft" );
         }
 
         [TestMethod]
@@ -53,8 +50,7 @@ namespace PiCross.Tests
         {
             var pgc = CreatePGConstraints( "x.?.xx", 1, 2 );
 
-            Assert.IsTrue( pgc.Values[0].IsSatisfied );
-            Assert.IsTrue( pgc.Values[1].IsSatisfied );
+            Check( pgc, "tt" );
         }
 
         [TestMethod]
@@ -63,15 +59,20 @@ namespace PiCross.Tests
         {
             var pgc = CreatePGConstraints( "x.xxx.???.xx", 1, 3, 1, 2 );
 
-            Assert.IsTrue( pgc.Values[0].IsSatisfied );
-            Assert.IsTrue( pgc.Values[1].IsSatisfied );
-            Assert.IsFalse( pgc.Values[2].IsSatisfied );
-            Assert.IsTrue( pgc.Values[3].IsSatisfied );
+            Check( pgc, "ttft" );
         }
 
         private static PlayGridConstraints CreatePGConstraints( string str, params int[] constraints )
         {
             return new PlayGridConstraints( CreateSlice( str ), CreateConstraints( constraints ) );
+        }
+
+        private static void Check(PlayGridConstraints constraints, string expectedString)
+        {
+            var expected = CreateBooleans( expectedString );
+            var actual = constraints.Values.Map( x => x.IsSatisfied );
+
+            Assert.AreEqual( expected, actual );
         }
     }
 }
