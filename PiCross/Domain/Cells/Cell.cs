@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PiCross.DataStructures
+namespace PiCross.Cells
 {
     public abstract class Cell<T> : Var<T>, INotifyPropertyChanged
     {
@@ -15,7 +15,7 @@ namespace PiCross.DataStructures
             // NOP
         }
 
-        private PropertyChangedEventHandler PropertyChanged = ( obj, sender ) => { };
+        private PropertyChangedEventHandler PropertyChanged = ( obj, args ) => { };
 
         event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
         {

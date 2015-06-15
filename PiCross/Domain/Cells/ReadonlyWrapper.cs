@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PiCross.DataStructures
+namespace PiCross.Cells
 {
     internal class ReadonlyWrapper<T> : Cell<T>
     {

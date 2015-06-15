@@ -39,16 +39,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataStructures\ConcreteCell.cs" />
-    <Compile Include="DataStructures\Derived.cs" />
-    <Compile Include="DataStructures\Flag.cs" />
+    <Compile Include="Cells\ConcreteCell.cs" />
+    <Compile Include="Cells\Derived.cs" />
+    <Compile Include="Cells\Flag.cs" />
     <Compile Include="DataStructures\Grid.cs" />
-    <Compile Include="DataStructures\Cell.cs" />
-    <Compile Include="DataStructures\IVar.cs" />
-    <Compile Include="DataStructures\ManualCell.cs" />
-    <Compile Include="DataStructures\ReadonlyWrapper.cs" />
+    <Compile Include="Cells\Cell.cs" />
+    <Compile Include="Cells\IVar.cs" />
+    <Compile Include="Cells\ManualCell.cs" />
+    <Compile Include="Cells\ReadonlyWrapper.cs" />
     <Compile Include="DataStructures\Sequence.cs" />
-    <Compile Include="DataStructures\Var.cs" />
+    <Compile Include="Cells\Var.cs" />
     <Compile Include="DataStructures\Vector2D.cs" />
     <Compile Include="Facade\Solving\Puzzle.cs" />
     <Compile Include="Facade\Solving\IPuzzle.cs" />

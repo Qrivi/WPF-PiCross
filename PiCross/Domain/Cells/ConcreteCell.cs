@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PiCross.DataStructures
+namespace PiCross.Cells
 {
     internal class CellImplementation<T> : Cell<T>
     {
