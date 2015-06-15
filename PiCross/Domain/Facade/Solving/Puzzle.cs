@@ -121,7 +121,7 @@ namespace PiCross.Facade.Solving
                 this.contents = new PuzzleSquareContentsCell( parent, contents );
             }
 
-            ICell<Square> IPuzzleSquare.Contents
+            Cell<Square> IPuzzleSquare.Contents
             {
                 get
                 {
@@ -192,7 +192,7 @@ namespace PiCross.Facade.Solving
                 }
             }
 
-            ICell<bool> IPuzzleConstraints.IsSatisfied
+            Cell<bool> IPuzzleConstraints.IsSatisfied
             {
                 get
                 {
@@ -229,7 +229,7 @@ namespace PiCross.Facade.Solving
                 }
             }
 
-            ICell<bool> IPuzzleConstraintsValue.IsSatisfied
+            Cell<bool> IPuzzleConstraintsValue.IsSatisfied
             {
                 get
                 {

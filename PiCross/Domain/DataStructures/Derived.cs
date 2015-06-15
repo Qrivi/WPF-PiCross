@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PiCross.DataStructures
 {
-    internal class Derived<T> : Cell<T>, IDerived<T>
+    internal class Derived<T> : CellImplementation<T>
     {
         private readonly Func<T> function;
 
@@ -16,7 +16,7 @@ namespace PiCross.DataStructures
             this.function = function;
         }
 
-        public void Refresh()
+        public override void Refresh()
         {
             base.Value = function();
         }

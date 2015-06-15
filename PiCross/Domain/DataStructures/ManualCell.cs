@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PiCross.DataStructures
 {
-    internal abstract class ManualCell<T> : Var<T>, ICell<T>
+    internal abstract class ManualCell<T> : Cell<T>
     {
         protected ManualCell( T initialValue )
             : base( initialValue )
@@ -34,27 +34,22 @@ namespace PiCross.DataStructures
             }
         }
 
-        public void Refresh()
+        public override void Refresh()
         {
             if ( IsDirty )
             {
                 base.Value = ReadValue();
 
-                if ( PropertyChanged != null )
-                {
-                    PropertyChanged( this, new System.ComponentModel.PropertyChangedEventArgs( "Value" ) );
-                }
+                NotifyObservers();
             }
         }
 
         protected abstract T ReadValue();
 
         protected abstract void WriteValue( T value );
-
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
     }
 
-    internal class ReadonlyManualCell<T> : Var<T>, ICell<T>
+    public class ReadonlyManualCell<T> : Cell<T>
     {
         private readonly Func<T> function;
 
@@ -84,20 +79,15 @@ namespace PiCross.DataStructures
             }
         }
 
-        public void Refresh()
+        public override void Refresh()
         {
             if ( IsDirty )
             {
                 base.Value = function();
 
-                if ( PropertyChanged != null )
-                {
-                    PropertyChanged( this, new System.ComponentModel.PropertyChangedEventArgs( "Value" ) );
-                }
+                NotifyObservers();
             }
         }
-
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
     }
 
     internal class DirtyCellFactory<T, CELL>

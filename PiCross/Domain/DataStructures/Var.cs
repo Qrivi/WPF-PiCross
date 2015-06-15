@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PiCross.DataStructures
 {
-    internal class Var<T> : IVar<T>
+    public class Var<T> : IVar<T>
     {
         private T value;
 

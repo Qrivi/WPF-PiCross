@@ -2,58 +2,180 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace PiCross.DataStructures
 {
-    internal class Cell<T> : Var<T>, ICell<T>
+    public abstract class Cell<T> : Var<T>, INotifyPropertyChanged
     {
-        /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="initialValue">
-        /// Cell's initial value.
-        /// </param>
-        public Cell( T initialValue = default(T) )
+        protected Cell( T initialValue = default(T) )
             : base( initialValue )
         {
             // NOP
         }
 
-        /// <summary>
-        /// Value of the cell.
-        /// </summary>
-        public override T Value
+        private PropertyChangedEventHandler PropertyChanged;
+
+        event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
         {
-            get
+            add
             {
-                return base.Value;
-            }
-            set
-            {
-                if ( !AreEqual( base.Value, value ) )
+                lock ( PropertyChanged )
                 {
-                    base.Value = value;
-                    NotifyObservers();
+                    PropertyChanged += value;
+                }
+            }
+            remove
+            {
+                lock ( PropertyChanged )
+                {
+                    PropertyChanged -= value;
                 }
             }
         }
 
-        protected void NotifyObservers( [CallerMemberName] string propertyName = null )
+        public event Action ValueChanged
+        {
+            add
+            {
+                PropertyChanged += ( obj, args ) => value();
+            }
+            remove
+            {
+                throw new NotSupportedException();
+            }
+        }
+
+        protected void NotifyObservers()
         {
             if ( PropertyChanged != null )
             {
-                PropertyChanged( this, new PropertyChangedEventArgs( propertyName ) );
+                PropertyChanged( this, new PropertyChangedEventArgs( "Value" ) );
             }
+        }
+
+        public abstract void Refresh();
+
+        public Cell<T> AsReadOnly()
+        {
+            return new ReadonlyWrapper<T>( this );
+        }
+
+        public override bool Equals( object obj )
+        {
+            return Equals( obj as Cell<T> );
+        }
+
+        public bool Equals( Cell<T> that )
+        {
+            if ( that == null )
+            {
+                return false;
+            }
+            else if ( this.Value == null )
+            {
+                return that.Value == null;
+            }
+            else
+            {
+                return this.Value.Equals( that.Value );
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Value.GetHashCode();
         }
 
         public override string ToString()
         {
-            return string.Format( "CELL[{0}]", this.Value != null ? this.Value.ToString() : "null" );
+            return string.Format( "CELL[{0}]", Value );
+        }
+    }
+
+    public static class Cell
+    {
+        public static Cell<T> Create<T>( T initialValue = default(T) )
+        {
+            return new CellImplementation<T>( initialValue );
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        private static void RegisterObserver<T, R>( Derived<R> derived, Cell<T> cell )
+        {
+            cell.ValueChanged += derived.Refresh;
+        }
+
+        public static Cell<R> Derived<R>( Func<R> function )
+        {
+            return new Derived<R>( function );
+        }
+
+        public static Cell<R> Derived<T, R>( Cell<T> cell, Func<T, R> function )
+        {
+            var derived = new Derived<R>( () => function( cell.Value ) );
+
+            RegisterObserver( derived, cell );
+
+            return derived;
+        }
+
+        public static Cell<R> Derived<T1, T2, R>( Cell<T1> c1, Cell<T2> c2, Func<T1, T2, R> function )
+        {
+            var derived = new Derived<R>( () => function( c1.Value, c2.Value ) );
+
+            RegisterObserver( derived, c1 );
+            RegisterObserver( derived, c2 );
+
+            return derived;
+        }
+
+        public static Cell<R> Derived<T1, T2, T3, R>( Cell<T1> c1, Cell<T2> c2, Cell<T3> c3, Func<T1, T2, T3, R> function )
+        {
+            var derived = new Derived<R>( () => function( c1.Value, c2.Value, c3.Value ) );
+
+            RegisterObserver( derived, c1 );
+            RegisterObserver( derived, c2 );
+            RegisterObserver( derived, c3 );
+
+            return derived;
+        }
+
+        public static Cell<R> Derived<T1, T2, T3, T4, R>( Cell<T1> c1, Cell<T2> c2, Cell<T3> c3, Cell<T4> c4, Func<T1, T2, T3, T4, R> function )
+        {
+            var derived = new Derived<R>( () => function( c1.Value, c2.Value, c3.Value, c4.Value ) );
+
+            RegisterObserver( derived, c1 );
+            RegisterObserver( derived, c2 );
+            RegisterObserver( derived, c3 );
+            RegisterObserver( derived, c4 );
+
+            return derived;
+        }
+
+        public static Cell<R> Derived<T1, T2, T3, T4, T5, R>( Cell<T1> c1, Cell<T2> c2, Cell<T3> c3, Cell<T4> c4, Cell<T5> c5, Func<T1, T2, T3, T4, T5, R> function )
+        {
+            var derived = new Derived<R>( () => function( c1.Value, c2.Value, c3.Value, c4.Value, c5.Value ) );
+
+            RegisterObserver( derived, c1 );
+            RegisterObserver( derived, c2 );
+            RegisterObserver( derived, c3 );
+            RegisterObserver( derived, c4 );
+            RegisterObserver( derived, c5 );
+
+            return derived;
+        }
+
+        public static Cell<R> Derived<T, R>( IEnumerable<Cell<T>> cells, Func<IEnumerable<T>, R> function )
+        {
+            var derived = new Derived<R>( () => function( cells.Select( cell => cell.Value ) ) );
+
+            foreach ( var cell in cells )
+            {
+                RegisterObserver( derived, cell );
+            }
+
+            return derived;
+        }
     }
 }

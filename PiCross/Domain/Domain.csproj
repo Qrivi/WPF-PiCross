@@ -39,10 +39,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataStructures\Cell.cs" />
+    <Compile Include="DataStructures\ConcreteCell.cs" />
     <Compile Include="DataStructures\Derived.cs" />
+    <Compile Include="DataStructures\Flag.cs" />
     <Compile Include="DataStructures\Grid.cs" />
-    <Compile Include="DataStructures\ICell.cs" />
+    <Compile Include="DataStructures\Cell.cs" />
+    <Compile Include="DataStructures\IVar.cs" />
     <Compile Include="DataStructures\ManualCell.cs" />
     <Compile Include="DataStructures\ReadonlyWrapper.cs" />
     <Compile Include="DataStructures\Sequence.cs" />

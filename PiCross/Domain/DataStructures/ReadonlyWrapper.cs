@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace PiCross.DataStructures
 {
-    internal class ReadonlyWrapper<T> : ICell<T>
+    internal class ReadonlyWrapper<T> : Cell<T>
     {
-        private readonly ICell<T> wrappedCell;
+        private readonly Cell<T> wrappedCell;
 
-        public ReadonlyWrapper( ICell<T> wrappedCell )
+        public ReadonlyWrapper( Cell<T> wrappedCell )
         {
             if ( wrappedCell == null )
             {
@@ -20,17 +20,12 @@ namespace PiCross.DataStructures
             else
             {
                 this.wrappedCell = wrappedCell;
-                wrappedCell.PropertyChanged += ( cell, args ) =>
-                    {
-                        if ( PropertyChanged != null )
-                        {
-                            PropertyChanged( this, new PropertyChangedEventArgs( "Value" ) );
-                        }
-                    };
+
+                wrappedCell.ValueChanged += NotifyObservers;                    
             }
         }        
 
-        public T Value
+        public override T Value
         {
             get
             {
@@ -42,6 +37,9 @@ namespace PiCross.DataStructures
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public override void Refresh()
+        {
+            // NOP
+        }
     }
 }

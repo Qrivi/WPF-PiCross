@@ -23,20 +23,20 @@ namespace PiCross.Facade.Solving
 
     public interface IPuzzleSquare
     {
-        ICell<Square> Contents { get; }
+        Cell<Square> Contents { get; }
     }
 
     public interface IPuzzleConstraints
     {
         ISequence<IPuzzleConstraintsValue> Values { get; }
 
-        ICell<bool> IsSatisfied { get; }
+        Cell<bool> IsSatisfied { get; }
     }
 
     public interface IPuzzleConstraintsValue
     {
         int Value { get; }
 
-        ICell<bool> IsSatisfied { get; }
+        Cell<bool> IsSatisfied { get; }
     }
 }
