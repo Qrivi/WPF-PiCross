@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PiCross.Cells;
+using System.Diagnostics;
 
 namespace PiCross.Game
 {
@@ -47,8 +48,6 @@ namespace PiCross.Game
 
         private static IEnumerable<ISequence<int>> GenerateIntegers( int count, int sum )
         {
-            // TODO Validate arguments
-
             if ( count == 0 )
             {
                 if ( sum == 0 )
@@ -62,11 +61,18 @@ namespace PiCross.Game
             }
             else
             {
-                // TODO Possible optimization: create separate sequence prefixer class
-                return from i in Enumerable.Range( 0, sum + 1 )
-                       from tail in GenerateIntegers( count - 1, sum - i )
-                       let prefix = Sequence.FromItems( i )
-                       select prefix.Concatenate( tail );
+                if ( sum < 0 )
+                {
+                    return Enumerable.Empty<ISequence<int>>();
+                }
+                else
+                {
+                    // TODO Possible optimization: create separate sequence prefixer class
+                    return from i in Enumerable.Range( 0, sum + 1 )
+                           from tail in GenerateIntegers( count - 1, sum - i )
+                           let prefix = Sequence.FromItems( i )
+                           select prefix.Concatenate( tail );
+                }
             }
         }
 

@@ -66,6 +66,13 @@ namespace PiCross.Tests
             new Test( 4, 1, 1, 1 ).Check();
         }
 
+        [TestMethod]
+        [TestCategory( "Constraints" )]
+        public void GenerateSlices_Length_4_Constraints_4_4()
+        {
+            new Test( 4, 4, 4 ).Check();
+        }
+
         private class Test
         {
             private readonly List<Slice> sequences;
