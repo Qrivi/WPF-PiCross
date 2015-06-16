@@ -17,7 +17,7 @@ namespace PiCross.Tests
         }
 
         [TestMethod]
-        [TestCategory("Sequence")]
+        [TestCategory( "Sequence" )]
         public void Concatenation()
         {
             var xs = Sequence.FromItems( 1, 2, 3 );
@@ -29,7 +29,7 @@ namespace PiCross.Tests
         }
 
         [TestMethod]
-        [TestCategory("Sequence")]
+        [TestCategory( "Sequence" )]
         public void TakeWhile()
         {
             var seq = Sequence.FromItems( 1, 2, 3, 4, 5 );
@@ -122,7 +122,7 @@ namespace PiCross.Tests
         {
             var seq = Sequence.FromItems( 1, 2, 3, 4, 5 );
             var expected = Sequence.CreateEmpty<int>();
-            var actual = seq.Prefix(0);
+            var actual = seq.Prefix( 0 );
 
             Assert.AreEqual( expected, actual );
         }
@@ -134,6 +134,17 @@ namespace PiCross.Tests
             var seq = Sequence.FromItems( 1, 2, 3, 4, 5 );
             var expected = Sequence.CreateEmpty<int>();
             var actual = seq.Suffix( 5 );
+
+            Assert.AreEqual( expected, actual );
+        }
+
+        [TestMethod]
+        [TestCategory( "Sequence" )]
+        public void Flatten()
+        {
+            var seq = Sequence.FromItems( Sequence.FromItems( 1, 2, 3 ), Sequence.FromItems( 4, 5, 6 ), Sequence.FromItems( 7, 8, 9 ) );
+            var expected = Sequence.FromItems( 1, 2, 3, 4, 5, 6, 7, 8, 9 );
+            var actual = seq.Flatten();
 
             Assert.AreEqual( expected, actual );
         }
