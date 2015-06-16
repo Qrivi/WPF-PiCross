@@ -34,7 +34,8 @@ namespace PiCross.Facade.Solving
             else
             {
                 this.playGrid = playGrid;
-                this.puzzleSquares = playGrid.Squares.Map( var => new PuzzleSquare( this, var ) ).Copy();
+                // this.puzzleSquares = playGrid.Squares.Map( var => new PuzzleSquare( this, var ) ).Copy();
+                this.puzzleSquares = playGrid.Squares.Map( (position, var) => new PuzzleSquare( this, var, position ) ).Copy();
                 this.columnConstraints = this.playGrid.ColumnConstraints.Map( constraints => new PuzzleConstraints( constraints ) ).Copy();
                 this.rowConstraints = this.playGrid.RowConstraints.Map( constraints => new PuzzleConstraints( constraints ) ).Copy();
             }
@@ -117,9 +118,12 @@ namespace PiCross.Facade.Solving
         {
             private readonly PuzzleSquareContentsCell contents;
 
-            public PuzzleSquare( Puzzle parent, IVar<Square> contents )
+            private readonly Vector2D position;
+
+            public PuzzleSquare( Puzzle parent, IVar<Square> contents, Vector2D position )
             {
                 this.contents = new PuzzleSquareContentsCell( parent, contents );
+                this.position = position;
             }
 
             Cell<Square> IPuzzleSquare.Contents
@@ -135,6 +139,14 @@ namespace PiCross.Facade.Solving
                 get
                 {
                     return contents;
+                }
+            }
+
+            public Vector2D Position
+            {
+                get
+                {
+                    return position;
                 }
             }
         }

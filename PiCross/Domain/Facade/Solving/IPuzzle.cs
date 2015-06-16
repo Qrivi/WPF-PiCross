@@ -25,6 +25,8 @@ namespace PiCross.Facade.Solving
     public interface IPuzzleSquare
     {
         Cell<Square> Contents { get; }
+
+        Vector2D Position { get; }
     }
 
     public interface IPuzzleConstraints
