@@ -48,6 +48,9 @@ namespace PiCross.Game
 
         private static IEnumerable<ISequence<int>> GenerateIntegers( int count, int sum )
         {
+            Debug.Assert( count >= 0 );
+            Debug.Assert( sum >= 0 );
+
             if ( count == 0 )
             {
                 if ( sum == 0 )
@@ -61,18 +64,11 @@ namespace PiCross.Game
             }
             else
             {
-                if ( sum < 0 )
-                {
-                    return Enumerable.Empty<ISequence<int>>();
-                }
-                else
-                {
-                    // TODO Possible optimization: create separate sequence prefixer class
-                    return from i in Enumerable.Range( 0, sum + 1 )
-                           from tail in GenerateIntegers( count - 1, sum - i )
-                           let prefix = Sequence.FromItems( i )
-                           select prefix.Concatenate( tail );
-                }
+                // TODO Possible optimization: create separate sequence prefixer class
+                return from i in Enumerable.Range( 0, sum + 1 )
+                        from tail in GenerateIntegers( count - 1, sum - i )
+                        let prefix = Sequence.FromItems( i )
+                        select prefix.Concatenate( tail );
             }
         }
 
@@ -83,10 +79,17 @@ namespace PiCross.Game
             var spacingCount = constraintCount + 1;
             var spacingSum = length - constraintSum - Math.Max( 0, constraintCount - 1 );
 
-            var numbers = GenerateIntegers( spacingCount, spacingSum );
-            var deltas = Sequence.FromFunction( spacingCount, i => i == 0 || i == spacingCount - 1 ? 0 : 1 );
+            if ( spacingSum < 0 )
+            {
+                return Enumerable.Empty<ISequence<int>>();
+            }
+            else
+            {
+                var numbers = GenerateIntegers( spacingCount, spacingSum );
+                var deltas = Sequence.FromFunction( spacingCount, i => i == 0 || i == spacingCount - 1 ? 0 : 1 );
 
-            return numbers.Select( ns => ns.ZipWith( deltas, ( x, y ) => x + y ) );
+                return numbers.Select( ns => ns.ZipWith( deltas, ( x, y ) => x + y ) );
+            }
         }
 
         private static IEnumerable<ISequence<Square>> GeneratePatterns( int totalSize, ISequence<int> constraints )
