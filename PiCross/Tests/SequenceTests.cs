@@ -140,10 +140,21 @@ namespace PiCross.Tests
 
         [TestMethod]
         [TestCategory( "Sequence" )]
-        public void Flatten()
+        public void Flatten1()
         {
             var seq = Sequence.FromItems( Sequence.FromItems( 1, 2, 3 ), Sequence.FromItems( 4, 5, 6 ), Sequence.FromItems( 7, 8, 9 ) );
             var expected = Sequence.FromItems( 1, 2, 3, 4, 5, 6, 7, 8, 9 );
+            var actual = seq.Flatten();
+
+            Assert.AreEqual( expected, actual );
+        }
+
+        [TestMethod]
+        [TestCategory( "Sequence" )]
+        public void Flatten2()
+        {
+            var seq = Sequence.Range( 1, 10 ).Map( x => Sequence.FromItems( x ) );
+            var expected = Sequence.Range( 1, 10 );
             var actual = seq.Flatten();
 
             Assert.AreEqual( expected, actual );
