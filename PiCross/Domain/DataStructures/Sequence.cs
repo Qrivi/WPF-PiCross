@@ -44,14 +44,14 @@ namespace PiCross.DataStructures
         public static ISequence<T> Repeat<T>( int length, T value )
         {
             return new VirtualSequence<T>( length, _ => value );
-        }        
+        }
 
         public static ISequence<char> FromString( string str )
         {
             return FromItems( str.ToCharArray() );
         }
 
-        public static ISequence<int> Range(int from, int length)
+        public static ISequence<int> Range( int from, int length )
         {
             return Sequence.FromFunction( length, i => from + i );
         }
@@ -75,7 +75,7 @@ namespace PiCross.DataStructures
             {
                 return Sequence.CreateEmpty<T>();
             }
-            else if (xss.Length == 1 )
+            else if ( xss.Length == 1 )
             {
                 return xss[0];
             }
@@ -116,9 +116,34 @@ namespace PiCross.DataStructures
 
         public static ISequence<R> Map<T, R>( this ISequence<T> xs, Func<T, R> function )
         {
-            // TODO Argument validation
+            if ( xs == null )
+            {
+                throw new ArgumentNullException( "xs" );
+            }
+            else if ( function == null )
+            {
+                throw new ArgumentNullException( "function" );
+            }
+            else
+            {
+                return Sequence.FromFunction( xs.Length, i => function( xs[i] ) );
+            }
+        }
 
-            return Sequence.FromFunction( xs.Length, i => function( xs[i] ) );
+        public static ISequence<R> Map<T, R>( this ISequence<T> xs, Func<int, T, R> function )
+        {
+            if ( xs == null )
+            {
+                throw new ArgumentNullException( "xs" );
+            }
+            else if ( function == null )
+            {
+                throw new ArgumentNullException( "function" );
+            }
+            else
+            {
+                return Sequence.FromFunction( xs.Length, i => function( i, xs[i] ) );
+            }
         }
 
         public static ISequence<T> Intersperse<T>( this ISequence<T> xs, ISequence<T> ys )
@@ -290,7 +315,7 @@ namespace PiCross.DataStructures
             return string.Join( infix, cs.Items.ToArray() );
         }
 
-        public static void Each<T>(this ISequence<T> xs, Action<T> action)
+        public static void Each<T>( this ISequence<T> xs, Action<T> action )
         {
             foreach ( var x in xs.Items )
             {
