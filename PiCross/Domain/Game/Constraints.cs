@@ -74,7 +74,9 @@ namespace PiCross.Game
 
         private static IEnumerable<ISequence<int>> GenerateSpacings( int length, int constraintCount, int constraintSum )
         {
-            // TODO Validate arguments
+            Debug.Assert( length >= 0 );
+            Debug.Assert( constraintCount >= 0 );
+            Debug.Assert( constraintSum >= 0 );
 
             var spacingCount = constraintCount + 1;
             var spacingSum = length - constraintSum - Math.Max( 0, constraintCount - 1 );
