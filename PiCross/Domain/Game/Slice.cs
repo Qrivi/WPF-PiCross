@@ -14,9 +14,14 @@ namespace PiCross.Game
 
         public Slice( ISequence<Square> squares )
         {
-            // TODO Validate
-
-            this.squares = squares;
+            if ( squares == null )
+            {
+                throw new ArgumentNullException( "squares" );
+            }
+            else
+            {
+                this.squares = squares;
+            }
         }
 
         public ISequence<Square> Squares
