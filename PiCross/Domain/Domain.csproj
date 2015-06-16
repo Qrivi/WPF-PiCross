@@ -50,6 +50,7 @@
     <Compile Include="DataStructures\Range.cs" />
     <Compile Include="DataStructures\Sequence.cs" />
     <Compile Include="Cells\Var.cs" />
+    <Compile Include="DataStructures\Signal.cs" />
     <Compile Include="DataStructures\Vector2D.cs" />
     <Compile Include="Facade\Solving\Puzzle.cs" />
     <Compile Include="Facade\Solving\IPuzzle.cs" />
