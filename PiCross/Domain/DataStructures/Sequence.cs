@@ -71,8 +71,23 @@ namespace PiCross.DataStructures
 
         public static ISequence<T> Flatten<T>( this ISequence<ISequence<T>> xss )
         {
-            // TODO Binary approach will probably be more efficient
-            return xss.Items.Aggregate( Sequence.CreateEmpty<T>(), ( xs, ys ) => xs.Concatenate( ys ) );
+            if ( xss.Length == 0 )
+            {
+                return Sequence.CreateEmpty<T>();
+            }
+            else if (xss.Length == 1 )
+            {
+                return xss[0];
+            }
+            else
+            {
+                var middle = xss.Length / 2;
+
+                var leftHalf = xss.Prefix( middle );
+                var rightHalf = xss.DropPrefix( middle );
+
+                return Flatten( leftHalf ).Concatenate( Flatten( rightHalf ) );
+            }
         }
 
         public static ISequence<R> ZipWith<T1, T2, R>( this ISequence<T1> xs, ISequence<T2> ys, Func<T1, T2, R> zipper )
