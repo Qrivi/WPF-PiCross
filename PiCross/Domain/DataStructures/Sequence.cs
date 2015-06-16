@@ -54,7 +54,7 @@ namespace PiCross.DataStructures
         public static ISequence<int> Range(int from, int length)
         {
             return Sequence.FromFunction( length, i => from + i );
-        }        
+        }
     }
 
     public static class SequenceExtensions
@@ -288,6 +288,14 @@ namespace PiCross.DataStructures
         public static string Join( this ISequence<string> cs, string infix = "" )
         {
             return string.Join( infix, cs.Items.ToArray() );
+        }
+
+        public static void Each<T>(this ISequence<T> xs, Action<T> action)
+        {
+            foreach ( var x in xs.Items )
+            {
+                action( x );
+            }
         }
     }
 
