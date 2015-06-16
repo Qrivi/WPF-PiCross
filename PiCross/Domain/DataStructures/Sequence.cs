@@ -50,6 +50,11 @@ namespace PiCross.DataStructures
         {
             return FromItems( str.ToCharArray() );
         }
+
+        public static ISequence<int> Range(int from, int length)
+        {
+            return Sequence.FromFunction( length, i => from + i );
+        }        
     }
 
     public static class SequenceExtensions
