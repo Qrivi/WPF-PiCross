@@ -117,6 +117,14 @@ namespace PiCross.Game
             return squares.Items.Count( var => var.Value == Square.UNKNOWN );            
         }
 
+        public bool IsSolved
+        {
+            get
+            {
+                return CountUnknowns() == 0;
+            }
+        }
+
         public int Width
         {
             get

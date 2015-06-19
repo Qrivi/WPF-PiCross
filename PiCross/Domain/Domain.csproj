@@ -57,12 +57,15 @@
     <Compile Include="Game\Constraints.cs" />
     <Compile Include="Game\EditorGrid.cs" />
     <Compile Include="Game\PlayGrid.cs" />
+    <Compile Include="Game\Puzzle.cs" />
     <Compile Include="Game\SolverGrid.cs" />
     <Compile Include="Game\Slice.cs" />
     <Compile Include="Game\Square.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Facade\Editing\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -98,11 +98,11 @@ namespace PiCross.Tests
             return playGrid;
         }
 
-        protected static Puzzle CreateManualPuzzle( params string[] rows )
+        protected static PiCross.Facade.Solving.Puzzle CreateManualPuzzle( params string[] rows )
         {
             var playGrid = CreatePlayGrid( rows );
 
-            return new Puzzle( playGrid );
+            return new PiCross.Facade.Solving.Puzzle( playGrid );
         }
 
         protected static void OverwritePlayGrid( PlayGrid grid, params string[] rows)

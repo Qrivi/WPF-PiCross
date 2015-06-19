@@ -34,7 +34,6 @@ namespace PiCross.Facade.Solving
             else
             {
                 this.playGrid = playGrid;
-                // this.puzzleSquares = playGrid.Squares.Map( var => new PuzzleSquare( this, var ) ).Copy();
                 this.puzzleSquares = playGrid.Squares.Map( ( position, var ) => new PuzzleSquare( this, var, position ) ).Copy();
                 this.columnConstraints = this.playGrid.ColumnConstraints.Map( constraints => new PuzzleConstraints( constraints ) ).Copy();
                 this.rowConstraints = this.playGrid.RowConstraints.Map( constraints => new PuzzleConstraints( constraints ) ).Copy();
