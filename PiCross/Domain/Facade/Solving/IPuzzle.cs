@@ -11,9 +11,7 @@ namespace PiCross.Facade.Solving
 {
     public interface IPuzzle
     {
-        int Width { get; }
-
-        int Height { get; }
+        Size Size { get; }
 
         IPuzzleSquare this[Vector2D position] { get; }
 

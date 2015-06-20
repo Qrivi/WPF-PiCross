@@ -39,20 +39,12 @@ namespace PiCross.Facade.Solving
                 this.rowConstraints = this.playGrid.RowConstraints.Map( constraints => new PuzzleConstraints( constraints ) ).Copy();
             }
         }
-
-        public int Width
+        
+        public Size Size
         {
             get
             {
-                return playGrid.Squares.Size.Width;
-            }
-        }
-
-        public int Height
-        {
-            get
-            {
-                return playGrid.Squares.Size.Height;
+                return playGrid.Squares.Size;
             }
         }
 
