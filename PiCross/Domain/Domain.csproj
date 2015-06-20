@@ -42,6 +42,7 @@
     <Compile Include="Cells\ConcreteCell.cs" />
     <Compile Include="Cells\Derived.cs" />
     <Compile Include="Cells\Flag.cs" />
+    <Compile Include="Cells\ValidatedCell.cs" />
     <Compile Include="DataStructures\Grid.cs" />
     <Compile Include="Cells\Cell.cs" />
     <Compile Include="Cells\IVar.cs" />

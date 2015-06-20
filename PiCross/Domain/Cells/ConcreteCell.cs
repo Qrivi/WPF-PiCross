@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PiCross.Cells
 {
-    internal class CellImplementation<T> : Cell<T>
+    internal class ConcreteCell<T> : Cell<T>
     {
         /// <summary>
         /// Constructor.
@@ -16,7 +16,7 @@ namespace PiCross.Cells
         /// <param name="initialValue">
         /// Cell's initial value.
         /// </param>
-        public CellImplementation( T initialValue = default(T) )
+        public ConcreteCell( T initialValue = default(T) )
             : base( initialValue )
         {
             // NOP

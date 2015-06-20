@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PiCross.Cells
 {
-    internal class Derived<T> : CellImplementation<T>
+    internal class Derived<T> : ConcreteCell<T>
     {
         private readonly Func<T> function;
 

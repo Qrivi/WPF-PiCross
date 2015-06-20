@@ -15,7 +15,7 @@ namespace PiCross.Game
 
         private readonly IGrid<Square> grid;
 
-        public static Puzzle FromConstraints(ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints)
+        public static Puzzle FromConstraints( ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints )
         {
             var solverGrid = new SolverGrid( columnConstraints, rowConstraints );
             solverGrid.Refine();
@@ -30,7 +30,7 @@ namespace PiCross.Game
             }
         }
 
-        public static Puzzle FromGrid(IGrid<Square> grid)
+        public static Puzzle FromGrid( IGrid<Square> grid )
         {
             var editorGrid = new EditorGrid( grid );
 
@@ -40,7 +40,12 @@ namespace PiCross.Game
             return new Puzzle( columnConstraints: columnConstraints, rowConstraints: rowConstraints, grid: grid.Copy() );
         }
 
-        private Puzzle(ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints, IGrid<Square> grid)
+        public static Puzzle FromRowStrings( params string[] rows )
+        {
+            return FromGrid( Square.CreateGrid( rows ) );
+        }
+
+        private Puzzle( ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints, IGrid<Square> grid )
         {
             if ( columnConstraints == null )
             {
@@ -70,6 +75,44 @@ namespace PiCross.Game
             }
         }
 
-        
+        public IGrid<Square> Grid
+        {
+            get
+            {
+                return grid;
+            }
+        }
+
+        public ISequence<Constraints> RowContraints
+        {
+            get
+            {
+                return rowConstraints;
+            }
+        }
+
+        public ISequence<Constraints> ColumnConstraints
+        {
+            get
+            {
+                return columnConstraints;
+            }
+        }
+
+        public int Width
+        {
+            get
+            {
+                return this.grid.Width;
+            }
+        }
+
+        public int Height
+        {
+            get
+            {
+                return this.grid.Height;
+            }
+        }
     }
 }

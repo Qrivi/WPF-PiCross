@@ -98,7 +98,7 @@ namespace PiCross.Cells
     {
         public static Cell<T> Create<T>( T initialValue = default(T) )
         {
-            return new CellImplementation<T>( initialValue );
+            return new ConcreteCell<T>( initialValue );
         }
 
         private static void RegisterObserver<T, R>( Derived<R> derived, Cell<T> cell )
