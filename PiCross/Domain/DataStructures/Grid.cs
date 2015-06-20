@@ -82,6 +82,11 @@ namespace PiCross.DataStructures
             return Grid.CreateVirtual( grid.Width, grid.Height, p => function( p, grid[p] ) );
         }
 
+        public static IGrid<R> Map<T, R>( this IGrid<T> grid, Func<Vector2D, R> function )
+        {
+            return Grid.CreateVirtual( grid.Width, grid.Height, p => function( p ) );
+        }
+
         public static IGrid<T> Copy<T>(this IGrid<T> grid)
         {
             return Grid.Create( grid.Width, grid.Height, p => grid[p] );

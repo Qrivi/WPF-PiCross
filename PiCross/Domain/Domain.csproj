@@ -54,6 +54,9 @@
     <Compile Include="DataStructures\Signal.cs" />
     <Compile Include="DataStructures\Vector2D.cs" />
     <Compile Include="Facade\Editing\IPuzzleEditor.cs" />
+    <Compile Include="Facade\Editing\PuzzleEditor.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Facade\Solving\Puzzle.cs" />
     <Compile Include="Facade\Solving\IPuzzle.cs" />
     <Compile Include="Game\Constraints.cs" />

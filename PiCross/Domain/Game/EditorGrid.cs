@@ -76,6 +76,16 @@ namespace PiCross.Game
             }
         }
 
+        public Constraints DeriveColumnConstraints(int column)
+        {
+            return Column( column ).DeriveConstraints();
+        }
+
+        public Constraints DeriveRowConstraints(int row)
+        {
+            return Row( row ).DeriveConstraints();
+        }
+
         public ISequence<Constraints> DeriveColumnConstraints()
         {
             return Sequence.FromEnumerable( Columns.Select( column => column.DeriveConstraints() ) );
