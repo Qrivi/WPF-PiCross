@@ -8,17 +8,26 @@ namespace PiCross.Cells
 {
     internal class Derived<T> : ConcreteCell<T>
     {
-        private readonly Func<T> function;
+        private readonly Func<T> reader;
 
-        public Derived( Func<T> function )
-            : base( function() )
+        private readonly Action<T> writer;
+
+        public Derived( Func<T> reader, Action<T> writer )
+            : base( reader() )
+        {            
+            this.reader = reader;
+            this.writer = writer;
+        }
+
+        public Derived( Func<T> reader )
+            : this( reader, _ => { throw new InvalidOperationException( "Cell is readonly" ); } )
         {
-            this.function = function;
+            // NOP
         }
 
         public override void Refresh()
         {
-            base.Value = function();
+            base.Value = reader();
         }
 
         public override T Value
@@ -29,7 +38,7 @@ namespace PiCross.Cells
             }
             set
             {
-                throw new InvalidOperationException();
+                writer( value );
             }
         }
     }
