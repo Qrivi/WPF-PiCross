@@ -54,6 +54,22 @@ namespace PiCross.Tests
             Assert.AreEqual( 25, derived.Value );
         }
 
+        [TestMethod]
+        [TestCategory("Cell")]
+        public void WritableCell_CanWrite()
+        {
+            var cell = CreateCell( 2 );
+            var derived = Cell.Derived( cell, x => x + 1, x => x - 1 );
+
+            Assert.AreEqual( 2, cell.Value );
+            Assert.AreEqual( 3, derived.Value );
+
+            derived.Value = 5;
+
+            Assert.AreEqual( 4, cell.Value );
+            Assert.AreEqual( 5, derived.Value );
+        }
+
         private static Cell<T> CreateCell<T>(T value)
         {
             return Cell.Create<T>( value );
