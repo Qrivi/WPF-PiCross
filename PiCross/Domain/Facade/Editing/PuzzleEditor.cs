@@ -98,7 +98,7 @@ namespace PiCross.Facade.Editing
 
         private class PuzzleEditorSquare : IPuzzleEditorSquare
         {
-            private readonly Cell<Square> contents;
+            private readonly Cell<bool> contents;
 
             private readonly Vector2D position;
 
@@ -108,7 +108,7 @@ namespace PiCross.Facade.Editing
                 this.position = position;
             }
 
-            public Cell<Square> Contents
+            public Cell<bool> Contents
             {
                 get
                 {
@@ -130,7 +130,7 @@ namespace PiCross.Facade.Editing
             }
         }
 
-        private class PuzzleEditorSquareContentsCell : ManualCell<Square>
+        private class PuzzleEditorSquareContentsCell : ManualCell<bool>
         {
             private readonly PuzzleEditor parent;
 
@@ -139,30 +139,33 @@ namespace PiCross.Facade.Editing
             private readonly Vector2D position;
 
             public PuzzleEditorSquareContentsCell( PuzzleEditor parent, Vector2D position )
-                : base( parent.editorGrid.Squares[position] )
+                : base( SquareToBool( parent.editorGrid.Squares[position] ) )
             {
                 this.parent = parent;
                 this.contents = parent.editorGrid.Contents[position];
                 this.position = position;
             }
 
-            protected override Square ReadValue()
+            private static bool SquareToBool(Square square)
             {
-                return parent.editorGrid.Squares[position];
+                return square == Square.FILLED;
             }
 
-            protected override void WriteValue( Square value )
+            private static Square BoolToSquare(bool b)
             {
-                if ( value != Square.EMPTY && value != Square.FILLED )
-                {
-                    throw new ArgumentException( "Only EMPTY and FILLED allowed" );
-                }
-                else
-                {
-                    this.contents.Value = value;
+                return b ? Square.FILLED : Square.EMPTY;
+            }
 
-                    parent.Refresh( position );
-                }
+            protected override bool ReadValue()
+            {
+                return SquareToBool( parent.editorGrid.Squares[position] );
+            }
+
+            protected override void WriteValue( bool value )
+            {
+                this.contents.Value = BoolToSquare( value );
+
+                parent.Refresh( position );                
             }
         }
 
