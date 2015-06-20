@@ -60,5 +60,59 @@ namespace PiCross.Tests
             square.Contents.Value = Square.FILLED;
             Assert.IsTrue( flag.Status );
         }
+
+        [TestMethod]
+        [TestCategory( "PuzzleEditor" )]
+        public void SquareObserversDoNotGetNotifiedWhenChangedToSameValue()
+        {
+            var editor = CreatePuzzleEditor(
+                "..x",
+                "xxx",
+                ".x."
+                );
+
+            var square = editor[new Vector2D( 0, 0 )];
+            var flag = Flag.Create( square.Contents );
+
+            Assert.IsFalse( flag.Status );
+            square.Contents.Value = Square.EMPTY;
+            Assert.IsFalse( flag.Status );
+        }
+
+        [TestMethod]
+        [TestCategory( "PuzzleEditor" )]
+        public void RowConstraintsObserversGetNotifiedOnChange()
+        {
+            var editor = CreatePuzzleEditor(
+                "..x",
+                "xxx",
+                ".x."
+                );
+
+            var square = editor[new Vector2D( 0, 0 )];
+            var flag = Flag.Create( editor.RowConstraints[0].Values );
+
+            Assert.IsFalse( flag.Status );
+            square.Contents.Value = Square.FILLED;
+            Assert.IsTrue( flag.Status );
+        }
+
+        [TestMethod]
+        [TestCategory( "PuzzleEditor" )]
+        public void ColumnConstraintsObserversGetNotifiedOnChange()
+        {
+            var editor = CreatePuzzleEditor(
+                "..x",
+                "xxx",
+                ".x."
+                );
+
+            var square = editor[new Vector2D( 0, 0 )];
+            var flag = Flag.Create( editor.ColumnConstraints[0].Values );
+
+            Assert.IsFalse( flag.Status );
+            square.Contents.Value = Square.FILLED;
+            Assert.IsTrue( flag.Status );
+        }
     }
 }
