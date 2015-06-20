@@ -95,5 +95,21 @@ namespace PiCross.Game
         {
             return new SolverGrid( columnConstraints: DeriveColumnConstraints(), rowConstraints: DeriveRowConstraints() );
         }
+
+        public int Width
+        {
+            get
+            {
+                return this.grid.Width;
+            }
+        }
+
+        public int Height
+        {
+            get
+            {
+                return this.grid.Height;
+            }
+        }
     }
 }
