@@ -120,6 +120,15 @@ namespace PiCross.Cells
             return derived;
         }
 
+        public static Cell<R> Derived<T, R>( Cell<T> cell, Func<T, R> convert, Func<R, T> convertBack )
+        {
+            var derived = new Derived<R>( () => convert( cell.Value ), x => { cell.Value = convertBack( x ); } );
+
+            RegisterObserver( derived, cell );
+
+            return derived;
+        }
+
         public static Cell<R> Derived<T1, T2, R>( Cell<T1> c1, Cell<T2> c2, Func<T1, T2, R> function )
         {
             var derived = new Derived<R>( () => function( c1.Value, c2.Value ) );
