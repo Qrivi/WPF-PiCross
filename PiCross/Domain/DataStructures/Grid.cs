@@ -170,7 +170,7 @@ namespace PiCross.DataStructures
             }
             else
             {
-                if ( xss.Width == yss.Width && xss.Height == yss.Height )
+                if ( xss.Size == yss.Size )
                 {
                     return xss.AllPositions.All( p => xss[p] == null ? yss[p] == null : xss[p].Equals( yss[p] ) );
                 }
