@@ -99,19 +99,11 @@ namespace PiCross.Game
             }
         }
 
-        public int Width
+        public Size Size
         {
             get
             {
-                return this.grid.Width;
-            }
-        }
-
-        public int Height
-        {
-            get
-            {
-                return this.grid.Height;
+                return new Size( this.grid.Width, this.grid.Height );
             }
         }
     }

@@ -63,6 +63,7 @@
     <Compile Include="Game\EditorGrid.cs" />
     <Compile Include="Game\PlayGrid.cs" />
     <Compile Include="Game\Puzzle.cs" />
+    <Compile Include="DataStructures\Size.cs" />
     <Compile Include="Game\SolverGrid.cs" />
     <Compile Include="Game\Slice.cs" />
     <Compile Include="Game\Square.cs" />
