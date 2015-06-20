@@ -22,17 +22,17 @@ namespace PiCross.Tests
             Assert.AreEqual( 3, editor.Width );
             Assert.AreEqual( 3, editor.Height );
 
-            Assert.AreEqual( false, editor[new Vector2D( 0, 0 )].Contents.Value );
-            Assert.AreEqual( false, editor[new Vector2D( 1, 0 )].Contents.Value );
-            Assert.AreEqual( true, editor[new Vector2D( 2, 0 )].Contents.Value );
+            Assert.AreEqual( false, editor[new Vector2D( 0, 0 )].IsFilled.Value );
+            Assert.AreEqual( false, editor[new Vector2D( 1, 0 )].IsFilled.Value );
+            Assert.AreEqual( true, editor[new Vector2D( 2, 0 )].IsFilled.Value );
 
-            Assert.AreEqual( true, editor[new Vector2D( 0, 1 )].Contents.Value );
-            Assert.AreEqual( true, editor[new Vector2D( 1, 1 )].Contents.Value );
-            Assert.AreEqual( true, editor[new Vector2D( 2, 1 )].Contents.Value );
+            Assert.AreEqual( true, editor[new Vector2D( 0, 1 )].IsFilled.Value );
+            Assert.AreEqual( true, editor[new Vector2D( 1, 1 )].IsFilled.Value );
+            Assert.AreEqual( true, editor[new Vector2D( 2, 1 )].IsFilled.Value );
 
-            Assert.AreEqual( false, editor[new Vector2D( 0, 2 )].Contents.Value );
-            Assert.AreEqual( true, editor[new Vector2D( 1, 2 )].Contents.Value );
-            Assert.AreEqual( false, editor[new Vector2D( 2, 2 )].Contents.Value );
+            Assert.AreEqual( false, editor[new Vector2D( 0, 2 )].IsFilled.Value );
+            Assert.AreEqual( true, editor[new Vector2D( 1, 2 )].IsFilled.Value );
+            Assert.AreEqual( false, editor[new Vector2D( 2, 2 )].IsFilled.Value );
 
             Assert.AreEqual( Sequence.FromItems( 1 ), editor.RowConstraints[0].Values.Value );
             Assert.AreEqual( Sequence.FromItems( 3 ), editor.RowConstraints[1].Values.Value );
@@ -54,10 +54,10 @@ namespace PiCross.Tests
                 );
 
             var square = editor[new Vector2D( 0, 0 )];
-            var flag = Flag.Create( square.Contents );
+            var flag = Flag.Create( square.IsFilled );
 
             Assert.IsFalse( flag.Status );
-            square.Contents.Value = true;
+            square.IsFilled.Value = true;
             Assert.IsTrue( flag.Status );
         }
 
@@ -72,10 +72,10 @@ namespace PiCross.Tests
                 );
 
             var square = editor[new Vector2D( 0, 0 )];
-            var flag = Flag.Create( square.Contents );
+            var flag = Flag.Create( square.IsFilled );
 
             Assert.IsFalse( flag.Status );
-            square.Contents.Value = false;
+            square.IsFilled.Value = false;
             Assert.IsFalse( flag.Status );
         }
 
@@ -93,7 +93,7 @@ namespace PiCross.Tests
             var flag = Flag.Create( editor.RowConstraints[0].Values );
 
             Assert.IsFalse( flag.Status );
-            square.Contents.Value = true;
+            square.IsFilled.Value = true;
             Assert.IsTrue( flag.Status );
         }
 
@@ -111,7 +111,7 @@ namespace PiCross.Tests
             var flag = Flag.Create( editor.ColumnConstraints[0].Values );
 
             Assert.IsFalse( flag.Status );
-            square.Contents.Value = true;
+            square.IsFilled.Value = true;
             Assert.IsTrue( flag.Status );
         }
     }

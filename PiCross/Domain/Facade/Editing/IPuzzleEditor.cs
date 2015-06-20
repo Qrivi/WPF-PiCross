@@ -24,7 +24,7 @@ namespace PiCross.Facade.Editing
 
     public interface IPuzzleEditorSquare
     {
-        Cell<bool> Contents { get; }
+        Cell<bool> IsFilled { get; }
 
         Vector2D Position { get; }
     }

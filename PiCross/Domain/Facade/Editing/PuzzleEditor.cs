@@ -108,7 +108,7 @@ namespace PiCross.Facade.Editing
                 this.position = position;
             }
 
-            public Cell<bool> Contents
+            public Cell<bool> IsFilled
             {
                 get
                 {
