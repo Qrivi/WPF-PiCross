@@ -100,23 +100,7 @@ namespace PiCross.DataStructures
         public static string[] AsStrings( this IGrid<char> grid )
         {
             return grid.Rows.Select( row => row.Join() ).ToArray();
-        }
-
-        public static bool HasSameSizeAs<T1, T2>( this IGrid<T1> xs, IGrid<T2> ys )
-        {
-            if ( xs == null )
-            {
-                throw new ArgumentNullException( "xs" );
-            }
-            else if ( ys == null )
-            {
-                throw new ArgumentNullException( "ys" );
-            }
-            else
-            {
-                return xs.Width == ys.Width && xs.Height == ys.Height;
-            }
-        }
+        }       
 
         public static void Overwrite<T>( this IGrid<IVar<T>> target, IGrid<T> source )
         {
@@ -128,7 +112,7 @@ namespace PiCross.DataStructures
             {
                 throw new ArgumentNullException( "source" );
             }
-            else if ( !target.HasSameSizeAs( source ) )
+            else if ( target.Size != source.Size )
             {
                 throw new ArgumentException( "Grids should have same size" );
             }
