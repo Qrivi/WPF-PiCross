@@ -56,7 +56,7 @@ namespace PiCross.Tests
 
         private static Cell<T> CreateCell<T>(T value)
         {
-            return new ConcreteCell<T>( value );
+            return Cell.Create<T>( value );
         }
 
         private static Cell<R> CreateDerived<T, R>( Cell<T> cell, Func<T, R> function)
