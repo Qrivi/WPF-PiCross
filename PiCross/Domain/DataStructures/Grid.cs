@@ -90,7 +90,7 @@ namespace PiCross.DataStructures
         public static string[] AsStrings( this IGrid<char> grid )
         {
             return grid.Rows.Select( row => row.Join() ).ToArray();
-        }       
+        }
 
         public static void Overwrite<T>( this IGrid<IVar<T>> target, IGrid<T> source )
         {
@@ -130,7 +130,7 @@ namespace PiCross.DataStructures
 
         public static IGrid<T> CreateVirtual<T>( Size size, Func<Vector2D, T> function )
         {
-            return new VirtualGrid<T>( size.Width, size.Height, function );
+            return new VirtualGrid<T>( size, function );
         }
 
         public static IGrid<char> CreateCharacterGrid( params string[] strings )
@@ -203,17 +203,7 @@ namespace PiCross.DataStructures
 
         public abstract T this[Vector2D position] { get; }
 
-        public abstract int Width { get; }
-
-        public abstract int Height { get; }
-
-        public Size Size
-        {
-            get
-            {
-                return new Size( Width, Height );
-            }
-        }
+        public abstract Size Size { get; }
 
         public bool IsValidPosition( Vector2D position )
         {
@@ -234,7 +224,7 @@ namespace PiCross.DataStructures
         {
             get
             {
-                return Enumerable.Range( 0, this.Height );
+                return Enumerable.Range( 0, this.Size.Height );
             }
         }
 
@@ -306,19 +296,11 @@ namespace PiCross.DataStructures
             // NOP
         }
 
-        public override int Width
+        public override Size Size
         {
             get
             {
-                return items.GetLength( 0 );
-            }
-        }
-
-        public override int Height
-        {
-            get
-            {
-                return items.GetLength( 1 );
+                return new Size( items.GetLength( 0 ), items.GetLength( 1 ) );
             }
         }
 
@@ -335,19 +317,13 @@ namespace PiCross.DataStructures
     {
         private readonly Func<Vector2D, T> function;
 
-        private readonly int width;
+        private readonly Size size;
 
-        private readonly int height;
-
-        public VirtualGrid( int width, int height, Func<Vector2D, T> function )
+        public VirtualGrid( Size size, Func<Vector2D, T> function )
         {
-            if ( width < 0 )
+            if ( size == null )
             {
-                throw new ArgumentOutOfRangeException( "width" );
-            }
-            else if ( height < 0 )
-            {
-                throw new ArgumentOutOfRangeException( "height" );
+                throw new ArgumentNullException( "size" );
             }
             else if ( function == null )
             {
@@ -356,24 +332,15 @@ namespace PiCross.DataStructures
             else
             {
                 this.function = function;
-                this.width = width;
-                this.height = height;
+                this.size = size;
             }
         }
 
-        public override int Width
+        public override Size Size
         {
             get
             {
-                return width;
-            }
-        }
-
-        public override int Height
-        {
-            get
-            {
-                return height;
+                return size;
             }
         }
 
