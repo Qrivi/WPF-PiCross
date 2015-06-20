@@ -120,7 +120,7 @@ namespace PiCross.DataStructures
     {
         public static IGrid<T> Create<T>( Size size, Func<Vector2D, T> initializer )
         {
-            return new Grid<T>( size.Width, size.Height, initializer );
+            return new Grid<T>( size, initializer );
         }
 
         public static IGrid<T> Create<T>( Size size, T initialValue = default(T) )
@@ -137,6 +137,7 @@ namespace PiCross.DataStructures
         {
             var height = strings.Length;
             var width = strings[0].Length;
+            var size = new Size( width, height );
 
             if ( !strings.All( s => s.Length == width ) )
             {
@@ -144,7 +145,7 @@ namespace PiCross.DataStructures
             }
             else
             {
-                return new Grid<char>( width, height, p => strings[p.Y][p.X] );
+                return new Grid<char>( size, p => strings[p.Y][p.X] );
             }
         }
 
@@ -275,8 +276,15 @@ namespace PiCross.DataStructures
     {
         private readonly T[,] items;
 
-        public Grid( int width, int height, Func<Vector2D, T> initializer )
+        private readonly Size size;
+
+        public Grid( Size size, Func<Vector2D, T> initializer )
         {
+            this.size = size;
+
+            var width = size.Width;
+            var height = size.Height;
+
             items = new T[width, height];
 
             foreach ( var x in Enumerable.Range( 0, width ) )
@@ -290,8 +298,8 @@ namespace PiCross.DataStructures
             }
         }
 
-        public Grid( int width, int height, T initialValue = default(T) )
-            : this( width, height, p => initialValue )
+        public Grid( Size size, T initialValue = default(T) )
+            : this( size, p => initialValue )
         {
             // NOP
         }

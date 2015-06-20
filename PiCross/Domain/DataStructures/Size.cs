@@ -1,4 +1,5 @@
-﻿namespace PiCross.DataStructures
+﻿using System;
+namespace PiCross.DataStructures
 {
     public class Size
     {
@@ -8,8 +9,19 @@
 
         public Size( int width, int height )
         {
-            this.width = width;
-            this.height = height;
+            if ( width < 0 )
+            {
+                throw new ArgumentOutOfRangeException( "width" );
+            }
+            else if ( height < 0 )
+            {
+                throw new ArgumentOutOfRangeException( "height" );
+            }
+            else
+            {
+                this.width = width;
+                this.height = height;
+            }
         }
 
         public int Width { get { return width; } }
@@ -48,7 +60,7 @@
             }
         }
 
-        public static bool operator !=(Size s1, Size s2)
+        public static bool operator !=( Size s1, Size s2 )
         {
             return !( s1 == s2 );
         }
