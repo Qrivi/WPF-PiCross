@@ -11,9 +11,7 @@ namespace PiCross.Facade.Editing
 {
     public interface IPuzzleEditor
     {
-        int Width { get; }
-
-        int Height { get; }
+        Size Size { get; }
 
         IPuzzleEditorSquare this[Vector2D position] { get; }
 

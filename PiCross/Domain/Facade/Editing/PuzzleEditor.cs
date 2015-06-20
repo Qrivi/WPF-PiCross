@@ -33,20 +33,12 @@ namespace PiCross.Facade.Editing
                 rowConstraints = editorGrid.Contents.RowIndices.Select( y => new PuzzleEditorRowConstraints( editorGrid, y ) ).ToSequence();
             }
         }
-
-        public int Width
+        
+        public Size Size
         {
             get
             {
-                return editorGrid.Width;
-            }
-        }
-
-        public int Height
-        {
-            get
-            {
-                return editorGrid.Height;
+                return editorGrid.Size;
             }
         }
 

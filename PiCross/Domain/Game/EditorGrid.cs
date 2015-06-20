@@ -23,8 +23,8 @@ namespace PiCross.Game
             // NOP
         }
 
-        public EditorGrid( int width, int height )
-            : this( Grid.Create( new Size( width, height ), _ => new Var<Square>( Square.UNKNOWN ) ) )
+        public EditorGrid( Size size )
+            : this( Grid.Create( size, _ => new Var<Square>( Square.UNKNOWN ) ) )
         {
             // NOP
         }
@@ -106,19 +106,11 @@ namespace PiCross.Game
             return new SolverGrid( columnConstraints: DeriveColumnConstraints(), rowConstraints: DeriveRowConstraints() );
         }
 
-        public int Width
+        public Size Size
         {
             get
             {
-                return this.grid.Size.Width;
-            }
-        }
-
-        public int Height
-        {
-            get
-            {
-                return this.grid.Size.Height;
+                return grid.Size;
             }
         }
     }

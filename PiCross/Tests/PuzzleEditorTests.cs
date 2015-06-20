@@ -19,8 +19,8 @@ namespace PiCross.Tests
                 ".x."
                 );
 
-            Assert.AreEqual( 3, editor.Width );
-            Assert.AreEqual( 3, editor.Height );
+            Assert.AreEqual( 3, editor.Size.Width );
+            Assert.AreEqual( 3, editor.Size.Height );
 
             Assert.AreEqual( false, editor[new Vector2D( 0, 0 )].IsFilled.Value );
             Assert.AreEqual( false, editor[new Vector2D( 1, 0 )].IsFilled.Value );
