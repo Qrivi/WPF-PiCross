@@ -24,7 +24,7 @@ namespace PiCross.Game
         }
 
         public EditorGrid( int width, int height )
-            : this( Grid.Create( width, height, _ => new Var<Square>( Square.UNKNOWN ) ) )
+            : this( Grid.Create( new Size( width, height ), _ => new Var<Square>( Square.UNKNOWN ) ) )
         {
             // NOP
         }
@@ -76,12 +76,12 @@ namespace PiCross.Game
             }
         }
 
-        public Constraints DeriveColumnConstraints(int column)
+        public Constraints DeriveColumnConstraints( int column )
         {
             return Column( column ).DeriveConstraints();
         }
 
-        public Constraints DeriveRowConstraints(int row)
+        public Constraints DeriveRowConstraints( int row )
         {
             return Row( row ).DeriveConstraints();
         }

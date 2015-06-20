@@ -41,7 +41,7 @@ namespace PiCross.Game
 
                 var width = columnConstraints.Length;
                 var height = rowConstraints.Length;
-                this.squares = Grid.Create( width, height, p => new Var<Square>( Square.UNKNOWN ) );
+                this.squares = Grid.Create( new Size( width, height ), p => new Var<Square>( Square.UNKNOWN ) );
             }
         }
 
@@ -114,7 +114,7 @@ namespace PiCross.Game
 
         public int CountUnknowns()
         {
-            return squares.Items.Count( var => var.Value == Square.UNKNOWN );            
+            return squares.Items.Count( var => var.Value == Square.UNKNOWN );
         }
 
         public bool IsSolved

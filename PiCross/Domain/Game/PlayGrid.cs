@@ -55,7 +55,7 @@ namespace PiCross.Game
         }
 
         public PlayGrid( ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints )
-            : this( columnConstraints, rowConstraints, Grid.CreateVirtual( columnConstraints.Length, rowConstraints.Length, _ => Square.UNKNOWN ) )
+            : this( columnConstraints, rowConstraints, Grid.CreateVirtual( new Size( columnConstraints.Length, rowConstraints.Length ), _ => Square.UNKNOWN ) )
         {
             // NOP
         }

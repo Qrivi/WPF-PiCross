@@ -32,6 +32,11 @@ namespace PiCross.DataStructures
         int Height { get; }
 
         /// <summary>
+        /// Size of the grid.
+        /// </summary>
+        Size Size { get; }
+
+        /// <summary>
         /// Checks if <paramref name="position"/> is valid.
         /// </summary>
         /// <param name="position">Position.</param>
@@ -72,32 +77,32 @@ namespace PiCross.DataStructures
     /// </summary>
     public static class IGridExtensions
     {
-        public static IGrid<R> Map<T, R>(this IGrid<T> grid, Func<T, R> function)
+        public static IGrid<R> Map<T, R>( this IGrid<T> grid, Func<T, R> function )
         {
-            return Grid.CreateVirtual( grid.Width, grid.Height, p => function( grid[p] ) );
+            return Grid.CreateVirtual( grid.Size, p => function( grid[p] ) );
         }
 
-        public static IGrid<R> Map<T, R>(this IGrid<T> grid, Func<Vector2D, T, R> function)
+        public static IGrid<R> Map<T, R>( this IGrid<T> grid, Func<Vector2D, T, R> function )
         {
-            return Grid.CreateVirtual( grid.Width, grid.Height, p => function( p, grid[p] ) );
+            return Grid.CreateVirtual( grid.Size, p => function( p, grid[p] ) );
         }
 
         public static IGrid<R> Map<T, R>( this IGrid<T> grid, Func<Vector2D, R> function )
         {
-            return Grid.CreateVirtual( grid.Width, grid.Height, p => function( p ) );
+            return Grid.CreateVirtual( grid.Size, p => function( p ) );
         }
 
-        public static IGrid<T> Copy<T>(this IGrid<T> grid)
+        public static IGrid<T> Copy<T>( this IGrid<T> grid )
         {
-            return Grid.Create( grid.Width, grid.Height, p => grid[p] );
+            return Grid.Create( grid.Size, p => grid[p] );
         }
 
-        public static string[] AsStrings(this IGrid<char> grid)
+        public static string[] AsStrings( this IGrid<char> grid )
         {
             return grid.Rows.Select( row => row.Join() ).ToArray();
         }
 
-        public static bool HasSameSizeAs<T1, T2>(this IGrid<T1> xs, IGrid<T2> ys)
+        public static bool HasSameSizeAs<T1, T2>( this IGrid<T1> xs, IGrid<T2> ys )
         {
             if ( xs == null )
             {
@@ -113,7 +118,7 @@ namespace PiCross.DataStructures
             }
         }
 
-        public static void Overwrite<T>(this IGrid<IVar<T>> target, IGrid<T> source)
+        public static void Overwrite<T>( this IGrid<IVar<T>> target, IGrid<T> source )
         {
             if ( target == null )
             {
@@ -123,7 +128,7 @@ namespace PiCross.DataStructures
             {
                 throw new ArgumentNullException( "source" );
             }
-            else if ( !target.HasSameSizeAs(source))
+            else if ( !target.HasSameSizeAs( source ) )
             {
                 throw new ArgumentException( "Grids should have same size" );
             }
@@ -139,19 +144,19 @@ namespace PiCross.DataStructures
 
     public static class Grid
     {
-        public static IGrid<T> Create<T>( int width, int height, Func<Vector2D, T> initializer )
+        public static IGrid<T> Create<T>( Size size, Func<Vector2D, T> initializer )
         {
-            return new Grid<T>( width, height, initializer );
+            return new Grid<T>( size.Width, size.Height, initializer );
         }
 
-        public static IGrid<T> Create<T>( int width, int height, T initialValue = default(T) )
+        public static IGrid<T> Create<T>( Size size, T initialValue = default(T) )
         {
-            return Create( width, height, _ => initialValue );
+            return Create( size, _ => initialValue );
         }
 
-        public static IGrid<T> CreateVirtual<T>( int width, int height, Func<Vector2D, T> function )
+        public static IGrid<T> CreateVirtual<T>( Size size, Func<Vector2D, T> function )
         {
-            return new VirtualGrid<T>( width, height, function );
+            return new VirtualGrid<T>( size.Width, size.Height, function );
         }
 
         public static IGrid<char> CreateCharacterGrid( params string[] strings )
@@ -227,6 +232,14 @@ namespace PiCross.DataStructures
         public abstract int Width { get; }
 
         public abstract int Height { get; }
+
+        public Size Size
+        {
+            get
+            {
+                return new Size( Width, Height );
+            }
+        }
 
         public bool IsValidPosition( Vector2D position )
         {
