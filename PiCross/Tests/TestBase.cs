@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PiCross.DataStructures;
+using PiCross.Facade.Editing;
 using PiCross.Facade.Solving;
 using PiCross.Game;
 
@@ -108,6 +109,13 @@ namespace PiCross.Tests
         protected static void OverwritePlayGrid( PlayGrid grid, params string[] rows)
         {
             grid.Squares.Overwrite( Square.CreateGrid( rows ) );
+        }
+
+        protected static IPuzzleEditor CreatePuzzleEditor(params string[] rows)
+        {
+            var editorGrid = EditorGrid.FromStrings( rows );
+
+            return new PuzzleEditor( editorGrid );
         }
     }
 }

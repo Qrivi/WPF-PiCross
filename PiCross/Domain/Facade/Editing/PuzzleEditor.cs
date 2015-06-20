@@ -62,13 +62,16 @@ namespace PiCross.Facade.Editing
         {
             get
             {
-                throw new NotImplementedException();
+                return this.columnConstraints;
             }
         }
 
         public ISequence<IPuzzleEditorConstraints> RowConstraints
         {
-            get { throw new NotImplementedException(); }
+            get
+            {
+                return this.rowConstraints;
+            }
         }
 
         private void Refresh( Vector2D position )
@@ -78,17 +81,17 @@ namespace PiCross.Facade.Editing
             RefreshRowConstraints( position.Y );
         }
 
-        private void RefreshSquare(Vector2D position)
+        private void RefreshSquare( Vector2D position )
         {
             this.facadeGrid[position].Refresh();
         }
 
-        private void RefreshColumnConstraints(int x)
+        private void RefreshColumnConstraints( int x )
         {
             this.columnConstraints[x].Refresh();
         }
 
-        private void RefreshRowConstraints(int x)
+        private void RefreshRowConstraints( int x )
         {
             this.rowConstraints[x].Refresh();
         }
