@@ -9,7 +9,7 @@ using PiCross.Game;
 
 namespace PiCross.Facade.Editing
 {
-    internal class PuzzleEditor : IPuzzleEditor
+    public class PuzzleEditor : IPuzzleEditor
     {
         private readonly EditorGrid editorGrid;
 
