@@ -129,7 +129,7 @@ namespace PiCross.Game
         {
             get
             {
-                return squares.Width;
+                return squares.Size.Width;
             }
         }
 
@@ -137,7 +137,7 @@ namespace PiCross.Game
         {
             get
             {
-                return squares.Height;
+                return squares.Size.Height;
             }
         }
 

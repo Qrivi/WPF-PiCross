@@ -30,11 +30,11 @@ namespace PiCross.Game
             {
                 throw new ArgumentNullException( "squares" );
             }
-            else if ( columnConstraints.Length != squares.Width )
+            else if ( columnConstraints.Length != squares.Size.Width )
             {
                 throw new ArgumentException( "Number of column constraints should be equal to grid width" );
             }
-            else if ( rowConstraints.Length != squares.Height )
+            else if ( rowConstraints.Length != squares.Size.Height )
             {
                 throw new ArgumentException( "Number of row constraints should be equal to grid height" );
             }

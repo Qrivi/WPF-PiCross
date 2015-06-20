@@ -59,11 +59,11 @@ namespace PiCross.Game
             {
                 throw new ArgumentNullException( "grid" );
             }
-            else if ( columnConstraints.Length != grid.Width )
+            else if ( columnConstraints.Length != grid.Size.Width )
             {
                 throw new ArgumentException( "columnConstraints and grid do not agree on width" );
             }
-            else if ( rowConstraints.Length != grid.Height )
+            else if ( rowConstraints.Length != grid.Size.Height )
             {
                 throw new ArgumentException( "rowConstraints and grid do not agree on height" );
             }
@@ -103,7 +103,7 @@ namespace PiCross.Game
         {
             get
             {
-                return new Size( this.grid.Width, this.grid.Height );
+                return this.grid.Size;
             }
         }
     }

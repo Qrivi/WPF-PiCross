@@ -22,16 +22,6 @@ namespace PiCross.DataStructures
         T this[Vector2D position] { get; }
 
         /// <summary>
-        /// Width of the grid.
-        /// </summary>
-        int Width { get; }
-
-        /// <summary>
-        /// Height of the grid.
-        /// </summary>
-        int Height { get; }
-
-        /// <summary>
         /// Size of the grid.
         /// </summary>
         Size Size { get; }
@@ -227,15 +217,15 @@ namespace PiCross.DataStructures
 
         public bool IsValidPosition( Vector2D position )
         {
-            return 0 <= position.X && position.X < this.Width && 0 <= position.Y && position.Y < this.Height;
+            return 0 <= position.X && position.X < this.Size.Width && 0 <= position.Y && position.Y < this.Size.Height;
         }
 
         public IEnumerable<Vector2D> AllPositions
         {
             get
             {
-                return from y in Enumerable.Range( 0, this.Height )
-                       from x in Enumerable.Range( 0, this.Width )
+                return from y in Enumerable.Range( 0, this.Size.Height )
+                       from x in Enumerable.Range( 0, this.Size.Width )
                        select new Vector2D( x, y );
             }
         }
@@ -252,7 +242,7 @@ namespace PiCross.DataStructures
         {
             get
             {
-                return Enumerable.Range( 0, this.Width );
+                return Enumerable.Range( 0, this.Size.Width );
             }
         }
 
@@ -266,12 +256,12 @@ namespace PiCross.DataStructures
 
         public ISequence<T> Row( int y )
         {
-            return Sequence.FromFunction( Width, x => this[new Vector2D( x, y )] );
+            return Sequence.FromFunction( Size.Width, x => this[new Vector2D( x, y )] );
         }
 
         public ISequence<T> Column( int x )
         {
-            return Sequence.FromFunction( Height, y => this[new Vector2D( x, y )] );
+            return Sequence.FromFunction( Size.Height, y => this[new Vector2D( x, y )] );
         }
 
         public IEnumerable<ISequence<T>> Rows

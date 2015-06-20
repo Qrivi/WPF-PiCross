@@ -44,7 +44,7 @@ namespace PiCross.Facade.Solving
         {
             get
             {
-                return playGrid.Squares.Width;
+                return playGrid.Squares.Size.Width;
             }
         }
 
@@ -52,7 +52,7 @@ namespace PiCross.Facade.Solving
         {
             get
             {
-                return playGrid.Squares.Height;
+                return playGrid.Squares.Size.Height;
             }
         }
 

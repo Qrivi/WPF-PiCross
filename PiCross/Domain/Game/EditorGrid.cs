@@ -110,7 +110,7 @@ namespace PiCross.Game
         {
             get
             {
-                return this.grid.Width;
+                return this.grid.Size.Width;
             }
         }
 
@@ -118,7 +118,7 @@ namespace PiCross.Game
         {
             get
             {
-                return this.grid.Height;
+                return this.grid.Size.Height;
             }
         }
     }

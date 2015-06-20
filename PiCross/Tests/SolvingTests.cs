@@ -138,8 +138,7 @@ namespace PiCross.Tests
 
             solverGrid.Refine();
 
-            Assert.AreEqual( editorGrid.Squares.Width, solverGrid.Squares.Width );
-            Assert.AreEqual( editorGrid.Squares.Height, solverGrid.Squares.Height );
+            Assert.AreEqual( editorGrid.Squares.Size, solverGrid.Squares.Size );
 
             foreach ( var position in solverGrid.Squares.AllPositions )
             {
