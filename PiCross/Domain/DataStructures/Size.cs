@@ -35,5 +35,22 @@
         {
             return string.Format( "PuzzleSize[{0}, {1}]", width, height );
         }
+
+        public static bool operator ==( Size s1, Size s2 )
+        {
+            if ( object.ReferenceEquals( s1, null ) )
+            {
+                return object.ReferenceEquals( s2, null );
+            }
+            else
+            {
+                return s1.Equals( s2 );
+            }
+        }
+
+        public static bool operator !=(Size s1, Size s2)
+        {
+            return !( s1 == s2 );
+        }
     }
 }
