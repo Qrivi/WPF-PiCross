@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PiCross.Cells;
 using PiCross.DataStructures;
 using PiCross.Game;
 
@@ -9,10 +10,10 @@ namespace PiCross.Tests
     public class PuzzleEditorTests : TestBase
     {
         [TestMethod]
-        [TestCategory("PuzzleEditor")]
+        [TestCategory( "PuzzleEditor" )]
         public void Initialization()
         {
-            var editor = CreatePuzzleEditor( 
+            var editor = CreatePuzzleEditor(
                 "..x",
                 "xxx",
                 ".x."
@@ -40,6 +41,24 @@ namespace PiCross.Tests
             Assert.AreEqual( Sequence.FromItems( 1 ), editor.ColumnConstraints[0].Values.Value );
             Assert.AreEqual( Sequence.FromItems( 2 ), editor.ColumnConstraints[1].Values.Value );
             Assert.AreEqual( Sequence.FromItems( 2 ), editor.ColumnConstraints[2].Values.Value );
+        }
+
+        [TestMethod]
+        [TestCategory( "PuzzleEditor" )]
+        public void SquareObserversGetNotifiedOnContentsChange()
+        {
+            var editor = CreatePuzzleEditor(
+                "..x",
+                "xxx",
+                ".x."
+                );
+
+            var square = editor[new Vector2D( 0, 0 )];
+            var flag = Flag.Create( square.Contents );
+
+            Assert.IsFalse( flag.Status );
+            square.Contents.Value = Square.FILLED;
+            Assert.IsTrue( flag.Status );
         }
     }
 }
