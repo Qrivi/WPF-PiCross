@@ -53,6 +53,7 @@
     <Compile Include="Cells\Var.cs" />
     <Compile Include="DataStructures\Signal.cs" />
     <Compile Include="DataStructures\Vector2D.cs" />
+    <Compile Include="Facade\Editing\IPuzzleChecker.cs" />
     <Compile Include="Facade\Editing\IPuzzleEditor.cs" />
     <Compile Include="Facade\Editing\PuzzleEditor.cs">
       <SubType>Code</SubType>
