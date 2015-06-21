@@ -49,6 +49,7 @@
     <Compile Include="Cells\ConcreteCell.cs" />
     <Compile Include="Cells\Derived.cs" />
     <Compile Include="Cells\Flag.cs" />
+    <Compile Include="Cells\FutureCell.cs" />
     <Compile Include="Cells\ValidatedCell.cs" />
     <Compile Include="DataStructures\Grid.cs" />
     <Compile Include="Cells\Cell.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="DataStructures\Vector2D.cs" />
     <Compile Include="Facade\Editing\IPuzzleChecker.cs" />
     <Compile Include="Facade\Editing\IPuzzleEditor.cs" />
+    <Compile Include="Facade\Editing\PuzzleChecker.cs" />
     <Compile Include="Facade\Editing\PuzzleEditor.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PiCross.Game;
 using PiCross.DataStructures;
@@ -6,7 +7,7 @@ using PiCross.DataStructures;
 namespace PiCross.Tests
 {
     [TestClass]
-    public class SolvingTests
+    public class SolvingTests : TestBase
     {
         [TestMethod]
         [TestCategory("SolverGrid")]
@@ -130,6 +131,16 @@ namespace PiCross.Tests
                 ".........." );
         }
 
+        [TestMethod]
+        [TestCategory("SolverGrid")]
+        public void IsAmbiguous()
+        {
+            AssertAmbiguous(
+                ".x",
+                "x."
+                );
+        }
+
 
         private static void Check(params string[] rows)
         {
@@ -147,6 +158,15 @@ namespace PiCross.Tests
 
                 Assert.AreEqual( expected, actual, "Unequal squares at {0}", position );
             }
+        }
+
+        private static void AssertAmbiguous(params string[] rows)
+        {
+            var solverGrid = CreateSolverGrid( rows );
+
+            solverGrid.Refine();
+
+            Assert.IsTrue( solverGrid.Squares.Items.Any( x => x == Square.UNKNOWN ) );
         }
     }
 }

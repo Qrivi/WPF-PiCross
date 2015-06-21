@@ -38,9 +38,9 @@ namespace PiCross.Actors
 
         private class InboxImplementation : IInbox<T>
         {
-            private IInbox<T> _inbox;
+            private readonly IInbox<T> _inbox;
 
-            private WaitHandle _waitHandle;
+            private readonly WaitHandle _waitHandle;
 
             public InboxImplementation( IInbox<T> inbox, WaitHandle waitHandle )
             {
@@ -74,9 +74,9 @@ namespace PiCross.Actors
 
         private class OutboxImplementation : IOutbox<T>
         {
-            private IOutbox<T> _outbox;
+            private readonly IOutbox<T> _outbox;
 
-            private EventWaitHandle _waitHandle;
+            private readonly EventWaitHandle _waitHandle;
 
             public OutboxImplementation( IOutbox<T> outbox, EventWaitHandle waitHandle )
             {

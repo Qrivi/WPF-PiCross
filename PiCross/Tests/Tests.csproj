@@ -60,6 +60,7 @@
     <Compile Include="PlayGridConstraints_IsSatisfied.cs" />
     <Compile Include="PlayGridTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PuzzleCheckerTests.cs" />
     <Compile Include="PuzzleEditorTests.cs" />
     <Compile Include="SequenceTests.cs" />
     <Compile Include="Slice_DeriveConstraints.cs" />

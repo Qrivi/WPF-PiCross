@@ -11,6 +11,8 @@ namespace PiCross.Facade.Editing
 {
     public interface IPuzzleChecker
     {
-        void FindAmbiguities( Constraints columnConstraints, Constraints rowConstraints, Cell<IGrid<bool>> output );
+        void FindAmbiguities( ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints, Cell<IGrid<bool>> output );
+
+        void Kill();
     }
 }

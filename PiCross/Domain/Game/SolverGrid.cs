@@ -157,7 +157,6 @@ namespace PiCross.Game
             }
         }
 
-
         public void SinglePassRefine()
         {
             RefineColumns();
