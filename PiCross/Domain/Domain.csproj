@@ -39,6 +39,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actors\ActivatableInbox.cs" />
+    <Compile Include="Actors\BlockingMessageQueue.cs" />
+    <Compile Include="Actors\Future.cs" />
+    <Compile Include="Actors\Interfaces.cs" />
+    <Compile Include="Actors\MessageQueue.cs" />
+    <Compile Include="Actors\PriorityInbox.cs" />
+    <Compile Include="Actors\SynchronizedMessageQueue.cs" />
     <Compile Include="Cells\ConcreteCell.cs" />
     <Compile Include="Cells\Derived.cs" />
     <Compile Include="Cells\Flag.cs" />
