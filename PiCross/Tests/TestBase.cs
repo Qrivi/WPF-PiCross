@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PiCross.DataStructures;
 using PiCross.Facade.Editing;
-using PiCross.Facade.Solving;
+using PiCross.Facade.Playing;
 using PiCross.Game;
 
 namespace PiCross.Tests
@@ -107,11 +107,11 @@ namespace PiCross.Tests
             return playGrid;
         }
 
-        protected static PiCross.Facade.Solving.Puzzle CreateManualPuzzle( params string[] rows )
+        protected static PiCross.Facade.Playing.Puzzle CreateManualPuzzle( params string[] rows )
         {
             var playGrid = CreatePlayGrid( rows );
 
-            return new PiCross.Facade.Solving.Puzzle( playGrid );
+            return new PiCross.Facade.Playing.Puzzle( playGrid );
         }
 
         protected static void OverwritePlayGrid( PlayGrid grid, params string[] rows)

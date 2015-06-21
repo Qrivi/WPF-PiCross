@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PiCross.Cells;
 
-namespace PiCross.Facade.Solving
+namespace PiCross.Facade.Playing
 {
     public interface IPuzzle
     {
