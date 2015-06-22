@@ -11,8 +11,8 @@ namespace PiCross.Cells
     {
         private volatile bool isBound;
 
-        public FutureCell( T initialValue = default(T) )
-            : base( initialValue )
+        public FutureCell()
+            : base( default( T ) )
         {
 
         }
