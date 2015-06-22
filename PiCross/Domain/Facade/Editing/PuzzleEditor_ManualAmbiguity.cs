@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PiCross.Cells;
 using PiCross.DataStructures;
 using PiCross.Game;
@@ -10,7 +7,7 @@ using AmbiguityEnum = PiCross.Facade.Editing.Ambiguity;
 
 namespace PiCross.Facade.Editing
 {
-    public class PuzzleEditor_NoAmbiguity : IPuzzleEditor
+    public class PuzzleEditor_ManualAmbiguity : IPuzzleEditor
     {
         private readonly EditorGrid editorGrid;
 
@@ -20,7 +17,7 @@ namespace PiCross.Facade.Editing
 
         private readonly ISequence<PuzzleEditorRowConstraints> rowConstraints;
 
-        public PuzzleEditor_NoAmbiguity( EditorGrid grid )
+        public PuzzleEditor_ManualAmbiguity( EditorGrid grid )
         {
             if ( grid == null )
             {
@@ -97,7 +94,7 @@ namespace PiCross.Facade.Editing
 
             private readonly Cell<Ambiguity> ambiguity;
 
-            public PuzzleEditorSquare( PuzzleEditor_NoAmbiguity parent, Vector2D position )
+            public PuzzleEditorSquare( PuzzleEditor_ManualAmbiguity parent, Vector2D position )
             {
                 this.contents = new PuzzleEditorSquareContentsCell( parent, position );
                 this.position = position;
@@ -136,13 +133,13 @@ namespace PiCross.Facade.Editing
 
         private class PuzzleEditorSquareContentsCell : ManualCell<bool>
         {
-            private readonly PuzzleEditor_NoAmbiguity parent;
+            private readonly PuzzleEditor_ManualAmbiguity parent;
 
             private readonly IVar<Square> contents;
 
             private readonly Vector2D position;
 
-            public PuzzleEditorSquareContentsCell( PuzzleEditor_NoAmbiguity parent, Vector2D position )
+            public PuzzleEditorSquareContentsCell( PuzzleEditor_ManualAmbiguity parent, Vector2D position )
                 : base( SquareToBool( parent.editorGrid.Squares[position] ) )
             {
                 this.parent = parent;

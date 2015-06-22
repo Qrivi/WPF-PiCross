@@ -11,7 +11,7 @@ namespace PiCross.Facade.Editing
     {
         public static IPuzzleEditor Create(EditorGrid editorGrid)
         {
-            return new PuzzleEditor_NoAmbiguity( editorGrid );
+            return new PuzzleEditor_ManualAmbiguity( editorGrid );
         }
     }
 }

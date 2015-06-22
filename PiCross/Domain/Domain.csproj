@@ -63,7 +63,7 @@
     <Compile Include="DataStructures\Vector2D.cs" />
     <Compile Include="Facade\Editing\IPuzzleEditor.cs" />
     <Compile Include="Facade\Editing\PuzzleEditor.cs" />
-    <Compile Include="Facade\Editing\PuzzleEditor_NoAmbiguity.cs">
+    <Compile Include="Facade\Editing\PuzzleEditor_ManualAmbiguity.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Facade\Playing\Puzzle.cs" />

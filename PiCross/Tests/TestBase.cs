@@ -123,7 +123,7 @@ namespace PiCross.Tests
         {
             var editorGrid = EditorGrid.FromStrings( rows );
 
-            return new PuzzleEditor_NoAmbiguity( editorGrid );
+            return new PuzzleEditor_ManualAmbiguity( editorGrid );
         }
 
         protected static PiCross.Game.Puzzle CreatePuzzle(params string[] rows)
