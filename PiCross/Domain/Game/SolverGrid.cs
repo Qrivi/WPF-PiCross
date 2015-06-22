@@ -65,28 +65,28 @@ namespace PiCross.Game
             return new Slice( Row( y ).Map( v => v.Value ) );
         }
 
-        private void OverwriteColumn( int x, Slice slice )
+        private bool OverwriteColumn( int x, Slice slice )
         {
-            Column( x ).Overwrite( slice.Squares );
+            return Column( x ).Overwrite( slice.Squares );
         }
 
-        private void OverwriteRow( int y, Slice slice )
+        private bool OverwriteRow( int y, Slice slice )
         {
-            Row( y ).Overwrite( slice.Squares );
+            return Row( y ).Overwrite( slice.Squares );
         }
 
-        public void RefineColumn( int x )
+        public bool RefineColumn( int x )
         {
             var refined = ColumnSlice( x ).Refine( columnConstraints[x] );
 
-            OverwriteColumn( x, refined );
+            return OverwriteColumn( x, refined );
         }
 
-        public void RefineRow( int y )
+        public bool RefineRow( int y )
         {
             var refined = RowSlice( y ).Refine( rowConstraints[y] );
 
-            OverwriteRow( y, refined );
+            return OverwriteRow( y, refined );
         }
 
         public int CountUnknowns()
@@ -118,40 +118,41 @@ namespace PiCross.Game
             }
         }
 
-        public void RefineColumns()
+        public bool RefineColumns()
         {
+            var changeDetected = false;
+
             for ( var i = 0; i != Width; ++i )
             {
-                RefineColumn( i );
+                changeDetected = RefineColumn( i ) || changeDetected;
             }
+
+            return changeDetected;
         }
 
-        public void RefineRows()
+        public bool RefineRows()
         {
+            var changeDetected = false;
+
             for ( var i = 0; i != Height; ++i )
             {
-                RefineRow( i );
+                changeDetected = RefineRow( i ) || changeDetected;
             }
+
+            return changeDetected;
         }
 
-        public void SinglePassRefine()
+        public bool SinglePassRefine()
         {
-            RefineColumns();
-            RefineRows();
+            var columnChanged = RefineColumns();
+            var rowChanged = RefineRows();
+
+            return columnChanged || rowChanged;
         }
 
         public void Refine()
         {
-            var unknownCount = CountUnknowns();
-            var lastUnknownCount = unknownCount + 1;
-
-            while ( unknownCount < lastUnknownCount )
-            {
-                SinglePassRefine();
-
-                lastUnknownCount = unknownCount;
-                unknownCount = CountUnknowns();
-            }
+            while ( SinglePassRefine() );
         }
 
         public IGrid<Square> Squares
