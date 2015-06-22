@@ -50,17 +50,5 @@ namespace PiCross.Cells
         {
             throw new NotImplementedException( "GetHashCode is not implemented for Vars" );
         }
-
-        protected static bool AreEqual( T oldValue, T newValue )
-        {
-            if ( oldValue == null )
-            {
-                return newValue == null;
-            }
-            else
-            {
-                return oldValue.Equals( newValue );
-            }
-        }
     }
 }

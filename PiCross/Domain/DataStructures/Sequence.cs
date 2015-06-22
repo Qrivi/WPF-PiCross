@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PiCross.Cells;
 
 namespace PiCross.DataStructures
 {
@@ -320,6 +321,40 @@ namespace PiCross.DataStructures
             foreach ( var x in xs.Items )
             {
                 action( x );
+            }
+        }
+
+        public static bool Overwrite<T>( this ISequence<IVar<T>> xs, ISequence<T> ys )
+        {
+            if ( xs == null )
+            {
+                throw new ArgumentNullException( "xs" );
+            }
+            else if ( ys == null )
+            {
+                throw new ArgumentNullException( "ys" );
+            }
+            else if ( xs.Length != ys.Length )
+            {
+                throw new ArgumentException( "xs and ys must have same length" );
+            }
+            else
+            {
+                var overwriteDetected = false;
+
+                foreach ( var i in xs.Indices )
+                {
+                    var cell = xs[i];
+                    var value = ys[i];
+
+                    if ( !Util.AreEqual(cell.Value, value))
+                    {
+                        cell.Value = value;
+                        overwriteDetected = true;
+                    }
+                }
+
+                return overwriteDetected;
             }
         }
     }

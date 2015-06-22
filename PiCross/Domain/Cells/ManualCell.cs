@@ -30,7 +30,7 @@ namespace PiCross.Cells
         {
             get
             {
-                return !AreEqual( ReadValue(), base.Value );
+                return !Util.AreEqual( ReadValue(), base.Value );
             }
         }
 
@@ -75,7 +75,7 @@ namespace PiCross.Cells
         {
             get
             {
-                return !AreEqual( function(), base.Value );
+                return !Util.AreEqual( function(), base.Value );
             }
         }
 

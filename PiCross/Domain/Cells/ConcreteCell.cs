@@ -33,7 +33,7 @@ namespace PiCross.Cells
             }
             set
             {
-                if ( !AreEqual( base.Value, value ) )
+                if ( !Util.AreEqual( base.Value, value ) )
                 {
                     base.Value = value;
                     NotifyObservers();
