@@ -65,37 +65,14 @@ namespace PiCross.Game
             return new Slice( Row( y ).Map( v => v.Value ) );
         }
 
-        private void Overwrite( ISequence<IVar<Square>> target, ISequence<Square> source )
-        {
-            if ( target == null )
-            {
-                throw new ArgumentNullException( "target" );
-            }
-            else if ( source == null )
-            {
-                throw new ArgumentNullException( "source" );
-            }
-            else if ( target.Length != source.Length )
-            {
-                throw new ArgumentException( "source and target must have same length" );
-            }
-            else
-            {
-                foreach ( var index in target.Indices )
-                {
-                    target[index].Value = source[index];
-                }
-            }
-        }
-
         private void OverwriteColumn( int x, Slice slice )
         {
-            Overwrite( Column( x ), slice.Squares );
+            Column( x ).Overwrite( slice.Squares );
         }
 
         private void OverwriteRow( int y, Slice slice )
         {
-            Overwrite( Row( y ), slice.Squares );
+            Row( y ).Overwrite( slice.Squares );
         }
 
         public void RefineColumn( int x )
