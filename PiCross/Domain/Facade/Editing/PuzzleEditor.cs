@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using PiCross.Cells;
 using PiCross.DataStructures;
 using PiCross.Game;
+using AmbiguityEnum = PiCross.Facade.Editing.Ambiguity;
 
 namespace PiCross.Facade.Editing
 {
@@ -33,7 +34,7 @@ namespace PiCross.Facade.Editing
                 rowConstraints = editorGrid.Contents.RowIndices.Select( y => new PuzzleEditorRowConstraints( editorGrid, y ) ).ToSequence();
             }
         }
-        
+
         public Size Size
         {
             get
@@ -94,10 +95,13 @@ namespace PiCross.Facade.Editing
 
             private readonly Vector2D position;
 
+            private readonly Cell<Ambiguity> ambiguity;
+
             public PuzzleEditorSquare( PuzzleEditor parent, Vector2D position )
             {
                 this.contents = new PuzzleEditorSquareContentsCell( parent, position );
                 this.position = position;
+                this.ambiguity = Cell.Create( AmbiguityEnum.Unknown );
             }
 
             public Cell<bool> IsFilled
@@ -105,6 +109,14 @@ namespace PiCross.Facade.Editing
                 get
                 {
                     return contents;
+                }
+            }
+
+            public Cell<Ambiguity> Ambiguity
+            {
+                get
+                {
+                    return ambiguity;
                 }
             }
 
@@ -138,12 +150,12 @@ namespace PiCross.Facade.Editing
                 this.position = position;
             }
 
-            private static bool SquareToBool(Square square)
+            private static bool SquareToBool( Square square )
             {
                 return square == Square.FILLED;
             }
 
-            private static Square BoolToSquare(bool b)
+            private static Square BoolToSquare( bool b )
             {
                 return b ? Square.FILLED : Square.EMPTY;
             }
@@ -157,7 +169,7 @@ namespace PiCross.Facade.Editing
             {
                 this.contents.Value = BoolToSquare( value );
 
-                parent.Refresh( position );                
+                parent.Refresh( position );
             }
         }
 

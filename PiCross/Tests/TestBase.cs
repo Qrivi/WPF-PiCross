@@ -131,11 +131,6 @@ namespace PiCross.Tests
             return PiCross.Game.Puzzle.FromRowStrings( rows );
         }
 
-        protected static IPuzzleChecker CreatePuzzleChecker()
-        {
-            return new PuzzleChecker();
-        }
-
         protected static SolverGrid CreateSolverGrid(params string[] rows)
         {
             var editorGrid = EditorGrid.FromStrings( rows );
