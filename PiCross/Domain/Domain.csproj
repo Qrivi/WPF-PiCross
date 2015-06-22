@@ -69,6 +69,7 @@
     </Compile>
     <Compile Include="Facade\Playing\Puzzle.cs" />
     <Compile Include="Facade\Playing\IPuzzle.cs" />
+    <Compile Include="Game\AmbiguityChecker.cs" />
     <Compile Include="Game\Constraints.cs" />
     <Compile Include="Game\EditorGrid.cs" />
     <Compile Include="Game\PlayGrid.cs" />

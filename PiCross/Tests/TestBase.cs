@@ -142,5 +142,12 @@ namespace PiCross.Tests
 
             return editorGrid.CreateSolverGrid();
         }
+
+        protected static AmbiguityChecker CreateAmbiguityChecker(params string[] rows)
+        {
+            var puzzle = PiCross.Game.Puzzle.FromRowStrings( rows );
+
+            return new AmbiguityChecker( columnConstraints: puzzle.ColumnConstraints, rowConstraints: puzzle.RowContraints );
+        }
     }
 }
