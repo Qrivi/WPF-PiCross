@@ -3,7 +3,7 @@ using System.Linq;
 using PiCross.Cells;
 using PiCross.DataStructures;
 using PiCross.Game;
-using AmbiguityEnum = PiCross.Facade.Editing.Ambiguity;
+using AmbiguityEnum = PiCross.Game.Ambiguity;
 
 namespace PiCross.Facade.Editing
 {
@@ -17,20 +17,55 @@ namespace PiCross.Facade.Editing
 
         private readonly ISequence<PuzzleEditorRowConstraints> rowConstraints;
 
-        public PuzzleEditor_ManualAmbiguity( EditorGrid grid )
+        private AmbiguityChecker ambiguityChecker;
+
+        private readonly IGrid<Cell<Ambiguity>> ambiguityGrid;
+
+        public PuzzleEditor_ManualAmbiguity( EditorGrid editorGrid )
         {
-            if ( grid == null )
+            if ( editorGrid == null )
             {
                 throw new ArgumentNullException( "grid" );
             }
             else
             {
-                this.editorGrid = grid;
-                facadeGrid = editorGrid.Contents.Map( position => new PuzzleEditorSquare( this, position ) ).Copy();
+                this.editorGrid = editorGrid;
+                ambiguityChecker = new AmbiguityChecker( columnConstraints: editorGrid.DeriveColumnConstraints(), rowConstraints: editorGrid.DeriveRowConstraints() );
+                ambiguityGrid = ambiguityChecker.Ambiguities.Map( ( Ambiguity x ) => Cell.Create( x ) ).Copy();
+                
+                facadeGrid = editorGrid.Contents.Map( position => new PuzzleEditorSquare( this, position, ambiguityGrid[position] ) ).Copy();
                 columnConstraints = editorGrid.Contents.ColumnIndices.Select( x => new PuzzleEditorColumnConstraints( editorGrid, x ) ).ToSequence();
-                rowConstraints = editorGrid.Contents.RowIndices.Select( y => new PuzzleEditorRowConstraints( editorGrid, y ) ).ToSequence();
+                rowConstraints = editorGrid.Contents.RowIndices.Select( y => new PuzzleEditorRowConstraints( editorGrid, y ) ).ToSequence();                
             }
         }
+
+        public void ResolveAmbiguityStep()
+        {
+            if ( !ambiguityChecker.IsAmbiguityResolved )
+            {
+                ambiguityChecker.Step();
+
+                RefreshAmbiguities();
+            }
+        }
+
+        public void ResolveAmbiguity()
+        {
+            if ( !ambiguityChecker.IsAmbiguityResolved )
+            {
+                ambiguityChecker.Resolve();
+
+                RefreshAmbiguities();
+            }
+        }
+
+        public bool IsAmbuigityResolved
+        {
+            get
+            {
+                return ambiguityChecker.IsAmbiguityResolved;
+            }
+        }        
 
         public Size Size
         {
@@ -64,11 +99,18 @@ namespace PiCross.Facade.Editing
             }
         }
 
-        private void Refresh( Vector2D position )
+        private void OnSquareChanged( Vector2D position )
         {
             RefreshSquare( position );
             RefreshColumnConstraints( position.X );
             RefreshRowConstraints( position.Y );
+            ResetAmbiguities();
+        }
+
+        private void ResetAmbiguities()
+        {
+            this.ambiguityChecker = new AmbiguityChecker( columnConstraints: editorGrid.DeriveColumnConstraints(), rowConstraints: editorGrid.DeriveRowConstraints() );
+            RefreshAmbiguities();
         }
 
         private void RefreshSquare( Vector2D position )
@@ -86,6 +128,11 @@ namespace PiCross.Facade.Editing
             this.rowConstraints[x].Refresh();
         }
 
+        private void RefreshAmbiguities()
+        {
+            ( (IGrid<IVar<Ambiguity>>) ambiguityGrid ).Overwrite( ambiguityChecker.Ambiguities );
+        }
+
         private class PuzzleEditorSquare : IPuzzleEditorSquare
         {
             private readonly Cell<bool> contents;
@@ -94,11 +141,11 @@ namespace PiCross.Facade.Editing
 
             private readonly Cell<Ambiguity> ambiguity;
 
-            public PuzzleEditorSquare( PuzzleEditor_ManualAmbiguity parent, Vector2D position )
+            public PuzzleEditorSquare( PuzzleEditor_ManualAmbiguity parent, Vector2D position, Cell<Ambiguity> ambiguity )
             {
                 this.contents = new PuzzleEditorSquareContentsCell( parent, position );
                 this.position = position;
-                this.ambiguity = Cell.Create( AmbiguityEnum.Unknown );
+                this.ambiguity = ambiguity;
             }
 
             public Cell<bool> IsFilled
@@ -164,9 +211,14 @@ namespace PiCross.Facade.Editing
 
             protected override void WriteValue( bool value )
             {
-                this.contents.Value = BoolToSquare( value );
+                var square = BoolToSquare( value );
 
-                parent.Refresh( position );
+                if ( this.contents.Value != square )
+                {
+                    this.contents.Value = square;
+
+                    parent.OnSquareChanged( position );
+                }
             }
         }
 

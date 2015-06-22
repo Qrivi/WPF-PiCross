@@ -13,13 +13,32 @@ namespace PiCross.Game
 
         private readonly IEnumerator<bool> stepwiseFunction;
 
-        private readonly IGrid<bool> ambiguities;
+        private readonly IGrid<Ambiguity> ambiguities;
 
         public AmbiguityChecker( ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints )
         {
             this.solver = new SolverGrid( columnConstraints: columnConstraints, rowConstraints: rowConstraints );
             stepwiseFunction = CreateStepwiseFunction().GetEnumerator();
-            ambiguities = this.solver.Squares.Map( x => x == Square.UNKNOWN );
+            ambiguities = this.solver.Squares.Map( DeriveAmbiguity );
+        }
+
+        private Ambiguity DeriveAmbiguity(Square square)
+        {
+            if ( square == Square.UNKNOWN )
+            {
+                if ( IsAmbiguityResolved )
+                {
+                    return Ambiguity.Ambiguous;
+                }
+                else
+                {
+                    return Ambiguity.Unknown;
+                }
+            }
+            else
+            {
+                return Ambiguity.Unambiguous;
+            }
         }
 
         private IEnumerable<bool> CreateStepwiseFunction()
@@ -73,7 +92,7 @@ namespace PiCross.Game
             }
         }
 
-        public IGrid<bool> Ambiguities
+        public IGrid<Ambiguity> Ambiguities
         {
             get
             {
@@ -91,7 +110,7 @@ namespace PiCross.Game
                 }
                 else
                 {
-                    return ambiguities.Items.Any( isAmbiguous => isAmbiguous );
+                    return ambiguities.Items.Any( a => a == Ambiguity.Ambiguous );
                 }
             }
         }

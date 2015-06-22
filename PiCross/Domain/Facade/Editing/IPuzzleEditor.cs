@@ -33,6 +33,4 @@ namespace PiCross.Facade.Editing
     {
         Cell<ISequence<int>> Values { get; }
     }
-
-    public enum Ambiguity { Unknown, Ambiguous, Unambiguous }
 }
