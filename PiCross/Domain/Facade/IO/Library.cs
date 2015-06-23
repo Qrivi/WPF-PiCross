@@ -90,6 +90,44 @@ namespace PiCross.Facade.IO
                 library.Entries.Add( new LibraryEntry( puzzle, author ) );
             }
 
+            {
+                var puzzle = Puzzle.FromRowStrings(
+                "..........",
+                "..........",
+                "..........",
+                "..........",
+                "..........",
+                "..........",
+                "..........",
+                "..........",
+                "..........",
+                ".........."
+                );
+
+                var author = "Woumpousse";
+
+                library.Entries.Add( new LibraryEntry( puzzle, author ) );
+            }
+
+            {
+                var puzzle = Puzzle.FromRowStrings(
+                "..........",
+                ".xxx..xxx.",
+                "...xx...x.",
+                ".xxx....x.",
+                "..xxxx....",
+                ".....xxxx.",
+                "..xxxx....",
+                "....xxxxx.",
+                "....x...x.",
+                "....x....."
+                );
+
+                var author = "Woumpousse";
+
+                library.Entries.Add( new LibraryEntry( puzzle, author ) );
+            }
+
             return library;
         }
     }
