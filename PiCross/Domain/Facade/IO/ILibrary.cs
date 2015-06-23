@@ -102,7 +102,7 @@ namespace PiCross.Facade.IO
                 WriteLine( "{0} {1}", size.Width, size.Height );
             }
 
-            private void WritePuzzleGrid( IGrid<Square> grid )
+            private void WritePuzzleGrid( IGrid<bool> grid )
             {
                 foreach ( var row in grid.Rows )
                 {
@@ -110,9 +110,9 @@ namespace PiCross.Facade.IO
                 }
             }
 
-            private void WritePuzzleGridRow( ISequence<Square> row )
+            private void WritePuzzleGridRow( ISequence<bool> row )
             {
-                WriteLine( row.Map( square => square.Symbol ).Join() );
+                WriteLine( row.Map( x => Square.FromBool(x).Symbol ).Join() );
             }
 
             private void WriteLine( string str, params object[] args )

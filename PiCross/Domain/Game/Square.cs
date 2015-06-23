@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,6 +34,11 @@ namespace PiCross.Game
             {
                 throw new ArgumentException( string.Format("Unknown symbol: {0}", symbol ) );
             }
+        }
+
+        public static Square FromBool(bool b)
+        {
+            return b ? FILLED : EMPTY;
         }
 
         public static IGrid<Square> CreateGrid(params string[] rows)
@@ -69,6 +75,28 @@ namespace PiCross.Game
         public override string ToString()
         {
             return Symbol.ToString();
+        }
+
+        public static explicit operator bool(Square square)
+        {
+            if ( square == null )
+            {
+                throw new ArgumentNullException( "square" );
+            }
+            else if ( square == UNKNOWN )
+            {
+                throw new ArgumentException( "Cannot convert UNKNOWN to bool" );
+            }
+            else if ( square == EMPTY )
+            {
+                return false;
+            }
+            else
+            {
+                Debug.Assert( square == FILLED );
+
+                return true;
+            }
         }
 
         private class Unknown : Square

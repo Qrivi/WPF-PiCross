@@ -7,14 +7,13 @@ using PiCross.DataStructures;
 
 namespace PiCross.Game
 {
-    // TODO Work with bools instead of Squares
     public sealed class Puzzle
     {
         private readonly ISequence<Constraints> columnConstraints;
 
         private readonly ISequence<Constraints> rowConstraints;
 
-        private readonly IGrid<Square> grid;
+        private readonly IGrid<bool> grid;
 
         public static Puzzle FromConstraints( ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints )
         {
@@ -27,7 +26,9 @@ namespace PiCross.Game
             }
             else
             {
-                return new Puzzle( columnConstraints: columnConstraints, rowConstraints: rowConstraints, grid: solverGrid.Squares.Copy() );
+                var grid = ConvertSquareGridToBoolGrid( solverGrid.Squares );
+
+                return new Puzzle( columnConstraints: columnConstraints, rowConstraints: rowConstraints, grid: grid );
             }
         }
 
@@ -38,7 +39,9 @@ namespace PiCross.Game
             var columnConstraints = editorGrid.DeriveColumnConstraints();
             var rowConstraints = editorGrid.DeriveRowConstraints();
 
-            return new Puzzle( columnConstraints: columnConstraints, rowConstraints: rowConstraints, grid: grid.Copy() );
+            var boolGrid = ConvertSquareGridToBoolGrid( grid );
+
+            return new Puzzle( columnConstraints: columnConstraints, rowConstraints: rowConstraints, grid: boolGrid );
         }
 
         public static Puzzle FromRowStrings( params string[] rows )
@@ -46,7 +49,12 @@ namespace PiCross.Game
             return FromGrid( Square.CreateGrid( rows ) );
         }
 
-        private Puzzle( ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints, IGrid<Square> grid )
+        private static IGrid<bool> ConvertSquareGridToBoolGrid(IGrid<Square> squares)
+        {
+            return squares.Map( x => (bool) x ).Copy();
+        }
+
+        private Puzzle( ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints, IGrid<bool> grid )
         {
             if ( columnConstraints == null )
             {
@@ -76,7 +84,7 @@ namespace PiCross.Game
             }
         }
 
-        public IGrid<Square> Grid
+        public IGrid<bool> Grid
         {
             get
             {
@@ -126,7 +134,7 @@ namespace PiCross.Game
         public override string ToString()
         {
             var rowStrings = from row in this.Grid.Rows
-                             select row.Map( x => x.Symbol ).Join();
+                             select row.Map( x => Square.FromBool(x).Symbol ).Join();
 
             return rowStrings.ToSequence().Join( "\n" );
         }
