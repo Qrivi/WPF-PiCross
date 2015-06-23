@@ -34,13 +34,13 @@ namespace PiCross.Tests
             Assert.AreEqual( true, editor[new Vector2D( 1, 2 )].IsFilled.Value );
             Assert.AreEqual( false, editor[new Vector2D( 2, 2 )].IsFilled.Value );
 
-            Assert.AreEqual( CreateConstraints( 1 ), editor.RowConstraints[0].Values.Value );
-            Assert.AreEqual( CreateConstraints( 3 ), editor.RowConstraints[1].Values.Value );
-            Assert.AreEqual( CreateConstraints( 1 ), editor.RowConstraints[2].Values.Value );
+            Assert.AreEqual( CreateConstraints( 1 ), editor.RowConstraints[0].Constraints.Value );
+            Assert.AreEqual( CreateConstraints( 3 ), editor.RowConstraints[1].Constraints.Value );
+            Assert.AreEqual( CreateConstraints( 1 ), editor.RowConstraints[2].Constraints.Value );
 
-            Assert.AreEqual( CreateConstraints( 1 ), editor.ColumnConstraints[0].Values.Value );
-            Assert.AreEqual( CreateConstraints( 2 ), editor.ColumnConstraints[1].Values.Value );
-            Assert.AreEqual( CreateConstraints( 2 ), editor.ColumnConstraints[2].Values.Value );
+            Assert.AreEqual( CreateConstraints( 1 ), editor.ColumnConstraints[0].Constraints.Value );
+            Assert.AreEqual( CreateConstraints( 2 ), editor.ColumnConstraints[1].Constraints.Value );
+            Assert.AreEqual( CreateConstraints( 2 ), editor.ColumnConstraints[2].Constraints.Value );
         }
 
         [TestMethod]
@@ -90,7 +90,7 @@ namespace PiCross.Tests
                 );
 
             var square = editor[new Vector2D( 0, 0 )];
-            var flag = Flag.Create( editor.RowConstraints[0].Values );
+            var flag = Flag.Create( editor.RowConstraints[0].Constraints );
 
             Assert.IsFalse( flag.Status );
             square.IsFilled.Value = true;
@@ -108,7 +108,7 @@ namespace PiCross.Tests
                 );
 
             var square = editor[new Vector2D( 0, 0 )];
-            var flag = Flag.Create( editor.ColumnConstraints[0].Values );
+            var flag = Flag.Create( editor.ColumnConstraints[0].Constraints );
 
             Assert.IsFalse( flag.Status );
             square.IsFilled.Value = true;

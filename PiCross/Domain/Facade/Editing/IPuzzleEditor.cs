@@ -31,6 +31,6 @@ namespace PiCross.Facade.Editing
 
     public interface IPuzzleEditorConstraints
     {
-        Cell<Constraints> Values { get; }
+        Cell<Constraints> Constraints { get; }
     }
 }

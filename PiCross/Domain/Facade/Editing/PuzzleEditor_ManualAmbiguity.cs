@@ -231,7 +231,7 @@ namespace PiCross.Facade.Editing
                 values = Cell.Derived( () => constraintsFetcher() );
             }
 
-            public Cell<Constraints> Values
+            public Cell<Constraints> Constraints
             {
                 get
                 {
