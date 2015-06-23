@@ -148,7 +148,17 @@ namespace PiCross.Tests
 
         protected static ILibrary CreateLibrary(params PiCross.Game.Puzzle[] puzzles)
         {
-            return Library.FromPuzzles( puzzles );
+            var author = "test";
+            var library = Library.CreateEmpty();
+
+            foreach ( var puzzle in puzzles )
+            {
+                var entry = new LibraryEntry( puzzle, author );
+
+                library.Entries.Add( entry );
+            }
+
+            return library;
         }
     }
 }

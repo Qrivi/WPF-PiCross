@@ -110,12 +110,12 @@ namespace PiCross.Tests
                 memoryStream.Seek( 0, SeekOrigin.Begin );
                 var loaded = io.Load( memoryStream );
 
-                Assert.AreEqual( library.Puzzles.Count, loaded.Puzzles.Count );
+                Assert.AreEqual( library.Entries.Count, loaded.Entries.Count );
 
-                for ( var i = 0; i != library.Puzzles.Count; ++i )
+                for ( var i = 0; i != library.Entries.Count; ++i )
                 {
-                    var expected = library.Puzzles[i];
-                    var actual = loaded.Puzzles[i];
+                    var expected = library.Entries[i];
+                    var actual = loaded.Entries[i];
 
                     Assert.AreEqual( expected, actual, string.Format( "Puzzle #{0} not saved/loaded correctly", i ) );
                 }

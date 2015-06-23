@@ -13,41 +13,131 @@ namespace PiCross.Facade.IO
 {
     public interface ILibrary
     {
-        ObservableCollection<Puzzle> Puzzles { get; }
+        ObservableCollection<ILibraryEntry> Entries { get; }
+    }
+
+    public interface ILibraryEntry
+    {
+        Puzzle Puzzle { get; }
+
+        string Author { get; }
     }
 
     public class Library : ILibrary
     {
-        private readonly ObservableCollection<Puzzle> puzzles;
+        private readonly ObservableCollection<ILibraryEntry> puzzles;
 
         public static Library CreateEmpty()
         {
             return new Library();
         }
 
-        public static Library FromPuzzles( params Puzzle[] puzzles )
-        {
-            var library = CreateEmpty();
-
-            foreach ( var puzzle in puzzles )
-            {
-                library.Puzzles.Add( puzzle );
-            }
-
-            return library;
-        }
-
         private Library()
         {
-            this.puzzles = new ObservableCollection<Puzzle>();
+            this.puzzles = new ObservableCollection<ILibraryEntry>();
         }
 
-        public ObservableCollection<Puzzle> Puzzles
+        public ObservableCollection<ILibraryEntry> Entries
         {
             get
             {
                 return puzzles;
             }
+        }
+
+        public static ILibrary CreateDummyLibrary()
+        {
+            var library = Library.CreateEmpty();
+
+            {
+                var puzzle = Puzzle.FromRowStrings(
+                "..x..",
+                ".x.x.",
+                "x...x",
+                ".x.x.",
+                "..x.."
+                );
+
+                var author = "Woumpousse";
+
+                library.Entries.Add( new LibraryEntry( puzzle, author ) );
+            }
+
+            {
+                var puzzle = Puzzle.FromRowStrings(
+                "x...x",
+                ".x.x.",
+                "..x..",
+                ".x.x.",
+                "x...x"
+                );
+
+                var author = "Woumpousse";
+
+                library.Entries.Add( new LibraryEntry( puzzle, author ) );
+            }
+
+            {
+                var puzzle = Puzzle.FromRowStrings(
+                ".x..x",
+                ".....",
+                "..x..",
+                "x...x",
+                ".xxx."
+                );
+
+                var author = "Woumpousse";
+
+                library.Entries.Add( new LibraryEntry( puzzle, author ) );
+            }
+
+            {
+                var puzzle = Puzzle.FromRowStrings(
+                "..x..",
+                ".xxx.",
+                "xxxxx",
+                ".xxx.",
+                "..x.."
+                );
+
+                var author = "Woumpousse";
+
+                library.Entries.Add( new LibraryEntry( puzzle, author ) );
+            }
+
+            return library;
+        }
+    }
+
+    public class LibraryEntry : ILibraryEntry
+    {
+        private readonly Puzzle puzzle;
+
+        private readonly string author;
+
+        public LibraryEntry(Puzzle puzzle, string author)
+        {
+            this.puzzle = puzzle;
+            this.author = author;
+        }
+
+        public Puzzle Puzzle { get { return puzzle; } }
+
+        public string Author { get { return author; } }
+
+        public override bool Equals( object obj )
+        {
+            return Equals( obj as LibraryEntry );
+        }
+
+        public bool Equals(LibraryEntry that)
+        {
+            return that != null && this.puzzle.Equals( that.puzzle ) && this.author == that.author;
+        }
+
+        public override int GetHashCode()
+        {
+            return puzzle.GetHashCode() ^ author.GetHashCode();
         }
     }
 
@@ -76,22 +166,33 @@ namespace PiCross.Facade.IO
                 this.stream = stream;
                 this.writer = new StreamWriter( stream );
 
-                Write( library );
+                WriteLibrary( library );
 
                 writer.Flush();
             }
 
-            private void Write( ILibrary library )
+            private void WriteLibrary( ILibrary library )
             {
-                WriteLine( library.Puzzles.Count.ToString() );
+                WriteLine( library.Entries.Count.ToString() );
 
-                foreach ( var puzzle in library.Puzzles )
+                foreach ( var entry in library.Entries )
                 {
-                    Write( puzzle );
+                    WriteEntry( entry );
                 }
             }
 
-            private void Write( Puzzle puzzle )
+            private void WriteEntry(ILibraryEntry entry)
+            {               
+                WritePuzzle( entry.Puzzle );
+                WriteAuthor( entry.Author );
+            }
+
+            private void WriteAuthor(string author)
+            {
+                WriteLine(author);
+            }
+
+            private void WritePuzzle( Puzzle puzzle )
             {
                 WritePuzzleSize( puzzle.Size );
                 WritePuzzleGrid( puzzle.Grid );
@@ -152,8 +253,21 @@ namespace PiCross.Facade.IO
 
                 for ( var i = 0; i != puzzleCount; ++i )
                 {
-                    library.Puzzles.Add( ReadPuzzle() );
+                    library.Entries.Add( ReadEntry() );
                 }
+            }
+
+            private ILibraryEntry ReadEntry()
+            {
+                var puzzle = ReadPuzzle();
+                var author = ReadAuthor();
+
+                return new LibraryEntry( puzzle, author );
+            }
+
+            private string ReadAuthor()
+            {
+                return ReadLine();
             }
 
             private Puzzle ReadPuzzle()
