@@ -64,6 +64,7 @@
     <Compile Include="DataStructures\Vector2D.cs" />
     <Compile Include="Dynamic\DictionaryDynamicObject.cs" />
     <Compile Include="Dynamic\DynamicObjectGroup.cs" />
+    <Compile Include="Dynamic\DynamicObjectMerger.cs" />
     <Compile Include="Dynamic\IDynamicObject.cs" />
     <Compile Include="Facade\Editing\IPuzzleEditor.cs" />
     <Compile Include="Facade\Editing\PuzzleEditor.cs" />
