@@ -31,7 +31,7 @@ namespace PiCross.Game
             }
             else
             {
-                throw new ArgumentOutOfRangeException( "symbol" );
+                throw new ArgumentException( string.Format("Unknown symbol: {0}", symbol ) );
             }
         }
 

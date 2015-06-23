@@ -7,7 +7,8 @@ using PiCross.DataStructures;
 
 namespace PiCross.Game
 {
-    public class Puzzle
+    // TODO Work with bools instead of Squares
+    public sealed class Puzzle
     {
         private readonly ISequence<Constraints> columnConstraints;
 
@@ -105,6 +106,29 @@ namespace PiCross.Game
             {
                 return this.grid.Size;
             }
+        }
+
+        public override bool Equals( object obj )
+        {
+            return Equals( obj as Puzzle );
+        }
+
+        public bool Equals(Puzzle that)
+        {
+            return that != null && this.columnConstraints.Equals( that.columnConstraints ) && this.rowConstraints.Equals( that.rowConstraints ) && this.grid.Equals( that.grid );
+        }
+
+        public override int GetHashCode()
+        {
+            return Size.GetHashCode() ^ columnConstraints.GetHashCode() ^ rowConstraints.GetHashCode();
+        }
+
+        public override string ToString()
+        {
+            var rowStrings = from row in this.Grid.Rows
+                             select row.Map( x => x.Symbol ).Join();
+
+            return rowStrings.ToSequence().Join( "\n" );
         }
     }
 }

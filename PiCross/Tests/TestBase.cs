@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PiCross.DataStructures;
 using PiCross.Facade.Editing;
+using PiCross.Facade.IO;
 using PiCross.Facade.Playing;
 using PiCross.Game;
 
@@ -143,6 +144,11 @@ namespace PiCross.Tests
             var puzzle = PiCross.Game.Puzzle.FromRowStrings( rows );
 
             return new AmbiguityChecker( columnConstraints: puzzle.ColumnConstraints, rowConstraints: puzzle.RowContraints );
+        }
+
+        protected static ILibrary CreateLibrary(params PiCross.Game.Puzzle[] puzzles)
+        {
+            return Library.FromPuzzles( puzzles );
         }
     }
 }

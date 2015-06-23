@@ -388,9 +388,9 @@ namespace PiCross.DataStructures
 
         public override string ToString()
         {
-            var items = string.Join( ", ", Items.Select( x => x.ToString() ) );
+            var str = string.Join( ", ", Items.Select( x => x.ToString() ) );
 
-            return string.Format( "SEQ[{0}]", items );
+            return str;
         }
 
         public override bool Equals( object obj )

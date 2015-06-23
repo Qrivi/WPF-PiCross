@@ -68,6 +68,7 @@
     <Compile Include="Facade\Editing\PuzzleEditor_ManualAmbiguity.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Facade\IO\ILibrary.cs" />
     <Compile Include="Facade\Playing\Puzzle.cs" />
     <Compile Include="Facade\Playing\IPuzzle.cs" />
     <Compile Include="Game\Ambiguity.cs" />

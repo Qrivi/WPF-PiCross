@@ -9,7 +9,7 @@ using System.Diagnostics;
 
 namespace PiCross.Game
 {
-    public class Constraints
+    public sealed class Constraints
     {
         private readonly ISequence<int> values;
 
@@ -191,7 +191,7 @@ namespace PiCross.Game
 
         public override string ToString()
         {
-            return string.Format( "Constraints[{0}]", this.values.Map( x => x.ToString() ).Join( "-" ) );
+            return string.Format( "[{0}]", this.values.Map( x => x.ToString() ).Join( "-" ) );
         }
 
         public Constraints Lift( Func<ISequence<int>, ISequence<int>> function )
