@@ -3,31 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PiCross.Cells;
 
 namespace PiCross.Dynamic
 {
-    public interface IDynamicObject
+    public interface IDynamicObject<PROPERTY>
     {
-        IEnumerable<IDynamicProperty> Properties { get; }
+        IEnumerable<PROPERTY> Properties { get; }
 
-        Cell<object> this[IDynamicProperty property] { get; }
+        object this[PROPERTY property] { get; }
     }
 
-    public interface IDynamicProperty
+    public interface IDynamicObjectGroup<OBJECT, PROPERTY> where OBJECT : IDynamicObject<PROPERTY>
     {
-        string Name { get; }
+        ISet<PROPERTY> Properties { get; }
+
+        ISet<object> PropertyValues( PROPERTY property );
     }
 
-    public interface IDynamicObjectGroup
+    public interface IFilter<PROPERTY>
     {
-        IEnumerable<IDynamicObject> Properties { get; }
-
-        IEnumerable<object> PropertyValues( IDynamicProperty property );
-    }
-
-    public interface IFilter
-    {
-        bool Accept( IDynamicObject obj );
+        bool Accept( PROPERTY obj );
     }
 }
