@@ -45,7 +45,10 @@ namespace PiCross.Dynamic
 
             foreach ( var member in members )
             {
-                result.Add( member[property] );
+                if ( member.Properties.Contains( property ) )
+                {
+                    result.Add( member[property] );
+                }
             }
 
             return result;

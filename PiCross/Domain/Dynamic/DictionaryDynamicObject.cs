@@ -34,11 +34,11 @@ namespace PiCross.Dynamic
             }
         }
 
-        public IEnumerable<PROPERTY> Properties
+        public ISet<PROPERTY> Properties
         {
             get
             {
-                return contents.Keys;
+                return new HashSet<PROPERTY>( contents.Keys );
             }
         }
 

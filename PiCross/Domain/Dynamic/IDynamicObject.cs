@@ -8,7 +8,7 @@ namespace PiCross.Dynamic
 {
     public interface IDynamicObject<PROPERTY>
     {
-        IEnumerable<PROPERTY> Properties { get; }
+        ISet<PROPERTY> Properties { get; }
 
         object this[PROPERTY property] { get; }
     }
