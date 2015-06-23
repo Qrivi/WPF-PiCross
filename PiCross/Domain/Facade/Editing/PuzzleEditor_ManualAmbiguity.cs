@@ -224,14 +224,14 @@ namespace PiCross.Facade.Editing
 
         private abstract class PuzzleEditorConstraints : IPuzzleEditorConstraints
         {
-            private Cell<ISequence<int>> values;
+            private Cell<Constraints> values;
 
             protected PuzzleEditorConstraints( Func<Constraints> constraintsFetcher )
             {
-                values = Cell.Derived( () => constraintsFetcher().Values );
+                values = Cell.Derived( () => constraintsFetcher() );
             }
 
-            public Cell<ISequence<int>> Values
+            public Cell<Constraints> Values
             {
                 get
                 {

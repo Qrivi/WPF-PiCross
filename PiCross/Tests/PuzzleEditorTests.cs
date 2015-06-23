@@ -34,13 +34,13 @@ namespace PiCross.Tests
             Assert.AreEqual( true, editor[new Vector2D( 1, 2 )].IsFilled.Value );
             Assert.AreEqual( false, editor[new Vector2D( 2, 2 )].IsFilled.Value );
 
-            Assert.AreEqual( Sequence.FromItems( 1 ), editor.RowConstraints[0].Values.Value );
-            Assert.AreEqual( Sequence.FromItems( 3 ), editor.RowConstraints[1].Values.Value );
-            Assert.AreEqual( Sequence.FromItems( 1 ), editor.RowConstraints[2].Values.Value );
+            Assert.AreEqual( CreateConstraints( 1 ), editor.RowConstraints[0].Values.Value );
+            Assert.AreEqual( CreateConstraints( 3 ), editor.RowConstraints[1].Values.Value );
+            Assert.AreEqual( CreateConstraints( 1 ), editor.RowConstraints[2].Values.Value );
 
-            Assert.AreEqual( Sequence.FromItems( 1 ), editor.ColumnConstraints[0].Values.Value );
-            Assert.AreEqual( Sequence.FromItems( 2 ), editor.ColumnConstraints[1].Values.Value );
-            Assert.AreEqual( Sequence.FromItems( 2 ), editor.ColumnConstraints[2].Values.Value );
+            Assert.AreEqual( CreateConstraints( 1 ), editor.ColumnConstraints[0].Values.Value );
+            Assert.AreEqual( CreateConstraints( 2 ), editor.ColumnConstraints[1].Values.Value );
+            Assert.AreEqual( CreateConstraints( 2 ), editor.ColumnConstraints[2].Values.Value );
         }
 
         [TestMethod]

@@ -13,6 +13,16 @@ namespace PiCross.Game
     {
         private readonly ISequence<int> values;
 
+        public static Constraints FromValues(params int[] values)
+        {
+            return new Constraints( values.ToSequence() );
+        }
+
+        public static Constraints FromSequence(ISequence<int> sequence)
+        {
+            return new Constraints( sequence );
+        }
+
         public Constraints( ISequence<int> values )
         {
             if ( values == null )
