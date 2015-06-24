@@ -159,5 +159,120 @@ namespace PiCross.Tests
 
             Assert.AreEqual( expected, actual );
         }
+
+        [TestMethod]
+        [TestCategory( "Sequence" )]
+        public void ToByte1()
+        {
+            var seq = Sequence.FromItems( true );
+            var expected = (byte) 0x80;
+            var actual = seq.ToByte();
+
+            Assert.AreEqual( expected, actual );
+        }
+
+        [TestMethod]
+        [TestCategory( "Sequence" )]
+        public void ToByte2()
+        {
+            var seq = Sequence.FromItems( false );
+            var expected = (byte) 0x00;
+            var actual = seq.ToByte();
+
+            Assert.AreEqual( expected, actual );
+        }
+
+        [TestMethod]
+        [TestCategory( "Sequence" )]
+        public void ToByte3()
+        {
+            var seq = Sequence.FromItems( true, false );
+            var expected = (byte) 0x80;
+            var actual = seq.ToByte();
+
+            Assert.AreEqual( expected, actual );
+        }
+
+        [TestMethod]
+        [TestCategory( "Sequence" )]
+        public void ToByte4()
+        {
+            var seq = Sequence.FromItems( true, true );
+            var expected = (byte) 0xC0;
+            var actual = seq.ToByte();
+
+            Assert.AreEqual( expected, actual );
+        }
+
+        [TestMethod]
+        [TestCategory( "Sequence" )]
+        public void ToByte5()
+        {
+            var seq = Sequence.FromItems( true, true, true, true );
+            var expected = (byte) 0xF0;
+            var actual = seq.ToByte();
+
+            Assert.AreEqual( expected, actual );
+        }
+
+        [TestMethod]
+        [TestCategory( "Sequence" )]
+        public void GroupBits1()
+        {
+            var seq = BoolSeq( 1, 1, 1, 1, 1, 1, 1, 1 );
+            var expected = Sequence.FromItems<byte>( 0xFF );
+            var actual = seq.GroupBits();
+
+            Assert.AreEqual( expected, actual );
+        }
+
+        [TestMethod]
+        [TestCategory( "Sequence" )]
+        public void GroupBits2()
+        {
+            var seq = BoolSeq( 0, 0, 0, 0, 0, 0, 0, 0 );
+            var expected = Sequence.FromItems<byte>( 0x00 );
+            var actual = seq.GroupBits();
+
+            Assert.AreEqual( expected, actual );
+        }
+
+        [TestMethod]
+        [TestCategory( "Sequence" )]
+        public void GroupBits3()
+        {
+            var seq = BoolSeq( 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 );
+            var expected = Sequence.FromItems<byte>( 0xFF, 0x00 );
+            var actual = seq.GroupBits();
+
+            Assert.AreEqual( expected, actual );
+        }
+
+        [TestMethod]
+        [TestCategory( "Sequence" )]
+        public void GroupBits4()
+        {
+            var seq = BoolSeq( 1, 1 );
+            var expected = Sequence.FromItems<byte>( 0xC0 );
+            var actual = seq.GroupBits();
+
+            Assert.AreEqual( expected, actual );
+        }
+
+        [TestMethod]
+        [TestCategory( "Sequence" )]
+        public void GroupBits5()
+        {
+            var seq = BoolSeq( 0, 0, 0, 0, 1, 1, 1, 1, 1 );
+            var expected = Sequence.FromItems<byte>( 0x0F, 0x80 );
+            var actual = seq.GroupBits();
+
+            Assert.AreEqual( expected, actual );
+        }
+
+        private ISequence<bool> BoolSeq( params int[] bits )
+        {
+            return Sequence.FromItems( bits ).Map( x => x == 1 );
+        }
     }
 }

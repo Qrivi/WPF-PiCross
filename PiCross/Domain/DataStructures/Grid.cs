@@ -114,6 +114,11 @@ namespace PiCross.DataStructures
                 }
             }
         }
+
+        public static ISequence<T> Linearize<T>(this IGrid<T> grid)
+        {
+            return grid.Rows.ToSequence().Flatten();   
+        }
     }
 
     public static class Grid
