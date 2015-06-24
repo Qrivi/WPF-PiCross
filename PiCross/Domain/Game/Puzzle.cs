@@ -44,6 +44,11 @@ namespace PiCross.Game
             return new Puzzle( columnConstraints: columnConstraints, rowConstraints: rowConstraints, grid: boolGrid );
         }
 
+        public static Puzzle FromGrid( IGrid<bool> grid )
+        {
+            return FromGrid( grid.Map( Square.FromBool ) );
+        }
+
         public static Puzzle FromRowStrings( params string[] rows )
         {
             return FromGrid( Square.CreateGrid( rows ) );

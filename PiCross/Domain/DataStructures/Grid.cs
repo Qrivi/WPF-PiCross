@@ -181,6 +181,15 @@ namespace PiCross.DataStructures
         {
             return grid.Items.Select( x => x.GetHashCode() ).Aggregate( 0, ( x, y ) => x ^ y );
         }
+
+        public static IGrid<T> FromRows<T>(ISequence<ISequence<T>> rows)
+        {
+            var width = rows[0].Length;
+            var height = rows.Length;
+            var size = new Size(width, height);
+
+            return Grid.Create( size, p => rows[p.Y][p.X] );
+        }
     }
 
     internal abstract class GridBase<T> : IGrid<T>

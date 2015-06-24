@@ -270,6 +270,46 @@ namespace PiCross.Tests
             Assert.AreEqual( expected, actual );
         }
 
+        [TestMethod]
+        [TestCategory( "Sequence" )]
+        public void Bits1()
+        {
+            var actual = Sequence.Bits( 0 );
+            var expected = BoolSeq( 0, 0, 0, 0, 0, 0, 0, 0 );
+
+            Assert.AreEqual( expected, actual );
+        }
+
+        [TestMethod]
+        [TestCategory( "Sequence" )]
+        public void Bits2()
+        {
+            var actual = Sequence.Bits( 1 );
+            var expected = BoolSeq( 0, 0, 0, 0, 0, 0, 0, 1 );
+
+            Assert.AreEqual( expected, actual );
+        }
+
+        [TestMethod]
+        [TestCategory( "Sequence" )]
+        public void Bits3()
+        {
+            var actual = Sequence.Bits( 2 );
+            var expected = BoolSeq( 0, 0, 0, 0, 0, 0, 1, 0 );
+
+            Assert.AreEqual( expected, actual );
+        }
+
+        [TestMethod]
+        [TestCategory( "Sequence" )]
+        public void Bits4()
+        {
+            var actual = Sequence.Bits( 0xFF );
+            var expected = BoolSeq( 1, 1, 1, 1, 1, 1, 1, 1 );
+
+            Assert.AreEqual( expected, actual );
+        }
+
         private ISequence<bool> BoolSeq( params int[] bits )
         {
             return Sequence.FromItems( bits ).Map( x => x == 1 );
