@@ -10,64 +10,64 @@ namespace PiCross.Tests
     {
         [TestMethod]
         [TestCategory( "LibraryIO" )]
-        public void Load_Saved1()
+        public void Load_Saved1_ReadableFormat()
         {
             var library = CreateLibrary(
                 CreatePuzzle( "." )
                 );
 
-            CheckIO( library );
+            CheckReadableFormatIO( library );
         }
 
         [TestMethod]
         [TestCategory( "LibraryIO" )]
-        public void Load_Saved2()
+        public void Load_Saved2_ReadableFormat()
         {
             var library = CreateLibrary(
                 CreatePuzzle( "x" )
                 );
 
-            CheckIO( library );
+            CheckReadableFormatIO( library );
         }
 
         [TestMethod]
         [TestCategory( "LibraryIO" )]
-        public void Load_Saved3()
+        public void Load_Saved3_ReadableFormat()
         {
             var library = CreateLibrary(
                 CreatePuzzle( ".." )
                 );
 
-            CheckIO( library );
+            CheckReadableFormatIO( library );
         }
 
         [TestMethod]
         [TestCategory( "LibraryIO" )]
-        public void Load_Saved4()
+        public void Load_Saved4_ReadableFormat()
         {
             var library = CreateLibrary(
                 CreatePuzzle( "xx" )
                 );
 
-            CheckIO( library );
+            CheckReadableFormatIO( library );
         }
 
         [TestMethod]
         [TestCategory( "LibraryIO" )]
-        public void Load_Saved5()
+        public void Load_Saved5_ReadableFormat()
         {
             var library = CreateLibrary(
-                CreatePuzzle( 
+                CreatePuzzle(
                 "xx",
                 "xx" )
                 );
 
-            CheckIO( library );
+            CheckReadableFormatIO( library );
         }
 
         [TestMethod]
         [TestCategory( "LibraryIO" )]
-        public void Load_Saved6()
+        public void Load_Saved6_ReadableFormat()
         {
             var library = CreateLibrary(
                 CreatePuzzle(
@@ -77,33 +77,97 @@ namespace PiCross.Tests
                 "x...x..xx" )
                 );
 
-            CheckIO( library );
+            CheckReadableFormatIO( library );
         }
 
         [TestMethod]
         [TestCategory( "LibraryIO" )]
-        public void MemoryStreamAssumptionCheck()
+        public void Load_Saved1_CondensedFormat()
         {
-            var str = "Hello world";
-            using ( var stream = new MemoryStream() )
-            {
-                var writer = new StreamWriter( stream );
-                writer.WriteLine( str );
-                writer.Flush();
+            var library = CreateLibrary(
+                CreatePuzzle( "." )
+                );
 
-                stream.Seek( 0, SeekOrigin.Begin );
-
-                var reader = new StreamReader( stream );
-                var line = reader.ReadLine();
-
-                Assert.AreEqual( str, line );
-            }
+            CheckCondensedFormatIO( library );
         }
 
-        private void CheckIO( ILibrary library )
+        [TestMethod]
+        [TestCategory( "LibraryIO" )]
+        public void Load_Saved2_CondensedFormat()
+        {
+            var library = CreateLibrary(
+                CreatePuzzle( "x" )
+                );
+
+            CheckCondensedFormatIO( library );
+        }
+
+        [TestMethod]
+        [TestCategory( "LibraryIO" )]
+        public void Load_Saved3_CondensedFormat()
+        {
+            var library = CreateLibrary(
+                CreatePuzzle( ".." )
+                );
+
+            CheckCondensedFormatIO( library );
+        }
+
+        [TestMethod]
+        [TestCategory( "LibraryIO" )]
+        public void Load_Saved4_CondensedFormat()
+        {
+            var library = CreateLibrary(
+                CreatePuzzle( "xx" )
+                );
+
+            CheckCondensedFormatIO( library );
+        }
+
+        [TestMethod]
+        [TestCategory( "LibraryIO" )]
+        public void Load_Saved5_CondensedFormat()
+        {
+            var library = CreateLibrary(
+                CreatePuzzle(
+                "xx",
+                "xx" )
+                );
+
+            CheckCondensedFormatIO( library );
+        }
+
+        [TestMethod]
+        [TestCategory( "LibraryIO" )]
+        public void Load_Saved6_CondensedFormat()
+        {
+            var library = CreateLibrary(
+                CreatePuzzle(
+                "x....x..x",
+                "x.xxx.x..",
+                ".x.xx.x..",
+                "x...x..xx" )
+                );
+
+            CheckCondensedFormatIO( library );
+        }
+
+        private void CheckReadableFormatIO( ILibrary library )
         {
             var io = new LibraryIO( new ReadableFormat() );
 
+            CheckIO( library, io );
+        }
+
+        private void CheckCondensedFormatIO( ILibrary library )
+        {
+            var io = new LibraryIO( new CondensedFormat() );
+
+            CheckIO( library, io );
+        }
+
+        private static void CheckIO( ILibrary library, LibraryIO io )
+        {
             using ( var memoryStream = new MemoryStream() )
             {
                 io.Save( library, memoryStream );

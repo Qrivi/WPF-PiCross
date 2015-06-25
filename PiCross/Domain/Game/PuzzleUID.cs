@@ -11,7 +11,7 @@ namespace PiCross.Game
     {
         private ISequence<byte> bytes;
 
-        public PuzzleUID(Puzzle puzzle)
+        public static PuzzleUID FromPuzzle( Puzzle puzzle )
         {
             if ( puzzle == null )
             {
@@ -25,9 +25,22 @@ namespace PiCross.Game
             {
                 var sizeBytes = Sequence.FromItems<byte>( (byte) puzzle.Size.Width, (byte) puzzle.Size.Height );
                 var gridBytes = puzzle.Grid.Linearize().GroupBits();
+                var bytes = sizeBytes.Concatenate( gridBytes );
 
-                this.bytes = sizeBytes.Concatenate( gridBytes );
+                return new PuzzleUID( bytes );
             }
+        }
+
+        public static PuzzleUID FromBase64(string str)
+        {
+            var bytes = Convert.FromBase64String( str ).ToSequence();
+
+            return new PuzzleUID( bytes );
+        }
+
+        private PuzzleUID( ISequence<byte> bytes )
+        {
+            this.bytes = bytes;
         }
 
         public override bool Equals( object obj )
@@ -35,7 +48,7 @@ namespace PiCross.Game
             return Equals( obj as PuzzleUID );
         }
 
-        public bool Equals(PuzzleUID uid)
+        public bool Equals( PuzzleUID uid )
         {
             return uid != null && this.bytes.Equals( uid.bytes );
         }
@@ -47,7 +60,15 @@ namespace PiCross.Game
 
         public override string ToString()
         {
-            return bytes.Map( x => string.Format( "{0:x}", x ) ).Join(" ");
+            return bytes.Map( x => string.Format( "{0:x}", x ) ).Join( " " );
+        }
+
+        public string Base64
+        {
+            get
+            {
+                return Convert.ToBase64String( bytes.ToArray() );
+            }
         }
 
         public Puzzle CreatePuzzle()
@@ -55,9 +76,9 @@ namespace PiCross.Game
             var width = this.bytes[0];
             var height = this.bytes[1];
             var gridBytes = this.bytes.DropPrefix( 2 ).Map( Sequence.Bits ).Flatten();
-            var rowBits = gridBytes.Group( width ).Prefix(height);
+            var rowBits = gridBytes.Group( width ).Prefix( height );
             var grid = Grid.FromRows( rowBits );
-            
+
             return Puzzle.FromGrid( grid );
         }
     }

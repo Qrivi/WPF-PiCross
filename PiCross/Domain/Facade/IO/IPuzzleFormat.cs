@@ -88,4 +88,22 @@ namespace PiCross.Facade.IO
 
         #endregion
     }
+
+    public class CondensedFormat : IPuzzleFormat
+    {
+        public Puzzle Read( StreamReader reader )
+        {
+            var line = reader.ReadLine();
+            var uid = PuzzleUID.FromBase64( line );
+
+            return uid.CreatePuzzle();
+        }
+
+        public void Write( StreamWriter writer, Puzzle puzzle )
+        {
+            var uid = PuzzleUID.FromPuzzle( puzzle );
+
+            writer.WriteLine( uid.Base64 );
+        }
+    }
 }

@@ -8,140 +8,140 @@ namespace PiCross.Tests
     public class PuzzleUIDTests : TestBase
     {
         [TestMethod]
-        [TestCategory("PuzzleUID")]
-        public void Test1()
+        [TestCategory( "PuzzleUID" )]
+        public void ConvertToUidAndBack1()
         {
             var puzzle = CreatePuzzle(
                 "."
                 );
 
-            var uid = new PuzzleUID( puzzle );
+            var uid = CreateUID( puzzle );
 
             Assert.AreEqual( puzzle, uid.CreatePuzzle() );
         }
 
         [TestMethod]
         [TestCategory( "PuzzleUID" )]
-        public void Test2()
+        public void ConvertToUidAndBack2()
         {
             var puzzle = CreatePuzzle(
                 "x"
                 );
 
-            var uid = new PuzzleUID( puzzle );
+            var uid = CreateUID( puzzle );
 
             Assert.AreEqual( puzzle, uid.CreatePuzzle() );
         }
 
         [TestMethod]
         [TestCategory( "PuzzleUID" )]
-        public void Test3()
+        public void ConvertToUidAndBack3()
         {
             var puzzle = CreatePuzzle(
                 ".."
                 );
 
-            var uid = new PuzzleUID( puzzle );
+            var uid = CreateUID( puzzle );
 
             Assert.AreEqual( puzzle, uid.CreatePuzzle() );
         }
 
         [TestMethod]
         [TestCategory( "PuzzleUID" )]
-        public void Test4()
+        public void ConvertToUidAndBack4()
         {
             var puzzle = CreatePuzzle(
                 ".x"
                 );
 
-            var uid = new PuzzleUID( puzzle );
+            var uid = CreateUID( puzzle );
 
             Assert.AreEqual( puzzle, uid.CreatePuzzle() );
         }
 
         [TestMethod]
         [TestCategory( "PuzzleUID" )]
-        public void Test5()
+        public void ConvertToUidAndBack5()
         {
             var puzzle = CreatePuzzle(
                 "x."
                 );
 
-            var uid = new PuzzleUID( puzzle );
+            var uid = CreateUID( puzzle );
 
             Assert.AreEqual( puzzle, uid.CreatePuzzle() );
         }
 
         [TestMethod]
         [TestCategory( "PuzzleUID" )]
-        public void Test6()
+        public void ConvertToUidAndBack6()
         {
             var puzzle = CreatePuzzle(
                 "xx"
                 );
 
-            var uid = new PuzzleUID( puzzle );
+            var uid = CreateUID( puzzle );
 
             Assert.AreEqual( puzzle, uid.CreatePuzzle() );
         }
 
         [TestMethod]
         [TestCategory( "PuzzleUID" )]
-        public void Test7()
+        public void ConvertToUidAndBack7()
         {
             var puzzle = CreatePuzzle(
                 "........x"
                 );
 
-            var uid = new PuzzleUID( puzzle );
+            var uid = CreateUID( puzzle );
 
             Assert.AreEqual( puzzle, uid.CreatePuzzle() );
         }
 
         [TestMethod]
         [TestCategory( "PuzzleUID" )]
-        public void Test8()
+        public void ConvertToUidAndBack8()
         {
             var puzzle = CreatePuzzle(
                 "........x.x.x.x.x....x.x.x.x..x..x...x........xxx"
                 );
 
-            var uid = new PuzzleUID( puzzle );
+            var uid = CreateUID( puzzle );
 
             Assert.AreEqual( puzzle, uid.CreatePuzzle() );
         }
 
         [TestMethod]
         [TestCategory( "PuzzleUID" )]
-        public void Test9()
+        public void ConvertToUidAndBack9()
         {
             var puzzle = CreatePuzzle(
                 ".",
                 "."
                 );
 
-            var uid = new PuzzleUID( puzzle );
+            var uid = CreateUID( puzzle );
 
             Assert.AreEqual( puzzle, uid.CreatePuzzle() );
         }
 
         [TestMethod]
         [TestCategory( "PuzzleUID" )]
-        public void Test10()
+        public void ConvertToUidAndBack10()
         {
             var puzzle = CreatePuzzle(
                 "x",
                 "."
                 );
 
-            var uid = new PuzzleUID( puzzle );
+            var uid = CreateUID( puzzle );
 
             Assert.AreEqual( puzzle, uid.CreatePuzzle() );
         }
 
         [TestMethod]
         [TestCategory( "PuzzleUID" )]
-        public void Test11()
+        public void ConvertToUidAndBack11()
         {
             var puzzle = CreatePuzzle(
                 ".x..x.x.xx.x.x.x..x.x.xxxx",
@@ -151,9 +151,104 @@ namespace PiCross.Tests
                 "xx.x..x.xx..x...x.x.x...x."
                 );
 
-            var uid = new PuzzleUID( puzzle );
+            var uid = CreateUID( puzzle );
 
             Assert.AreEqual( puzzle, uid.CreatePuzzle() );
+        }
+
+        [TestMethod]
+        [TestCategory( "PuzzleUID" )]
+        public void ToAndFromBase64_1()
+        {
+            var puzzle = CreatePuzzle(
+                "." );
+
+            var uid1 = CreateUID( puzzle );
+            var b64 = uid1.Base64;
+            var uid2 = PuzzleUID.FromBase64( b64 );
+
+            Assert.AreEqual( uid1, uid2 );
+        }
+
+        [TestMethod]
+        [TestCategory( "PuzzleUID" )]
+        public void ToAndFromBase64_2()
+        {
+            var puzzle = CreatePuzzle(
+                "x" );
+
+            var uid1 = CreateUID( puzzle );
+            var b64 = uid1.Base64;
+            var uid2 = PuzzleUID.FromBase64( b64 );
+
+            Assert.AreEqual( uid1, uid2 );
+        }
+
+        [TestMethod]
+        [TestCategory( "PuzzleUID" )]
+        public void ToAndFromBase64_3()
+        {
+            var puzzle = CreatePuzzle(
+                ".." );
+
+            var uid1 = CreateUID( puzzle );
+            var b64 = uid1.Base64;
+            var uid2 = PuzzleUID.FromBase64( b64 );
+
+            Assert.AreEqual( uid1, uid2 );
+        }
+
+        [TestMethod]
+        [TestCategory( "PuzzleUID" )]
+        public void ToAndFromBase64_4()
+        {
+            var puzzle = CreatePuzzle(
+                "xx" );
+
+            var uid1 = CreateUID( puzzle );
+            var b64 = uid1.Base64;
+            var uid2 = PuzzleUID.FromBase64( b64 );
+
+            Assert.AreEqual( uid1, uid2 );
+        }
+
+        [TestMethod]
+        [TestCategory( "PuzzleUID" )]
+        public void ToAndFromBase64_5()
+        {
+            var puzzle = CreatePuzzle(
+                "...",
+                "..." );
+
+            var uid1 = CreateUID( puzzle );
+            var b64 = uid1.Base64;
+            var uid2 = PuzzleUID.FromBase64( b64 );
+
+            Assert.AreEqual( uid1, uid2 );
+        }
+
+        [TestMethod]
+        [TestCategory( "PuzzleUID" )]
+        public void ToAndFromBase64_6()
+        {
+            var puzzle = CreatePuzzle(
+                ".x..x.x.xx.x.x.x..x.x.xxxx",
+                ".xxx.x.x..xx.x.x.xx.x..x..",
+                "xx....x.x.x.x.x.xx...x...x",
+                "xxx.x..x....x.x.xx.x.xxx.x",
+                "xx.x..x.xx..x...x.x.x...x."
+                );
+
+            var uid1 = CreateUID( puzzle );
+            var b64 = uid1.Base64;
+            var uid2 = PuzzleUID.FromBase64( b64 );
+
+            Assert.AreEqual( uid1, uid2 );
+        }
+
+        public static PuzzleUID CreateUID( Puzzle puzzle )
+        {
+            return PuzzleUID.FromPuzzle( puzzle );
         }
     }
 }

@@ -408,6 +408,23 @@ namespace PiCross.DataStructures
                 return (byte) ( bits.Map( ( i, b ) => ( b ? 1 : 0 ) << ( 7 - i ) ).Items.Aggregate( 0, ( x, y ) => x | y ) );
             }
         }
+
+        public static T[] ToArray<T>( this ISequence<T> seq )
+        {
+            var array = new T[seq.Length];
+
+            seq.Each( i => array[i] = seq[i] );
+
+            return array;
+        }
+
+        public static void Each<T>(this ISequence<T> xs, Action<int> action)
+        {
+            foreach ( var i in xs.Indices )
+            {
+                action( i );
+            }
+        }
     }
 
     internal abstract class SequenceBase<T> : ISequence<T>
