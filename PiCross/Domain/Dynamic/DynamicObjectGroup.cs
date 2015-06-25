@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace PiCross.Dynamic
 {
-    public class DynamicObjectGroup<OBJECT, PROPERTY> : IDynamicObjectGroup<OBJECT, PROPERTY>
-        where OBJECT : IDynamicObject<PROPERTY>
+    public class DynamicObjectGroup<OBJECT> : IDynamicObjectGroup<OBJECT>
+        where OBJECT : IDynamicObject
     {
         private readonly List<OBJECT> members;
 
-        public static DynamicObjectGroup<OBJECT, PROPERTY> FromMembers( params OBJECT[] members )
+        public static DynamicObjectGroup<OBJECT> FromMembers( params OBJECT[] members )
         {
-            return new DynamicObjectGroup<OBJECT, PROPERTY>( members.ToList() );
+            return new DynamicObjectGroup<OBJECT>( members.ToList() );
         }
 
         private DynamicObjectGroup( List<OBJECT> members )
@@ -21,11 +21,11 @@ namespace PiCross.Dynamic
             this.members = members;
         }
 
-        public ISet<PROPERTY> Properties
+        public ISet<string> Properties
         {
             get
             {
-                var result = new HashSet<PROPERTY>();
+                var result = new HashSet<string>();
 
                 foreach ( var member in members )
                 {
@@ -39,7 +39,7 @@ namespace PiCross.Dynamic
             }
         }
 
-        public ISet<object> PropertyValues( PROPERTY property )
+        public ISet<object> PropertyValues( string property )
         {
             var result = new HashSet<object>();
 

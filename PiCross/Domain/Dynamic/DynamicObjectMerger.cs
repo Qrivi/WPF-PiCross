@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace PiCross.Dynamic
 {
-    public class DynamicObjectMerger<PROPERTY> : IDynamicObject<PROPERTY>
+    public class DynamicObjectMerger : IDynamicObject
     {
-        private readonly IDynamicObject<PROPERTY> first;
+        private readonly IDynamicObject first;
 
-        private readonly IDynamicObject<PROPERTY> second;
+        private readonly IDynamicObject second;
 
-        public DynamicObjectMerger(IDynamicObject<PROPERTY> first, IDynamicObject<PROPERTY> second)
+        public DynamicObjectMerger(IDynamicObject first, IDynamicObject second)
         {
             if ( first == null )
             {
@@ -33,18 +33,18 @@ namespace PiCross.Dynamic
             }
         }
 
-        public ISet<PROPERTY> Properties
+        public ISet<string> Properties
         {
             get
             {
-                var result = new HashSet<PROPERTY>(first.Properties);
+                var result = new HashSet<string>(first.Properties);
                 result.UnionWith( second.Properties );
 
                 return result;
             }
         }
 
-        public object this[PROPERTY property]
+        public object this[string property]
         {
             get
             {

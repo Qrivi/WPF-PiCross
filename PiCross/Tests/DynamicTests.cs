@@ -12,8 +12,8 @@ namespace PiCross.Tests
         [TestCategory( "DynamicObjectGroup" )]
         public void GroupProperties1()
         {
-            var dyn1 = new DDO() { { "x", 1 } };
-            var group = DynamicObjectGroup<DDO, string>.FromMembers( dyn1 );
+            var dyn1 = new DictionaryDynamicObject() { { "x", 1 } };
+            var group = DynamicObjectGroup<DictionaryDynamicObject>.FromMembers( dyn1 );
             var expected = new HashSet<string>() { "x" };
             var actual = group.Properties;
 
@@ -24,9 +24,9 @@ namespace PiCross.Tests
         [TestCategory( "DynamicObjectGroup" )]
         public void GroupProperties2()
         {
-            var dyn1 = new DDO() { { "x", 1 } };
-            var dyn2 = new DDO() { { "y", 1 } };
-            var group = DynamicObjectGroup<DDO, string>.FromMembers( dyn1, dyn2 );
+            var dyn1 = new DictionaryDynamicObject() { { "x", 1 } };
+            var dyn2 = new DictionaryDynamicObject() { { "y", 1 } };
+            var group = DynamicObjectGroup<DictionaryDynamicObject>.FromMembers( dyn1, dyn2 );
             var expected = new HashSet<string>() { "x", "y" };
             var actual = group.Properties;
 
@@ -37,10 +37,10 @@ namespace PiCross.Tests
         [TestCategory( "DynamicObjectGroup" )]
         public void GroupProperties3()
         {
-            var dyn1 = new DDO() { { "x", 1 } };
-            var dyn2 = new DDO() { { "y", 1 } };
-            var dyn3 = new DDO() { { "x", 2 } };
-            var group = DynamicObjectGroup<DDO, string>.FromMembers( dyn1, dyn2, dyn3 );
+            var dyn1 = new DictionaryDynamicObject() { { "x", 1 } };
+            var dyn2 = new DictionaryDynamicObject() { { "y", 1 } };
+            var dyn3 = new DictionaryDynamicObject() { { "x", 2 } };
+            var group = DynamicObjectGroup<DictionaryDynamicObject>.FromMembers( dyn1, dyn2, dyn3 );
             var expected = new HashSet<string>() { "x", "y" };
             var actual = group.Properties;
 
@@ -51,10 +51,10 @@ namespace PiCross.Tests
         [TestCategory( "DynamicObjectGroup" )]
         public void GroupProperties4()
         {
-            var dyn1 = new DDO() { { "x", 1 }, { "y", 2 } };
-            var dyn2 = new DDO() { { "y", 1 } };
-            var dyn3 = new DDO() { { "x", 2 } };
-            var group = DynamicObjectGroup<DDO, string>.FromMembers( dyn1, dyn2, dyn3 );
+            var dyn1 = new DictionaryDynamicObject() { { "x", 1 }, { "y", 2 } };
+            var dyn2 = new DictionaryDynamicObject() { { "y", 1 } };
+            var dyn3 = new DictionaryDynamicObject() { { "x", 2 } };
+            var group = DynamicObjectGroup<DictionaryDynamicObject>.FromMembers( dyn1, dyn2, dyn3 );
             var expected = new HashSet<string>() { "x", "y" };
             var actual = group.Properties;
 
@@ -65,10 +65,10 @@ namespace PiCross.Tests
         [TestCategory( "DynamicObjectGroup" )]
         public void PropertyValues1()
         {
-            var dyn1 = new DDO() { { "x", 1 } };
-            var dyn2 = new DDO() { { "y", 1 } };
-            var dyn3 = new DDO() { { "x", 2 } };
-            var group = DynamicObjectGroup<DDO, string>.FromMembers( dyn1, dyn2, dyn3 );
+            var dyn1 = new DictionaryDynamicObject() { { "x", 1 } };
+            var dyn2 = new DictionaryDynamicObject() { { "y", 1 } };
+            var dyn3 = new DictionaryDynamicObject() { { "x", 2 } };
+            var group = DynamicObjectGroup<DictionaryDynamicObject>.FromMembers( dyn1, dyn2, dyn3 );
             var expected = new HashSet<object>() { 1 };
             var actual = group.PropertyValues( "y" );
 
@@ -79,10 +79,10 @@ namespace PiCross.Tests
         [TestCategory( "DynamicObjectGroup" )]
         public void PropertyValues2()
         {
-            var dyn1 = new DDO() { { "x", 1 } };
-            var dyn2 = new DDO() { { "y", 1 } };
-            var dyn3 = new DDO() { { "x", 2 } };
-            var group = DynamicObjectGroup<DDO, string>.FromMembers( dyn1, dyn2, dyn3 );
+            var dyn1 = new DictionaryDynamicObject() { { "x", 1 } };
+            var dyn2 = new DictionaryDynamicObject() { { "y", 1 } };
+            var dyn3 = new DictionaryDynamicObject() { { "x", 2 } };
+            var group = DynamicObjectGroup<DictionaryDynamicObject>.FromMembers( dyn1, dyn2, dyn3 );
             var expected = new HashSet<object>() { 1, 2 };
             var actual = group.PropertyValues( "x" );
 
@@ -97,8 +97,6 @@ namespace PiCross.Tests
             {
                 Assert.IsTrue( actual.Contains( x ), string.Format( "{0} should be in set", x ) );
             }
-        }
-
-        private class DDO : DictionaryDynamicObject<string> { }
+        }        
     }
 }

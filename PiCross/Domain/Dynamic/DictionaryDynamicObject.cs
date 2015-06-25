@@ -9,16 +9,16 @@ namespace PiCross.Dynamic
 {
     [DebuggerDisplay("Property count = {PropertyCount}")]
     [DebuggerTypeProxy( typeof( DynamicObjectProxy<> ) )]
-    public class DictionaryDynamicObject<PROPERTY> : IDynamicObject<PROPERTY>, IEnumerable<KeyValuePair<PROPERTY, object>>
+    public class DictionaryDynamicObject : IDynamicObject, IEnumerable<KeyValuePair<string, object>>
     {
-        private readonly Dictionary<PROPERTY, object> contents;
+        private readonly Dictionary<string, object> contents;
 
         public DictionaryDynamicObject()
         {
-            this.contents = new Dictionary<PROPERTY, object>();
+            this.contents = new Dictionary<string, object>();
         }
 
-        public object this[PROPERTY property]
+        public object this[string property]
         {
             get
             {
@@ -37,11 +37,11 @@ namespace PiCross.Dynamic
             }
         }
 
-        public ISet<PROPERTY> Properties
+        public ISet<string> Properties
         {
             get
             {
-                return new HashSet<PROPERTY>( contents.Keys );
+                return new HashSet<string>( contents.Keys );
             }
         }
 
@@ -55,12 +55,12 @@ namespace PiCross.Dynamic
 
         #region Necessary for collection initializers
 
-        public void Add(PROPERTY property, object value)
+        public void Add(string property, object value)
         {
             this[property] = value;
         }
 
-        public IEnumerator<KeyValuePair<PROPERTY, object>> GetEnumerator()
+        public IEnumerator<KeyValuePair<string, object>> GetEnumerator()
         {
             return this.contents.GetEnumerator();
         }

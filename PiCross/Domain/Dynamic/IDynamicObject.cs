@@ -7,60 +7,60 @@ using System.Diagnostics;
 
 namespace PiCross.Dynamic
 {    
-    public interface IDynamicObject<PROPERTY>
+    public interface IDynamicObject
     {
-        ISet<PROPERTY> Properties { get; }
+        ISet<string> Properties { get; }
 
-        object this[PROPERTY property] { get; }
+        object this[string property] { get; }
     }
 
-    public interface IDynamicObjectGroup<OBJECT, PROPERTY> where OBJECT : IDynamicObject<PROPERTY>
+    public interface IDynamicObjectGroup<OBJECT> where OBJECT : IDynamicObject
     {
-        ISet<PROPERTY> Properties { get; }
+        ISet<string> Properties { get; }
 
-        ISet<object> PropertyValues( PROPERTY property );
+        ISet<object> PropertyValues( string property );
     }
 
-    public interface IFilter<PROPERTY>
+    public interface IFilter
     {
-        bool Accept( PROPERTY obj );
+        bool Accept( object obj );
     }
 
     internal class DynamicObjectProxy<PROPERTY>
     {
-        private IDynamicObject<PROPERTY> obj;
+        private IDynamicObject obj;
 
-        public DynamicObjectProxy( IDynamicObject<PROPERTY> obj )
+        public DynamicObjectProxy( IDynamicObject obj )
         {
             this.obj = obj;
         }
 
         [DebuggerBrowsable( DebuggerBrowsableState.RootHidden )]
-        public PropertyValuePair<PROPERTY>[] Properties
+        public PropertyValuePair[] Properties
         {
             get
             {
                 return ( from property in this.obj.Properties
                          let value = this.obj[property]
-                         select new PropertyValuePair<PROPERTY>( property, value ) ).ToArray();
+                         select new PropertyValuePair( property, value ) ).ToArray();
             }
         }
     }
 
     [DebuggerDisplay("{Property} => {Value}")]
-    internal class PropertyValuePair<PROPERTY>
+    internal class PropertyValuePair
     {
-        private PROPERTY property;
+        private string property;
 
         private object value;
 
-        public PropertyValuePair(PROPERTY property, object value)
+        public PropertyValuePair(string property, object value)
         {
             this.property = property;
             this.value = value;
         }
 
-        public PROPERTY Property
+        public string Property
         {
             get
             {
