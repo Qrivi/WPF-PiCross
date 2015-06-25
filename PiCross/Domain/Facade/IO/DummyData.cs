@@ -7,17 +7,21 @@ using PiCross.Game;
 
 namespace PiCross.Facade.IO
 {
-    public class Dummy
+    public class DummyData
     {
         private readonly ILibrary library;
 
         private readonly IUserDatabase users;
 
-        public Dummy()
+        public DummyData()
         {
             this.library = CreateDummyLibrary();
             this.users = CreateDummyUserDatabase();
         }
+
+        public ILibrary Puzzles { get { return library; } }
+
+        public IUserDatabase Users { get { return users; } }
 
         private static IUserDatabase CreateDummyUserDatabase()
         {
