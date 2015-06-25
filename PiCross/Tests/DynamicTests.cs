@@ -49,6 +49,20 @@ namespace PiCross.Tests
 
         [TestMethod]
         [TestCategory( "DynamicObjectGroup" )]
+        public void GroupProperties4()
+        {
+            var dyn1 = new DDO() { { "x", 1 }, { "y", 2 } };
+            var dyn2 = new DDO() { { "y", 1 } };
+            var dyn3 = new DDO() { { "x", 2 } };
+            var group = DynamicObjectGroup<DDO, string>.FromMembers( dyn1, dyn2, dyn3 );
+            var expected = new HashSet<string>() { "x", "y" };
+            var actual = group.Properties;
+
+            AssertSameItems( expected, actual );
+        }
+
+        [TestMethod]
+        [TestCategory( "DynamicObjectGroup" )]
         public void PropertyValues1()
         {
             var dyn1 = new DDO() { { "x", 1 } };

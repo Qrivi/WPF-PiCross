@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace PiCross.Dynamic
 {
+    [DebuggerDisplay("Property count = {PropertyCount}")]
+    [DebuggerTypeProxy( typeof( DynamicObjectProxy<> ) )]
     public class DictionaryDynamicObject<PROPERTY> : IDynamicObject<PROPERTY>, IEnumerable<KeyValuePair<PROPERTY, object>>
     {
         private readonly Dictionary<PROPERTY, object> contents;
@@ -39,6 +42,14 @@ namespace PiCross.Dynamic
             get
             {
                 return new HashSet<PROPERTY>( contents.Keys );
+            }
+        }
+
+        private int PropertyCount
+        {
+            get
+            {
+                return contents.Count;
             }
         }
 
