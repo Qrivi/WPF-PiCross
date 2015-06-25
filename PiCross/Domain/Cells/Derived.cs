@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace PiCross.Cells
 {
+    [DebuggerDisplay( "{Value}" )]
     internal class Derived<T> : ConcreteCell<T>
     {
         private readonly Func<T> reader;

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PiCross.Cells;
 using PiCross.DataStructures;
@@ -9,7 +11,7 @@ namespace PiCross.Tests
     public class CellTests
     {
         [TestMethod]
-        [TestCategory("Cell")]
+        [TestCategory( "Cell" )]
         public void Cell_EventFiredWhenValueChange()
         {
             var cell = CreateCell( 0 );
@@ -55,7 +57,7 @@ namespace PiCross.Tests
         }
 
         [TestMethod]
-        [TestCategory("Cell")]
+        [TestCategory( "Cell" )]
         public void WritableCell_CanWrite()
         {
             var cell = CreateCell( 2 );
@@ -70,14 +72,33 @@ namespace PiCross.Tests
             Assert.AreEqual( 5, derived.Value );
         }
 
-        private static Cell<T> CreateCell<T>(T value)
+        [TestMethod]
+        [TestCategory( "Cell" )]
+        [Timeout(10000)]
+        public void Future()
+        {
+            var value = 5;
+            var cell = CreateFuture<int>();
+            var task = new Task( () => { Thread.Sleep( 100 ); cell.Value = value; } );
+
+            task.Start();
+            Thread.Sleep( 200 );
+            Assert.AreEqual( value, cell.Value );
+        }
+
+        private static Cell<T> CreateCell<T>( T value )
         {
             return Cell.Create<T>( value );
         }
 
-        private static Cell<R> CreateDerived<T, R>( Cell<T> cell, Func<T, R> function)
+        private static Cell<R> CreateDerived<T, R>( Cell<T> cell, Func<T, R> function )
         {
             return Cell.Derived( cell, function );
+        }
+
+        private static FutureCell<T> CreateFuture<T>()
+        {
+            return (FutureCell<T>) Cell.CreateFuture<T>();
         }
     }
 }

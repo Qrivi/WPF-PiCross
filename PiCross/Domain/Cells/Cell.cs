@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -99,6 +100,11 @@ namespace PiCross.Cells
         public static Cell<T> Create<T>( T initialValue = default(T) )
         {
             return new ConcreteCell<T>( initialValue );
+        }
+
+        public static Cell<T> CreateFuture<T>()
+        {
+            return new FutureCell<T>();
         }
 
         private static void RegisterObserver<T, R>( Derived<R> derived, Cell<T> cell )

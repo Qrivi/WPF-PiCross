@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -7,14 +8,15 @@ using System.Threading.Tasks;
 
 namespace PiCross.Cells
 {
-    public class FutureCell<T> : Cell<T>
+    [DebuggerDisplay( "{DebugProxy}" )]
+    internal class FutureCell<T> : Cell<T>
     {
         private volatile bool isBound;
 
         public FutureCell()
             : base( default( T ) )
         {
-
+            isBound = false;
         }
 
         public override T Value
@@ -58,6 +60,40 @@ namespace PiCross.Cells
         public override void Refresh()
         {
             throw new InvalidOperationException( "Cannot refresh futures" );
+        }
+
+        private T BaseValue { get { return base.Value; } }
+
+        private string DebugString
+        {
+            get
+            {
+                if ( isBound )
+                {
+                    return base.Value.ToString();
+                }
+                else
+                {
+                    return "<unbound>";
+                }
+            }
+        }
+
+        private Proxy DebugProxy { get { return new Proxy( this ); } }
+
+        private struct Proxy
+        {
+            private readonly FutureCell<T> cell;
+
+            public Proxy(FutureCell<T> cell)
+            {
+                this.cell = cell;
+            }
+
+            public override string ToString()
+            {
+                return cell.DebugString;
+            }
         }
     }
 }
