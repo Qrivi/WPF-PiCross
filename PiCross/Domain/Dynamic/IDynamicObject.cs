@@ -23,7 +23,7 @@ namespace PiCross.Dynamic
 
     public interface IFilter
     {
-        bool Accept( object obj );
+        bool Accept( IDynamicObject obj );
     }
 
     internal class DynamicObjectProxy<PROPERTY>

@@ -65,7 +65,9 @@
     <Compile Include="Dynamic\DictionaryDynamicObject.cs" />
     <Compile Include="Dynamic\DynamicObjectGroup.cs" />
     <Compile Include="Dynamic\DynamicObjectMerger.cs" />
+    <Compile Include="Dynamic\FilterConjunction.cs" />
     <Compile Include="Dynamic\IDynamicObject.cs" />
+    <Compile Include="Dynamic\PropertyFilter.cs" />
     <Compile Include="Facade\Editing\IPuzzleEditor.cs" />
     <Compile Include="Facade\Editing\PuzzleEditor.cs" />
     <Compile Include="Facade\Editing\PuzzleEditor_ManualAmbiguity.cs">
