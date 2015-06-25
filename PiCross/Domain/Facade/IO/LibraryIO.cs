@@ -11,16 +11,23 @@ namespace PiCross.Facade.IO
 {
     public class LibraryIO
     {
+        private readonly IPuzzleFormat format;
+
+        public LibraryIO(IPuzzleFormat format)
+        {
+            this.format = format;
+        }
+
         public ILibrary Load( Stream stream )
         {
-            var loader = new LibraryReader( stream );
+            var loader = new LibraryReader( format, stream );
 
             return loader.Result;
         }
 
         public void Save( ILibrary library, Stream stream )
         {
-            new LibraryWriter( library, stream );
+            new LibraryWriter( format, library, stream );
         }
 
         private class LibraryWriter
@@ -29,14 +36,17 @@ namespace PiCross.Facade.IO
 
             private readonly StreamWriter writer;
 
-            public LibraryWriter( ILibrary library, Stream stream )
+            private readonly IPuzzleFormat format;
+
+            public LibraryWriter( IPuzzleFormat format, ILibrary library, Stream stream )
             {
+                this.format = format;
                 this.stream = stream;
-                this.writer = new StreamWriter( stream );
 
-                WriteLibrary( library );
-
-                writer.Flush();
+                using ( this.writer = new StreamWriter( stream, Encoding.UTF8, 1024, true ) )
+                {
+                    WriteLibrary( library );
+                }
             }
 
             private void WriteLibrary( ILibrary library )
@@ -55,34 +65,15 @@ namespace PiCross.Facade.IO
                 WriteAuthor( entry.Author );
             }
 
+            private void WritePuzzle(Puzzle puzzle)
+            {
+                format.Write( writer, puzzle );   
+            }
+
             private void WriteAuthor( string author )
             {
                 WriteLine( author );
-            }
-
-            private void WritePuzzle( Puzzle puzzle )
-            {
-                WritePuzzleSize( puzzle.Size );
-                WritePuzzleGrid( puzzle.Grid );
-            }
-
-            private void WritePuzzleSize( Size size )
-            {
-                WriteLine( "{0} {1}", size.Width, size.Height );
-            }
-
-            private void WritePuzzleGrid( IGrid<bool> grid )
-            {
-                foreach ( var row in grid.Rows )
-                {
-                    WritePuzzleGridRow( row );
-                }
-            }
-
-            private void WritePuzzleGridRow( ISequence<bool> row )
-            {
-                WriteLine( row.Map( x => Square.FromBool( x ).Symbol ).Join() );
-            }
+            }                        
 
             private void WriteLine( string str, params object[] args )
             {
@@ -98,13 +89,18 @@ namespace PiCross.Facade.IO
 
             private readonly Library library;
 
-            public LibraryReader( Stream stream )
+            private readonly IPuzzleFormat format;
+
+            public LibraryReader( IPuzzleFormat format, Stream stream )
             {
+                this.format = format;
                 this.library = Library.CreateEmpty();
                 this.stream = stream;
-                this.reader = new StreamReader( stream );
 
-                Read();
+                using ( this.reader = new StreamReader( stream, Encoding.UTF8, true, 1024, true ) )
+                {
+                    Read();
+                }
             }
 
             public ILibrary Result
@@ -133,52 +129,19 @@ namespace PiCross.Facade.IO
                 return new LibraryEntry( puzzle, author );
             }
 
+            private Puzzle ReadPuzzle()
+            {
+                return format.Read( reader );
+            }
+
             private string ReadAuthor()
             {
                 return ReadLine();
             }
 
-            private Puzzle ReadPuzzle()
-            {
-                var size = ReadPuzzleSize();
-                var grid = ReadPuzzleGrid( size );
-
-                return Puzzle.FromGrid( grid );
-            }
-
-            private Size ReadPuzzleSize()
-            {
-                var line = ReadLine();
-                var ns = line.Split( ' ' ).Select( int.Parse ).ToArray();
-
-                var width = ns[0];
-                var height = ns[1];
-
-                return new Size( width, height );
-            }
-
-            private IGrid<Square> ReadPuzzleGrid( Size size )
-            {
-                var rows = ReadLines( size.Height );
-
-                return Grid.Create( size, position => rows[position.Y][position.X] ).Map( Square.FromSymbol );
-            }
-
             private string ReadLine()
             {
                 var result = reader.ReadLine();
-
-                return result;
-            }
-
-            private string[] ReadLines( int n )
-            {
-                var result = new string[n];
-
-                for ( var i = 0; i != n; ++i )
-                {
-                    result[i] = ReadLine();
-                }
 
                 return result;
             }
