@@ -102,7 +102,7 @@ namespace PiCross.Tests
 
         private void CheckIO( ILibrary library )
         {
-            var io = new LibraryIO( new TextFormat() );
+            var io = new LibraryIO( new ReadableFormat() );
 
             using ( var memoryStream = new MemoryStream() )
             {

@@ -14,7 +14,7 @@ namespace PiCross.Facade.IO
         private readonly IPuzzleFormat format;
 
         public LibraryIO()
-            : this( new TextFormat() )
+            : this( new ReadableFormat() )
         {
             // NOP
         }

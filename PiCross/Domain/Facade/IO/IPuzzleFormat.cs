@@ -16,7 +16,7 @@ namespace PiCross.Facade.IO
         void Write( StreamWriter writer, Puzzle puzzle );
     }
 
-    public class TextFormat : IPuzzleFormat
+    public class ReadableFormat : IPuzzleFormat
     {
         #region Reading
 
