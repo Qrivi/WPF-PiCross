@@ -1,8 +1,6 @@
-﻿using System.Diagnostics;
-
+﻿
 namespace PiCross.Cells
-{
-    [DebuggerDisplay( "{Value}" )]
+{    
     internal class ConcreteCell<T> : Cell<T>
     {
         /// <summary>

@@ -74,7 +74,7 @@ namespace PiCross.Tests
 
         [TestMethod]
         [TestCategory( "Cell" )]
-        [Timeout(10000)]
+        [Timeout(1000)]
         public void Future()
         {
             var value = 5;

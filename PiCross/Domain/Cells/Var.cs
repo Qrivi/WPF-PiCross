@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace PiCross.Cells
 {
+    [DebuggerDisplay( "{Value}" )]
     public class Var<T> : IVar<T>
     {
         private T value;

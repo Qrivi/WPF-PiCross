@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PiCross.Cells
-{
+{    
     public abstract class Cell<T> : Var<T>, INotifyPropertyChanged
     {
         protected Cell( T initialValue = default(T) )
