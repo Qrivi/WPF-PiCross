@@ -101,7 +101,14 @@ namespace PiCross.Facade.IO
         {
             get
             {
-                return entries[puzzle];
+                if ( entries.ContainsKey(puzzle))
+                {
+                    return entries[puzzle];
+                }
+                else
+                {
+                    return null;
+                }
             }
             set
             {
