@@ -71,6 +71,7 @@
     <Compile Include="Facade\Editing\PuzzleEditor_ManualAmbiguity.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Facade\IO\Dummy.cs" />
     <Compile Include="Facade\IO\ILibrary.cs" />
     <Compile Include="Facade\IO\IPuzzleFormat.cs" />
     <Compile Include="Facade\IO\IUserDatabase.cs" />
