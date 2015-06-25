@@ -9,7 +9,11 @@ namespace PiCross.Facade.IO
 {
     public interface IUserDatabase
     {
-        IUserProfile GetUserProfile( string name );
+        IUserProfile this[string name] { get; }
+
+        IUserProfile CreateNewProfile( string name );
+
+        ISet<string> UserNames { get; }
     }
 
     public interface IUserProfile
