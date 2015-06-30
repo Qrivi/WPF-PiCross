@@ -14,7 +14,7 @@ namespace PiCross.Facade.IO
         private readonly Dictionary<string, PlayerProfile> playerProfiles;
 
         private readonly ObservableCollection<string> names;
-        
+
         public PlayerDatabase()
         {
             playerProfiles = new Dictionary<string, PlayerProfile>();
@@ -60,14 +60,31 @@ namespace PiCross.Facade.IO
 
                 return profile;
             }
-        }        
+        }
 
-        private void AddToDictionary(PlayerProfile profile)
+        public void DeleteProfile(string name)
+        {
+            if ( name == null )
+            {
+                throw new ArgumentNullException( "name" );
+            }
+            else if ( !playerProfiles.ContainsKey(name))
+            {
+                throw new ArgumentException( "No player with name " + name );
+            }
+            else
+            {
+                this.playerProfiles.Remove( name );
+                this.names.Remove( name );
+            }
+        }
+
+        private void AddToDictionary( PlayerProfile profile )
         {
             playerProfiles[profile.Name] = profile;
         }
 
-        private void AddToNames(string name)
+        private void AddToNames( string name )
         {
             var index = 0;
 
@@ -124,7 +141,7 @@ namespace PiCross.Facade.IO
         {
             get
             {
-                if ( entries.ContainsKey(puzzle))
+                if ( entries.ContainsKey( puzzle ) )
                 {
                     return entries[puzzle];
                 }
