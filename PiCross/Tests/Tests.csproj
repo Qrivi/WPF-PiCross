@@ -60,6 +60,7 @@
     <Compile Include="DynamicTests.cs" />
     <Compile Include="Facade_Puzzle.cs" />
     <Compile Include="LibraryIOTests.cs" />
+    <Compile Include="PlayerDatabaseTests.cs" />
     <Compile Include="PlayGridConstraints_IsSatisfied.cs" />
     <Compile Include="PlayGridTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

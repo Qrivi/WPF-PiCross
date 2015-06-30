@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace PiCross.Facade.IO
 
         IPlayerProfile CreateNewProfile( string name );
 
-        ISet<string> PlayerNames { get; }
+        ObservableCollection<string> PlayerNames { get; }
     }
 
     public interface IPlayerProfile

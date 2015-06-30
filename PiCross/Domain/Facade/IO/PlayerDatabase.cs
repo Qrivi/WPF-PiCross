@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,10 +12,13 @@ namespace PiCross.Facade.IO
     public class PlayerDatabase : IPlayerDatabase
     {
         private readonly Dictionary<string, PlayerProfile> playerProfiles;
+
+        private readonly ObservableCollection<string> names;
         
         public PlayerDatabase()
         {
             playerProfiles = new Dictionary<string, PlayerProfile>();
+            names = new ObservableCollection<string>();
         }
 
         public IPlayerProfile this[string name]
@@ -50,17 +55,35 @@ namespace PiCross.Facade.IO
             {
                 var profile = new PlayerProfile( name );
 
-                playerProfiles[name] = profile;
+                AddToDictionary( profile );
+                AddToNames( profile.Name );
 
                 return profile;
             }
+        }        
+
+        private void AddToDictionary(PlayerProfile profile)
+        {
+            playerProfiles[profile.Name] = profile;
         }
 
-        public ISet<string> PlayerNames
+        private void AddToNames(string name)
+        {
+            var index = 0;
+
+            while ( index < this.names.Count && name.CompareTo( this.names[index] ) < 0 )
+            {
+                index++;
+            }
+
+            names.Insert( index, name );
+        }
+
+        public ObservableCollection<string> PlayerNames
         {
             get
             {
-                return new HashSet<string>( playerProfiles.Keys );
+                return names;
             }
         }
     }
