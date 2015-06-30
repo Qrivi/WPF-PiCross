@@ -76,10 +76,10 @@
     <Compile Include="Facade\IO\DummyData.cs" />
     <Compile Include="Facade\IO\ILibrary.cs" />
     <Compile Include="Facade\IO\IPuzzleFormat.cs" />
-    <Compile Include="Facade\IO\IUserDatabase.cs" />
+    <Compile Include="Facade\IO\IPlayerDatabase.cs" />
     <Compile Include="Facade\IO\Library.cs" />
     <Compile Include="Facade\IO\LibraryIO.cs" />
-    <Compile Include="Facade\IO\UserDatabase.cs" />
+    <Compile Include="Facade\IO\PlayerDatabase.cs" />
     <Compile Include="Facade\Playing\Puzzle.cs" />
     <Compile Include="Facade\Playing\IPuzzle.cs" />
     <Compile Include="Game\Ambiguity.cs" />

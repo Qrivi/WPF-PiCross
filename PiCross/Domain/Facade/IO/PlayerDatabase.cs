@@ -7,16 +7,16 @@ using PiCross.Game;
 
 namespace PiCross.Facade.IO
 {
-    public class UserDatabase : IUserDatabase
+    public class PlayerDatabase : IPlayerDatabase
     {
-        private readonly Dictionary<string, UserProfile> userProfiles;
-
-        public UserDatabase()
+        private readonly Dictionary<string, PlayerProfile> playerProfiles;
+        
+        public PlayerDatabase()
         {
-            userProfiles = new Dictionary<string, UserProfile>();
+            playerProfiles = new Dictionary<string, PlayerProfile>();
         }
 
-        public IUserProfile this[string name]
+        public IPlayerProfile this[string name]
         {
             get
             {
@@ -26,7 +26,7 @@ namespace PiCross.Facade.IO
                 }
                 else
                 {
-                    return userProfiles[name];
+                    return playerProfiles[name];
                 }
             }
         }
@@ -36,48 +36,48 @@ namespace PiCross.Facade.IO
             return !string.IsNullOrWhiteSpace( name );
         }
 
-        public IUserProfile CreateNewProfile( string name )
+        public IPlayerProfile CreateNewProfile( string name )
         {
             if ( !IsValidName( name ) )
             {
                 throw new ArgumentException( "Invalid name" );
             }
-            else if ( userProfiles.ContainsKey( name ) )
+            else if ( playerProfiles.ContainsKey( name ) )
             {
-                throw new ArgumentException( "User already exists" );
+                throw new ArgumentException( "Player already exists" );
             }
             else
             {
-                var profile = new UserProfile( name );
+                var profile = new PlayerProfile( name );
 
-                userProfiles[name] = profile;
+                playerProfiles[name] = profile;
 
                 return profile;
             }
         }
 
-        public ISet<string> UserNames
+        public ISet<string> PlayerNames
         {
             get
             {
-                return new HashSet<string>( userProfiles.Keys );
+                return new HashSet<string>( playerProfiles.Keys );
             }
         }
     }
 
-    public class UserProfile : IUserProfile
+    public class PlayerProfile : IPlayerProfile
     {
         private readonly string name;
 
-        private readonly UserPuzzleInformation puzzleInformation;
+        private readonly PlayerPuzzleInformation puzzleInformation;
 
-        public UserProfile( string name )
+        public PlayerProfile( string name )
         {
             this.name = name;
-            puzzleInformation = new UserPuzzleInformation();
+            puzzleInformation = new PlayerPuzzleInformation();
         }
 
-        public IUserPuzzleInformation PuzzleInformation
+        public IPlayerPuzzleInformation PuzzleInformation
         {
             get { return puzzleInformation; }
         }
@@ -88,16 +88,16 @@ namespace PiCross.Facade.IO
         }
     }
 
-    public class UserPuzzleInformation : IUserPuzzleInformation
+    public class PlayerPuzzleInformation : IPlayerPuzzleInformation
     {
-        private readonly Dictionary<Puzzle, IUserPuzzleInformationEntry> entries;
+        private readonly Dictionary<Puzzle, IPlayerPuzzleInformationEntry> entries;
 
-        public UserPuzzleInformation()
+        public PlayerPuzzleInformation()
         {
-            this.entries = new Dictionary<Puzzle, IUserPuzzleInformationEntry>();
+            this.entries = new Dictionary<Puzzle, IPlayerPuzzleInformationEntry>();
         }
 
-        public IUserPuzzleInformationEntry this[Puzzle puzzle]
+        public IPlayerPuzzleInformationEntry this[Puzzle puzzle]
         {
             get
             {
@@ -117,11 +117,11 @@ namespace PiCross.Facade.IO
         }
     }
 
-    public class UserPuzzleInformationEntry : IUserPuzzleInformationEntry
+    public class PlayerPuzzleInformationEntry : IPlayerPuzzleInformationEntry
     {
         private readonly TimeSpan bestTime;
 
-        public UserPuzzleInformationEntry( TimeSpan bestTime )
+        public PlayerPuzzleInformationEntry( TimeSpan bestTime )
         {
             this.bestTime = bestTime;
         }

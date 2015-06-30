@@ -11,26 +11,26 @@ namespace PiCross.Facade.IO
     {
         private readonly ILibrary library;
 
-        private readonly IUserDatabase users;
+        private readonly IPlayerDatabase players;
 
         public DummyData()
         {
             this.library = CreateDummyLibrary();
-            this.users = CreateDummyUserDatabase();
+            this.players = CreateDummyPlayerDatabase();
         }
 
         public ILibrary Puzzles { get { return library; } }
 
-        public IUserDatabase Users { get { return users; } }
+        public IPlayerDatabase Players { get { return players; } }
 
-        private static IUserDatabase CreateDummyUserDatabase()
+        private static IPlayerDatabase CreateDummyPlayerDatabase()
         {
-            var db = new UserDatabase();
+            var db = new PlayerDatabase();
 
             var woumpousse = db.CreateNewProfile( "Woumpousse" );
             var pimousse = db.CreateNewProfile( "Pimousse" );
 
-            woumpousse.PuzzleInformation[Puzzle1] = new UserPuzzleInformationEntry( TimeSpan.FromSeconds( 5 ) );
+            woumpousse.PuzzleInformation[Puzzle1] = new PlayerPuzzleInformationEntry( TimeSpan.FromSeconds( 5 ) );
 
             return db;
         }
