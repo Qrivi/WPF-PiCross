@@ -48,6 +48,22 @@ namespace PiCross.Tests
 
         [TestMethod]
         [TestCategory( "PlayerDatabase" )]
+        public void NamesAreSorted()
+        {            
+            var pdb = new PlayerDatabase();
+                        
+            pdb.CreateNewProfile( "b" );
+            pdb.CreateNewProfile( "a" );
+            pdb.CreateNewProfile( "c" );
+
+            Assert.AreEqual( 3, pdb.PlayerNames.Count );
+            Assert.AreEqual( "a", pdb.PlayerNames[0] );
+            Assert.AreEqual( "b", pdb.PlayerNames[1] );
+            Assert.AreEqual( "c", pdb.PlayerNames[2] );
+        }
+
+        [TestMethod]
+        [TestCategory( "PlayerDatabase" )]
         public void RemovingRemovesName()
         {
             var name = "mathy";

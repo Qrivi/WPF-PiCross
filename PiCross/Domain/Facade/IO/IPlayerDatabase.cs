@@ -14,6 +14,8 @@ namespace PiCross.Facade.IO
 
         IPlayerProfile CreateNewProfile( string name );
 
+        bool IsValidPlayerName( string name );
+
         ObservableCollection<string> PlayerNames { get; }
     }
 

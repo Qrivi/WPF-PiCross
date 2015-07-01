@@ -25,7 +25,7 @@ namespace PiCross.Facade.IO
         {
             get
             {
-                if ( !IsValidName( name ) )
+                if ( !IsValidPlayerName( name ) )
                 {
                     throw new ArgumentException( "Invalid name" );
                 }
@@ -36,14 +36,14 @@ namespace PiCross.Facade.IO
             }
         }
 
-        private bool IsValidName( string name )
+        public bool IsValidPlayerName( string name )
         {
             return !string.IsNullOrWhiteSpace( name );
         }
-
+        
         public IPlayerProfile CreateNewProfile( string name )
         {
-            if ( !IsValidName( name ) )
+            if ( !IsValidPlayerName( name ) )
             {
                 throw new ArgumentException( "Invalid name" );
             }
@@ -88,7 +88,7 @@ namespace PiCross.Facade.IO
         {
             var index = 0;
 
-            while ( index < this.names.Count && name.CompareTo( this.names[index] ) < 0 )
+            while ( index < this.names.Count && name.CompareTo( this.names[index] ) > 0 )
             {
                 index++;
             }
