@@ -81,8 +81,8 @@
     <Compile Include="Facade\IO\Library.cs" />
     <Compile Include="Facade\IO\LibraryIO.cs" />
     <Compile Include="Facade\IO\PlayerDatabase.cs" />
-    <Compile Include="Facade\Playing\Puzzle.cs" />
-    <Compile Include="Facade\Playing\IPuzzle.cs" />
+    <Compile Include="Facade\Playing\PlayablePuzzle.cs" />
+    <Compile Include="Facade\Playing\IPlayablePuzzle.cs" />
     <Compile Include="Game\Ambiguity.cs" />
     <Compile Include="Game\AmbiguityChecker.cs" />
     <Compile Include="Game\Constraints.cs" />

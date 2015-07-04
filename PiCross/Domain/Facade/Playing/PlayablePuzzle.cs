@@ -9,23 +9,23 @@ using PiCross.Cells;
 
 namespace PiCross.Facade.Playing
 {
-    public class Puzzle : IPuzzle
+    public class PlayablePuzzle : IPlayablePuzzle
     {
         private readonly PlayGrid playGrid;
 
-        private readonly IGrid<PuzzleSquare> puzzleSquares;
+        private readonly IGrid<PlayablePuzzleSquare> puzzleSquares;
 
-        private readonly ISequence<PuzzleConstraints> columnConstraints;
+        private readonly ISequence<PlayablePuzzleConstraints> columnConstraints;
 
-        private readonly ISequence<PuzzleConstraints> rowConstraints;
+        private readonly ISequence<PlayablePuzzleConstraints> rowConstraints;
 
-        public Puzzle( ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints )
+        public PlayablePuzzle( ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints )
             : this( new PlayGrid( columnConstraints: columnConstraints, rowConstraints: rowConstraints ) )
         {
             // NOP            
         }
 
-        public Puzzle( PlayGrid playGrid )
+        public PlayablePuzzle( PlayGrid playGrid )
         {
             if ( playGrid == null )
             {
@@ -34,9 +34,9 @@ namespace PiCross.Facade.Playing
             else
             {
                 this.playGrid = playGrid;
-                this.puzzleSquares = playGrid.Squares.Map( ( position, var ) => new PuzzleSquare( this, var, position ) ).Copy();
-                this.columnConstraints = this.playGrid.ColumnConstraints.Map( constraints => new PuzzleConstraints( constraints ) ).Copy();
-                this.rowConstraints = this.playGrid.RowConstraints.Map( constraints => new PuzzleConstraints( constraints ) ).Copy();
+                this.puzzleSquares = playGrid.Squares.Map( ( position, var ) => new PlayablePuzzleSquare( this, var, position ) ).Copy();
+                this.columnConstraints = this.playGrid.ColumnConstraints.Map( constraints => new PlayablePuzzleConstraints( constraints ) ).Copy();
+                this.rowConstraints = this.playGrid.RowConstraints.Map( constraints => new PlayablePuzzleConstraints( constraints ) ).Copy();
             }
         }
         
@@ -48,7 +48,7 @@ namespace PiCross.Facade.Playing
             }
         }
 
-        public IPuzzleSquare this[DataStructures.Vector2D position]
+        public IPlayablePuzzleSquare this[DataStructures.Vector2D position]
         {
             get
             {
@@ -56,7 +56,7 @@ namespace PiCross.Facade.Playing
             }
         }
 
-        public ISequence<IPuzzleConstraints> ColumnConstraints
+        public ISequence<IPlayablePuzzleConstraints> ColumnConstraints
         {
             get
             {
@@ -64,7 +64,7 @@ namespace PiCross.Facade.Playing
             }
         }
 
-        public ISequence<IPuzzleConstraints> RowConstraints
+        public ISequence<IPlayablePuzzleConstraints> RowConstraints
         {
             get
             {
@@ -114,7 +114,7 @@ namespace PiCross.Facade.Playing
             RefreshConstraints( this.rowConstraints[y] );
         }
 
-        private static void RefreshConstraints(PuzzleConstraints constraints)
+        private static void RefreshConstraints(PlayablePuzzleConstraints constraints)
         {
             constraints.IsSatisfied.Refresh();
 
@@ -124,19 +124,19 @@ namespace PiCross.Facade.Playing
             }
         }
 
-        private class PuzzleSquare : IPuzzleSquare
+        private class PlayablePuzzleSquare : IPlayablePuzzleSquare
         {
-            private readonly PuzzleSquareContentsCell contents;
+            private readonly PlayablePuzzleSquareContentsCell contents;
 
             private readonly Vector2D position;
 
-            public PuzzleSquare( Puzzle parent, IVar<Square> contents, Vector2D position )
+            public PlayablePuzzleSquare( PlayablePuzzle parent, IVar<Square> contents, Vector2D position )
             {
-                this.contents = new PuzzleSquareContentsCell( parent, contents, position );
+                this.contents = new PlayablePuzzleSquareContentsCell( parent, contents, position );
                 this.position = position;
             }
 
-            Cell<Square> IPuzzleSquare.Contents
+            Cell<Square> IPlayablePuzzleSquare.Contents
             {
                 get
                 {
@@ -144,7 +144,7 @@ namespace PiCross.Facade.Playing
                 }
             }
 
-            public PuzzleSquareContentsCell Contents
+            public PlayablePuzzleSquareContentsCell Contents
             {
                 get
                 {
@@ -161,15 +161,15 @@ namespace PiCross.Facade.Playing
             }
         }
 
-        private class PuzzleSquareContentsCell : ManualCell<Square>
+        private class PlayablePuzzleSquareContentsCell : ManualCell<Square>
         {
-            private readonly Puzzle parent;
+            private readonly PlayablePuzzle parent;
 
             private readonly IVar<Square> contents;
 
             private readonly Vector2D position;
 
-            public PuzzleSquareContentsCell( Puzzle parent, IVar<Square> contents, Vector2D position )
+            public PlayablePuzzleSquareContentsCell( PlayablePuzzle parent, IVar<Square> contents, Vector2D position )
                 : base( contents.Value )
             {
                 this.parent = parent;
@@ -190,19 +190,19 @@ namespace PiCross.Facade.Playing
             }
         }
 
-        private class PuzzleConstraints : IPuzzleConstraints
+        private class PlayablePuzzleConstraints : IPlayablePuzzleConstraints
         {
-            private readonly ISequence<PuzzleConstraintsValue> constraints;
+            private readonly ISequence<PlayablePuzzleConstraintsValue> constraints;
 
             private readonly ReadonlyManualCell<bool> isSatisfied;
 
-            public PuzzleConstraints( PlayGridConstraints constraints )
+            public PlayablePuzzleConstraints( PlayGridConstraints constraints )
             {
-                this.constraints = constraints.Values.Map( constraint => new PuzzleConstraintsValue( constraint ) ).Copy();
+                this.constraints = constraints.Values.Map( constraint => new PlayablePuzzleConstraintsValue( constraint ) ).Copy();
                 this.isSatisfied = new ReadonlyManualCell<bool>( () => constraints.IsSatisfied );
             }
 
-            ISequence<IPuzzleConstraintsValue> IPuzzleConstraints.Values
+            ISequence<IPlayablePuzzleConstraintsValue> IPlayablePuzzleConstraints.Values
             {
                 get
                 {
@@ -210,7 +210,7 @@ namespace PiCross.Facade.Playing
                 }
             }
 
-            public ISequence<PuzzleConstraintsValue> Constraints
+            public ISequence<PlayablePuzzleConstraintsValue> Constraints
             {
                 get
                 {
@@ -218,7 +218,7 @@ namespace PiCross.Facade.Playing
                 }
             }
 
-            Cell<bool> IPuzzleConstraints.IsSatisfied
+            Cell<bool> IPlayablePuzzleConstraints.IsSatisfied
             {
                 get
                 {
@@ -235,13 +235,13 @@ namespace PiCross.Facade.Playing
             }
         }
 
-        private class PuzzleConstraintsValue : IPuzzleConstraintsValue
+        private class PlayablePuzzleConstraintsValue : IPlayablePuzzleConstraintsValue
         {
             private readonly ReadonlyManualCell<bool> isSatisfied;
 
             private readonly PlayGridConstraintValue constraint;
 
-            public PuzzleConstraintsValue( PlayGridConstraintValue constraint )
+            public PlayablePuzzleConstraintsValue( PlayGridConstraintValue constraint )
             {
                 this.constraint = constraint;
                 this.isSatisfied = new ReadonlyManualCell<bool>( () => constraint.IsSatisfied );
@@ -255,7 +255,7 @@ namespace PiCross.Facade.Playing
                 }
             }
 
-            Cell<bool> IPuzzleConstraintsValue.IsSatisfied
+            Cell<bool> IPlayablePuzzleConstraintsValue.IsSatisfied
             {
                 get
                 {

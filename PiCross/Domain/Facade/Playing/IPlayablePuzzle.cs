@@ -9,32 +9,32 @@ using PiCross.Cells;
 
 namespace PiCross.Facade.Playing
 {
-    public interface IPuzzle
+    public interface IPlayablePuzzle
     {
         Size Size { get; }
 
-        IPuzzleSquare this[Vector2D position] { get; }
+        IPlayablePuzzleSquare this[Vector2D position] { get; }
 
-        ISequence<IPuzzleConstraints> ColumnConstraints { get; }
+        ISequence<IPlayablePuzzleConstraints> ColumnConstraints { get; }
 
-        ISequence<IPuzzleConstraints> RowConstraints { get; }
+        ISequence<IPlayablePuzzleConstraints> RowConstraints { get; }
     }
 
-    public interface IPuzzleSquare
+    public interface IPlayablePuzzleSquare
     {
         Cell<Square> Contents { get; }
 
         Vector2D Position { get; }
     }
 
-    public interface IPuzzleConstraints
+    public interface IPlayablePuzzleConstraints
     {
-        ISequence<IPuzzleConstraintsValue> Values { get; }
+        ISequence<IPlayablePuzzleConstraintsValue> Values { get; }
 
         Cell<bool> IsSatisfied { get; }
     }
 
-    public interface IPuzzleConstraintsValue
+    public interface IPlayablePuzzleConstraintsValue
     {
         int Value { get; }
 
