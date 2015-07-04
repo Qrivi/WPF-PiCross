@@ -19,6 +19,8 @@ namespace PiCross.Facade.Playing
 
         private readonly ISequence<PlayablePuzzleConstraints> rowConstraints;
 
+        private readonly Cell<bool> isSolved;
+
         public PlayablePuzzleImplementation( ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints )
             : this( new PlayGrid( columnConstraints: columnConstraints, rowConstraints: rowConstraints ) )
         {
@@ -37,6 +39,20 @@ namespace PiCross.Facade.Playing
                 this.puzzleSquares = playGrid.Squares.Map( ( position, var ) => new PlayablePuzzleSquare( this, var, position ) ).Copy();
                 this.columnConstraints = this.playGrid.ColumnConstraints.Map( constraints => new PlayablePuzzleConstraints( constraints ) ).Copy();
                 this.rowConstraints = this.playGrid.RowConstraints.Map( constraints => new PlayablePuzzleConstraints( constraints ) ).Copy();
+                this.isSolved = Cell.Derived( DeriveIsSolved );
+            }
+        }
+
+        private bool DeriveIsSolved()
+        {
+            return columnConstraints.Items.All( x => x.IsSatisfied.Value ) && rowConstraints.Items.All( x => x.IsSatisfied.Value );
+        }
+
+        public Cell<bool> IsSolved
+        {
+            get
+            {
+                return isSolved;
             }
         }
         
@@ -77,12 +93,19 @@ namespace PiCross.Facade.Playing
             RefreshSquare( position );
             RefreshColumnConstraints( position.X );
             RefreshRowConstraints( position.Y );
+            RefreshIsSolved();
         }
 
         private void Refresh()
         {
             RefreshSquares();
             RefreshConstraints();
+            RefreshIsSolved();
+        }
+
+        private void RefreshIsSolved()
+        {
+            isSolved.Refresh();
         }
 
         private void RefreshSquares()

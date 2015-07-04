@@ -18,6 +18,8 @@ namespace PiCross.Facade.Playing
         ISequence<IPlayablePuzzleConstraints> ColumnConstraints { get; }
 
         ISequence<IPlayablePuzzleConstraints> RowConstraints { get; }
+
+        Cell<bool> IsSolved { get; }
     }
 
     public interface IPlayablePuzzleSquare
