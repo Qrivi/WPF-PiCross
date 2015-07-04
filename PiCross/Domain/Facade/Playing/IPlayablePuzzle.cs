@@ -40,4 +40,12 @@ namespace PiCross.Facade.Playing
 
         Cell<bool> IsSatisfied { get; }
     }
+
+    public static class PlayablePuzzle
+    {
+        public static IPlayablePuzzle Create(Puzzle puzzle)
+        {
+            return new PlayablePuzzleImplementation( columnConstraints: puzzle.ColumnConstraints, rowConstraints: puzzle.RowContraints );
+        }
+    }
 }

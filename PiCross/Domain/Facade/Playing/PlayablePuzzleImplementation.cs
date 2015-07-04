@@ -9,7 +9,7 @@ using PiCross.Cells;
 
 namespace PiCross.Facade.Playing
 {
-    public class PlayablePuzzle : IPlayablePuzzle
+    public class PlayablePuzzleImplementation : IPlayablePuzzle
     {
         private readonly PlayGrid playGrid;
 
@@ -19,13 +19,13 @@ namespace PiCross.Facade.Playing
 
         private readonly ISequence<PlayablePuzzleConstraints> rowConstraints;
 
-        public PlayablePuzzle( ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints )
+        public PlayablePuzzleImplementation( ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints )
             : this( new PlayGrid( columnConstraints: columnConstraints, rowConstraints: rowConstraints ) )
         {
             // NOP            
         }
 
-        public PlayablePuzzle( PlayGrid playGrid )
+        public PlayablePuzzleImplementation( PlayGrid playGrid )
         {
             if ( playGrid == null )
             {
@@ -130,7 +130,7 @@ namespace PiCross.Facade.Playing
 
             private readonly Vector2D position;
 
-            public PlayablePuzzleSquare( PlayablePuzzle parent, IVar<Square> contents, Vector2D position )
+            public PlayablePuzzleSquare( PlayablePuzzleImplementation parent, IVar<Square> contents, Vector2D position )
             {
                 this.contents = new PlayablePuzzleSquareContentsCell( parent, contents, position );
                 this.position = position;
@@ -163,13 +163,13 @@ namespace PiCross.Facade.Playing
 
         private class PlayablePuzzleSquareContentsCell : ManualCell<Square>
         {
-            private readonly PlayablePuzzle parent;
+            private readonly PlayablePuzzleImplementation parent;
 
             private readonly IVar<Square> contents;
 
             private readonly Vector2D position;
 
-            public PlayablePuzzleSquareContentsCell( PlayablePuzzle parent, IVar<Square> contents, Vector2D position )
+            public PlayablePuzzleSquareContentsCell( PlayablePuzzleImplementation parent, IVar<Square> contents, Vector2D position )
                 : base( contents.Value )
             {
                 this.parent = parent;
