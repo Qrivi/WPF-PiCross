@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PiCross.Cells;
 
-namespace PiCross
+namespace PiCross.Facade
 {
     public class Chronometer
     {
@@ -12,11 +13,12 @@ namespace PiCross
 
         private bool started;
 
-        private TimeSpan totalTime;
+        private Cell<TimeSpan> totalTime;
 
         public Chronometer()
         {
             started = false;
+            totalTime = Cell.Create( TimeSpan.Zero );
         }
 
         public void Start()
@@ -38,11 +40,11 @@ namespace PiCross
                 var delta = now - lastTick;
                 lastTick = now;
 
-                totalTime += delta;
+                totalTime.Value += delta;
             }
         }
 
-        public TimeSpan TotalTime
+        public Cell<TimeSpan> TotalTime
         {
             get
             {
