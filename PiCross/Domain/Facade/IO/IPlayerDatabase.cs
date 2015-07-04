@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PiCross.Cells;
 using PiCross.Game;
 
 namespace PiCross.Facade.IO
@@ -33,6 +34,6 @@ namespace PiCross.Facade.IO
 
     public interface IPlayerPuzzleInformationEntry
     {
-        TimeSpan BestTime { get; }
+        Cell<TimeSpan> BestTime { get; }
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PiCross.Cells;
 using PiCross.Game;
 
 namespace PiCross.Facade.IO
@@ -159,14 +160,14 @@ namespace PiCross.Facade.IO
 
     public class PlayerPuzzleInformationEntry : IPlayerPuzzleInformationEntry
     {
-        private readonly TimeSpan bestTime;
+        private readonly Cell<TimeSpan> bestTime;
 
         public PlayerPuzzleInformationEntry( TimeSpan bestTime )
         {
-            this.bestTime = bestTime;
+            this.bestTime = Cell.Create( bestTime );
         }
 
-        public TimeSpan BestTime
+        public Cell<TimeSpan> BestTime
         {
             get
             {
