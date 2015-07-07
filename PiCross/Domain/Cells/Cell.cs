@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 
 namespace PiCross.Cells
-{    
+{
     public abstract class Cell<T> : Var<T>, INotifyPropertyChanged
     {
         protected Cell( T initialValue = default(T) )
@@ -37,7 +37,25 @@ namespace PiCross.Cells
         {
             add
             {
-                PropertyChanged += ( obj, args ) => value();
+                var weakRef = new WeakReference<Action>( value );
+
+                PropertyChangedEventHandler handler = null;
+                
+                handler = ( obj, args ) =>
+                    {
+                        Action action;
+
+                        if ( weakRef.TryGetTarget( out action ) )
+                        {
+                            action();
+                        }
+                        else
+                        {
+                            this.PropertyChanged -= handler;
+                        }
+                    };
+
+                this.PropertyChanged += handler;
             }
             remove
             {
