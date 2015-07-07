@@ -29,11 +29,11 @@ namespace PiCross.Facade.IO
 
     public interface IPlayerPuzzleInformation
     {
-        IPlayerPuzzleInformationEntry this[Puzzle puzzle] { get; set; }
+        IPlayerPuzzleInformationEntry this[Puzzle puzzle] { get; }
     }
 
     public interface IPlayerPuzzleInformationEntry
     {
-        Cell<TimeSpan> BestTime { get; }
+        Cell<TimeSpan?> BestTime { get; }
     }
 }

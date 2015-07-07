@@ -142,32 +142,26 @@ namespace PiCross.Facade.IO
         {
             get
             {
-                if ( entries.ContainsKey( puzzle ) )
+                if ( !entries.ContainsKey( puzzle ) )
                 {
-                    return entries[puzzle];
+                    entries[puzzle] = new PlayerPuzzleInformationEntry();
                 }
-                else
-                {
-                    return null;
-                }
-            }
-            set
-            {
-                entries[puzzle] = value;
+
+                return entries[puzzle];
             }
         }
     }
 
     public class PlayerPuzzleInformationEntry : IPlayerPuzzleInformationEntry
     {
-        private readonly Cell<TimeSpan> bestTime;
+        private readonly Cell<TimeSpan?> bestTime;
 
-        public PlayerPuzzleInformationEntry( TimeSpan bestTime )
+        public PlayerPuzzleInformationEntry()
         {
-            this.bestTime = Cell.Create( bestTime );
+            this.bestTime = Cell.Create<TimeSpan?>( null );
         }
 
-        public Cell<TimeSpan> BestTime
+        public Cell<TimeSpan?> BestTime
         {
             get
             {

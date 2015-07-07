@@ -30,7 +30,7 @@ namespace PiCross.Facade.IO
             var woumpousse = db.CreateNewProfile( "Woumpousse" );
             var pimousse = db.CreateNewProfile( "Pimousse" );
 
-            woumpousse.PuzzleInformation[Puzzle1] = new PlayerPuzzleInformationEntry( TimeSpan.FromSeconds( 5 ) );
+            woumpousse.PuzzleInformation[Puzzle1].BestTime.Value = TimeSpan.FromSeconds( 5 );
 
             return db;
         }
