@@ -46,6 +46,7 @@
     <Compile Include="Actors\MessageQueue.cs" />
     <Compile Include="Actors\PriorityInbox.cs" />
     <Compile Include="Actors\SynchronizedMessageQueue.cs" />
+    <Compile Include="Cells\CellExtensions.cs" />
     <Compile Include="Cells\ConcreteCell.cs" />
     <Compile Include="Cells\ConstantCell.cs" />
     <Compile Include="Cells\Derived.cs" />
