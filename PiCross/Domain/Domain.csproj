@@ -49,6 +49,7 @@
     <Compile Include="Cells\CellExtensions.cs" />
     <Compile Include="Cells\ConcreteCell.cs" />
     <Compile Include="Cells\ConstantCell.cs" />
+    <Compile Include="Cells\DeferredCell.cs" />
     <Compile Include="Cells\Derived.cs" />
     <Compile Include="Cells\Flag.cs" />
     <Compile Include="Cells\FutureCell.cs" />
