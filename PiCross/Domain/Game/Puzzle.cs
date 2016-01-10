@@ -67,7 +67,7 @@ namespace PiCross.Game
             }
             else if ( rowConstraints == null )
             {
-                throw new ArgumentNullException( "rowContraints" );
+                throw new ArgumentNullException( "rowConstraints" );
             }
             else if ( grid == null )
             {
