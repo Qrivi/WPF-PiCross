@@ -97,7 +97,7 @@ namespace PiCross.Game
             }
         }
 
-        public ISequence<Constraints> RowContraints
+        public ISequence<Constraints> RowConstraints
         {
             get
             {
@@ -118,6 +118,18 @@ namespace PiCross.Game
             get
             {
                 return this.grid.Size;
+            }
+        }
+
+        public bool IsSolvable
+        {
+            get
+            {
+                var solverGrid = new SolverGrid( columnConstraints: ColumnConstraints, rowConstraints: RowConstraints );
+
+                solverGrid.Refine();
+
+                return solverGrid.IsSolved;
             }
         }
 

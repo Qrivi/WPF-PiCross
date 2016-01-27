@@ -115,6 +115,29 @@ namespace PiCross.DataStructures
             }
         }
 
+        public static void Overwrite<T>( this IGrid<Cell<T>> target, IGrid<T> source )
+        {
+            if ( target == null )
+            {
+                throw new ArgumentNullException( "target" );
+            }
+            else if ( source == null )
+            {
+                throw new ArgumentNullException( "source" );
+            }
+            else if ( target.Size != source.Size )
+            {
+                throw new ArgumentException( "Grids should have same size" );
+            }
+            else
+            {
+                foreach ( var position in target.AllPositions )
+                {
+                    target[position].Value = source[position];
+                }
+            }
+        }
+
         public static ISequence<T> Linearize<T>(this IGrid<T> grid)
         {
             return grid.Rows.ToSequence().Flatten();   

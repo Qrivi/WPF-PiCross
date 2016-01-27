@@ -47,7 +47,7 @@ namespace PiCross.Facade.Playing
     {
         public static IPlayablePuzzle Create(Puzzle puzzle)
         {
-            return new PlayablePuzzleImplementation( columnConstraints: puzzle.ColumnConstraints, rowConstraints: puzzle.RowContraints );
+            return new PlayablePuzzleImplementation( columnConstraints: puzzle.ColumnConstraints, rowConstraints: puzzle.RowConstraints );
         }
     }
 }

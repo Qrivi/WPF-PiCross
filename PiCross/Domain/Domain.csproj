@@ -96,6 +96,7 @@
     <Compile Include="Game\SolverGrid.cs" />
     <Compile Include="Game\Slice.cs" />
     <Compile Include="Game\Square.cs" />
+    <Compile Include="Game\StepwiseSolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>

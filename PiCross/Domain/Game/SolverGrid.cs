@@ -16,6 +16,11 @@ namespace PiCross.Game
 
         private readonly ISequence<Constraints> rowConstraints;
 
+        public static SolverGrid FromPuzzle(Puzzle puzzle)
+        {
+            return new SolverGrid( columnConstraints: puzzle.ColumnConstraints, rowConstraints: puzzle.RowConstraints );
+        }
+
         public SolverGrid( ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints )
         {
             if ( columnConstraints == null )
