@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Cells;
 
-namespace PiCross.DataStructures
+namespace DataStructures
 {
     /// <summary>
     /// Interface for grids. A grid is immutable (i.e. readonly).

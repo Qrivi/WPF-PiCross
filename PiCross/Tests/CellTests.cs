@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Cells;
-using PiCross.DataStructures;
+using DataStructures;
 
 namespace PiCross.Tests
 {

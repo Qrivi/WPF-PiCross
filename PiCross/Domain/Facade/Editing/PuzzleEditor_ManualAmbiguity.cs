@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Cells;
-using PiCross.DataStructures;
+using DataStructures;
 using PiCross.Game;
 using AmbiguityEnum = PiCross.Game.Ambiguity;
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cells;
-using PiCross.DataStructures;
+using DataStructures;
 using PiCross.Game;
 
 namespace PiCross.Facade.Editing

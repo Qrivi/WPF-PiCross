@@ -1,5 +1,5 @@
 ﻿using System;
-namespace PiCross.DataStructures
+namespace DataStructures
 {
     public class Size
     {

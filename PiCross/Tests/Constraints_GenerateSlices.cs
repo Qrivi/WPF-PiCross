@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
 using PiCross.Game;
-using PiCross.DataStructures;
+using DataStructures;
 
 namespace PiCross.Tests
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PiCross.DataStructures;
+using DataStructures;
 
 namespace PiCross.Tests
 {

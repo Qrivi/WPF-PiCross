@@ -1,4 +1,4 @@
-﻿using PiCross.DataStructures;
+﻿using DataStructures;
 using PiCross.Game;
 using System;
 using System.Collections.Generic;

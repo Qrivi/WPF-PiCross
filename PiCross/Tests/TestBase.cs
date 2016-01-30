@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PiCross.DataStructures;
+using DataStructures;
 using PiCross.Facade.Editing;
 using PiCross.Facade.IO;
 using PiCross.Facade.Playing;

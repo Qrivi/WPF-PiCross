@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PiCross.DataStructures
+namespace DataStructures
 {
     public class Vector2D
     {
