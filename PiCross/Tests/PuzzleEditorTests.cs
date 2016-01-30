@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PiCross.Cells;
+using Cells;
 using PiCross.DataStructures;
 using PiCross.Game;
 

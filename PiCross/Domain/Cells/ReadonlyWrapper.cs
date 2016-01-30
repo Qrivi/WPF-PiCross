@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PiCross.Cells
+namespace Cells
 {
     internal class ReadonlyWrapper<T> : Cell<T>
     {

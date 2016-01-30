@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using PiCross.Cells;
+using Cells;
 using PiCross.DataStructures;
 using PiCross.Game;
 using AmbiguityEnum = PiCross.Game.Ambiguity;

@@ -1,5 +1,5 @@
 ﻿
-namespace PiCross.Cells
+namespace Cells
 {    
     internal class ConcreteCell<T> : Cell<T>
     {

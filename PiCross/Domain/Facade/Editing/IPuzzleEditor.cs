@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PiCross.Cells;
+using Cells;
 using PiCross.DataStructures;
 using PiCross.Game;
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace PiCross.Cells
+namespace Cells
 {
     internal abstract class ManualCell<T> : Cell<T>
     {

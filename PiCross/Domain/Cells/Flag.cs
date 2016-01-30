@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace PiCross.Cells
+namespace Cells
 {
     public class Flag
     {

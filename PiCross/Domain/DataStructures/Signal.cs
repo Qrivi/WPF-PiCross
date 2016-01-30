@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PiCross.Cells;
+using Cells;
 
 namespace PiCross.DataStructures
 {
@@ -22,7 +22,7 @@ namespace PiCross.DataStructures
         }
 
         public SignalFactory( T initialCellContents = default(T) )
-            : this( PiCross.Cells.Cell.Create<T>( initialCellContents ) )
+            : this( Cells.Cell.Create<T>( initialCellContents ) )
         {
             // NOP
         }

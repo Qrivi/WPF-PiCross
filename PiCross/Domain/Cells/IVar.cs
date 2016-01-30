@@ -1,5 +1,5 @@
 ﻿
-namespace PiCross.Cells
+namespace Cells
 {
     public interface IVar<T>
     {

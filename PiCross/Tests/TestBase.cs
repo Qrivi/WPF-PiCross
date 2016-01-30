@@ -143,7 +143,7 @@ namespace PiCross.Tests
         {
             var puzzle = PiCross.Game.Puzzle.FromRowStrings( rows );
 
-            return new AmbiguityChecker( columnConstraints: puzzle.ColumnConstraints, rowConstraints: puzzle.RowContraints );
+            return new AmbiguityChecker( columnConstraints: puzzle.ColumnConstraints, rowConstraints: puzzle.RowConstraints );
         }
 
         protected static ILibrary CreateLibrary(params PiCross.Game.Puzzle[] puzzles)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 
-namespace PiCross.Cells
+namespace Cells
 {    
     public abstract class Cell<T> : Var<T>, INotifyPropertyChanged
     {

@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Threading;
 
-namespace PiCross.Cells
+namespace Cells
 {
     [DebuggerDisplay( "{DebugProxy}" )]
     internal class FutureCell<T> : Cell<T>

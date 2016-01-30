@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace PiCross.Cells
+namespace Cells
 {
     [DebuggerDisplay( "{Value}" )]
     public class Var<T> : IVar<T>
