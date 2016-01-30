@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PiCross.Actors
+namespace Actors
 {
     public class MessageQueue<T> : IMessageQueue<T>
     {

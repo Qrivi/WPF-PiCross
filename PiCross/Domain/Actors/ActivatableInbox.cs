@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PiCross.Actors
+namespace Actors
 {
     public class ActivatableInbox<T> : IInbox<T>
     {
