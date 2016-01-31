@@ -16,6 +16,8 @@ namespace PiCross.Facade.Editing
         ISequence<IPuzzleEditorConstraints> ColumnConstraints { get; }
 
         ISequence<IPuzzleEditorConstraints> RowConstraints { get; }
+
+        void ResolveAmbiguity();
     }
 
     public interface IPuzzleEditorSquare
