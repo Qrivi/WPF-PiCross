@@ -67,6 +67,14 @@ namespace PiCross.Facade.Editing
             }
         }        
 
+        public IGrid<IPuzzleEditorSquare> Grid
+        { 
+            get
+            {
+                return this.facadeGrid;
+            }
+        }
+
         public Size Size
         {
             get
