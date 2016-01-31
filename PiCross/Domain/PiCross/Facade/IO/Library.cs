@@ -8,7 +8,7 @@ using PiCross.Game;
 
 namespace PiCross.Facade.IO
 {
-    public class Library : ILibrary
+    internal class Library : ILibrary
     {
         private readonly ObservableCollection<ILibraryEntry> puzzles;
 
@@ -31,7 +31,7 @@ namespace PiCross.Facade.IO
         }        
     }
 
-    public class LibraryEntry : ILibraryEntry
+    internal class LibraryEntry : ILibraryEntry
     {
         private readonly Puzzle puzzle;
 

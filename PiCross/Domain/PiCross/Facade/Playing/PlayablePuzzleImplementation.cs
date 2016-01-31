@@ -55,20 +55,12 @@ namespace PiCross.Facade.Playing
                 return isSolved;
             }
         }
-        
-        public Size Size
+    
+        public IGrid<IPlayablePuzzleSquare> Grid
         {
             get
             {
-                return playGrid.Squares.Size;
-            }
-        }
-
-        public IPlayablePuzzleSquare this[DataStructures.Vector2D position]
-        {
-            get
-            {
-                return puzzleSquares[position];
+                return this.puzzleSquares;
             }
         }
 

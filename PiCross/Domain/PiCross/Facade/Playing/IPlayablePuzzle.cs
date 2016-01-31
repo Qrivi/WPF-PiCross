@@ -11,9 +11,7 @@ namespace PiCross.Facade.Playing
 {
     public interface IPlayablePuzzle
     {
-        Size Size { get; }
-
-        IPlayablePuzzleSquare this[Vector2D position] { get; }
+        IGrid<IPlayablePuzzleSquare> Grid { get; }
 
         ISequence<IPlayablePuzzleConstraints> ColumnConstraints { get; }
 

@@ -14,7 +14,7 @@ namespace PiCross.Tests
         public void ContentsChangeNotification()
         {
             var puzzle = CreateManualPuzzle( "." );
-            var square = puzzle[new Vector2D( 0, 0 )];
+            var square = puzzle.Grid[new Vector2D( 0, 0 )];
 
             var flag = Flag.Create( square.Contents );
 
@@ -32,7 +32,7 @@ namespace PiCross.Tests
         public void ConstraintsSatisfactionChangeNotification()
         {
             var puzzle = CreateManualPuzzle( "x" );
-            var square = puzzle[new Vector2D( 0, 0 )];
+            var square = puzzle.Grid[new Vector2D( 0, 0 )];
             var constraint = puzzle.RowConstraints[0];
 
             var flag = Flag.Create( constraint.IsSatisfied );
@@ -51,7 +51,7 @@ namespace PiCross.Tests
         public void ConstraintValueSatisfactionChangeNotification()
         {
             var puzzle = CreateManualPuzzle( "x" );
-            var square = puzzle[new Vector2D( 0, 0 )];
+            var square = puzzle.Grid[new Vector2D( 0, 0 )];
             var constraints = puzzle.RowConstraints[0];
             var value = constraints.Values[0];
 
