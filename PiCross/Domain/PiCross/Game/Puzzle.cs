@@ -54,6 +54,11 @@ namespace PiCross.Game
             return FromGrid( Square.CreateGrid( rows ) );
         }
 
+        public static Puzzle CreateEmpty(Size size)
+        {
+            return FromGrid( DataStructures.Grid.Create( size, false ) );
+        }
+
         private static IGrid<bool> ConvertSquareGridToBoolGrid(IGrid<Square> squares)
         {
             return squares.Map( x => (bool) x ).Copy();

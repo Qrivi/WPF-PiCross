@@ -4,13 +4,14 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataStructures;
 using PiCross.Game;
 
 namespace PiCross.Facade.IO
 {
     internal class Library : ILibrary
     {
-        private readonly ObservableCollection<ILibraryEntry> puzzles;
+        private readonly ObservableCollection<ILibraryEntry> entries;
 
         public static Library CreateEmpty()
         {
@@ -19,16 +20,26 @@ namespace PiCross.Facade.IO
 
         private Library()
         {
-            this.puzzles = new ObservableCollection<ILibraryEntry>();
+            this.entries = new ObservableCollection<ILibraryEntry>();
         }
 
         public ObservableCollection<ILibraryEntry> Entries
         {
             get
             {
-                return puzzles;
+                return entries;
             }
-        }        
+        }   
+     
+        public ILibraryEntry Create(Size size, string author)
+        {
+            var puzzle = Puzzle.CreateEmpty( size );
+            var newEntry = new LibraryEntry( puzzle, author );
+
+            entries.Add( newEntry );
+
+            return newEntry;
+        }
     }
 
     internal class LibraryEntry : ILibraryEntry
