@@ -29,9 +29,9 @@ namespace PiCross.Facade.IO
             {
                 return entries;
             }
-        }   
-     
-        public ILibraryEntry Create(Size size, string author)
+        }
+
+        public ILibraryEntry Create( Size size, string author )
         {
             var puzzle = Puzzle.CreateEmpty( size );
             var newEntry = new LibraryEntry( puzzle, author );
@@ -44,7 +44,7 @@ namespace PiCross.Facade.IO
 
     internal class LibraryEntry : ILibraryEntry
     {
-        private readonly Puzzle puzzle;
+        private Puzzle puzzle;
 
         private readonly string author;
 
@@ -54,7 +54,17 @@ namespace PiCross.Facade.IO
             this.author = author;
         }
 
-        public Puzzle Puzzle { get { return puzzle; } }
+        public Puzzle Puzzle
+        {
+            get
+            {
+                return puzzle;
+            }
+            set
+            {
+                this.puzzle = value;
+            }
+        }
 
         public string Author { get { return author; } }
 

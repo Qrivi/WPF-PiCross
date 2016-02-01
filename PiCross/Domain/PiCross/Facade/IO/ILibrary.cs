@@ -20,7 +20,7 @@ namespace PiCross.Facade.IO
 
     public interface ILibraryEntry
     {
-        Puzzle Puzzle { get; }
+        Puzzle Puzzle { get; set; }
 
         string Author { get; }
     }

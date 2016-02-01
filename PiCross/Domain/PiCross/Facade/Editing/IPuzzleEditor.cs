@@ -18,6 +18,8 @@ namespace PiCross.Facade.Editing
         ISequence<IPuzzleEditorConstraints> RowConstraints { get; }
 
         void ResolveAmbiguity();
+
+        Puzzle BuildPuzzle();
     }
 
     public interface IPuzzleEditorSquare

@@ -34,6 +34,11 @@ namespace PiCross.Game
             return new EditorGrid( Square.CreateGrid( rows ) );
         }
 
+        public static EditorGrid FromPuzzle(Puzzle puzzle)
+        {
+            return new EditorGrid( puzzle.Grid.Map( b => b ? Square.FILLED : Square.EMPTY ) );
+        }
+
         public IGrid<IVar<Square>> Contents
         {
             get
@@ -112,6 +117,11 @@ namespace PiCross.Game
             {
                 return grid.Size;
             }
+        }
+
+        public Puzzle ToPuzzle()
+        {
+            return Puzzle.FromGrid( this.grid.Map( cell => cell.Value == Square.FILLED ) );
         }
     }
 }

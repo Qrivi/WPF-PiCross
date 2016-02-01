@@ -270,5 +270,10 @@ namespace PiCross.Facade.Editing
                 // NOP
             }
         }
+
+        public Puzzle BuildPuzzle()
+        {
+            return editorGrid.ToPuzzle();
+        }
     }
 }
