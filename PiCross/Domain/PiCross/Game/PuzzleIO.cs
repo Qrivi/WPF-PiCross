@@ -19,12 +19,12 @@ namespace PiCross.PiCross.Game
 
         public Puzzle Read( StreamReader reader )
         {
-            return new PuzzleReader( reader ).Read();
+            return new Reader( reader ).Read();
         }
 
-        private class PuzzleReader : ReaderBase
+        private class Reader : ReaderBase
         {
-            internal PuzzleReader( StreamReader streamReader )
+            internal Reader( StreamReader streamReader )
                 : base( streamReader )
             {
                 // NOP
