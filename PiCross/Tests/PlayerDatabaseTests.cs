@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PiCross.Facade.IO;
+using PiCross.Game;
 
 namespace PiCross.Tests
 {

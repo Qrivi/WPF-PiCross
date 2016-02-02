@@ -7,8 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Cells;
 using PiCross.Game;
+using PiCross.Facade.IO;
 
-namespace PiCross.Facade.IO
+namespace PiCross.Game
 {
     public class PlayerDatabase : IPlayerDatabase
     {

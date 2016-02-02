@@ -79,7 +79,7 @@
     <Compile Include="PiCross\Game\Library.cs" />
     <Compile Include="PiCross\Game\LibraryEntrySerializer.cs" />
     <Compile Include="PiCross\Facade\IO\LibraryIO.cs" />
-    <Compile Include="PiCross\Facade\IO\PlayerDatabase.cs" />
+    <Compile Include="PiCross\Game\PlayerDatabase.cs" />
     <Compile Include="PiCross\Facade\Playing\PlayablePuzzleImplementation.cs" />
     <Compile Include="PiCross\Facade\Playing\IPlayablePuzzle.cs" />
     <Compile Include="PiCross\Game\Ambiguity.cs" />
