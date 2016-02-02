@@ -56,7 +56,7 @@
     <Compile Include="Cells\ValidatedCell.cs" />
     <Compile Include="IO\MagicCookieDecorator.cs" />
     <Compile Include="IO\Serializer.cs" />
-    <Compile Include="PiCross\Facade\Chronometer.cs" />
+    <Compile Include="Utility\Chronometer.cs" />
     <Compile Include="DataStructures\Grid.cs" />
     <Compile Include="Cells\Cell.cs" />
     <Compile Include="Cells\IVar.cs" />
