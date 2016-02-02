@@ -17,7 +17,7 @@ namespace PiCross.Facade.IO
 
         bool IsValidPlayerName( string name );
 
-        ObservableCollection<string> PlayerNames { get; }
+        IList<string> PlayerNames { get; }
     }
 
     public interface IPlayerProfile

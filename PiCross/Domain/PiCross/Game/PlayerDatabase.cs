@@ -15,12 +15,12 @@ namespace PiCross.Game
     {
         private readonly Dictionary<string, PlayerProfile> playerProfiles;
 
-        private readonly ObservableCollection<string> names;
+        private readonly List<string> names;
 
         public PlayerDatabase()
         {
             playerProfiles = new Dictionary<string, PlayerProfile>();
-            names = new ObservableCollection<string>();
+            names = new List<string>();
         }
 
         public IPlayerProfile this[string name]
@@ -98,7 +98,7 @@ namespace PiCross.Game
             names.Insert( index, name );
         }
 
-        public ObservableCollection<string> PlayerNames
+        public IList<string> PlayerNames
         {
             get
             {
