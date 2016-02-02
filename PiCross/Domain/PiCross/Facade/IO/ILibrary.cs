@@ -13,7 +13,7 @@ namespace PiCross.Facade.IO
 {
     public interface ILibrary
     {
-        ObservableCollection<ILibraryEntry> Entries { get; }
+        IList<ILibraryEntry> Entries { get; }
 
         ILibraryEntry Create( Puzzle puzzle, string author );
     }

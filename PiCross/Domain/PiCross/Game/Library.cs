@@ -12,7 +12,7 @@ namespace PiCross
 {
     internal class Library : ILibrary
     {
-        private readonly ObservableCollection<ILibraryEntry> entries;
+        private readonly List<ILibraryEntry> entries;
 
         private int nextUID;
 
@@ -23,15 +23,15 @@ namespace PiCross
 
         private Library()
         {
-            this.entries = new ObservableCollection<ILibraryEntry>();
+            this.entries = new List<ILibraryEntry>();
             nextUID = 0;
         }
 
-        public ObservableCollection<ILibraryEntry> Entries
+        public IList<ILibraryEntry> Entries
         {
             get
             {
-                return entries;
+                return entries.AsReadOnly();
             }
         }
 
