@@ -134,12 +134,13 @@ namespace PiCross.Facade.IO
             var library = Library.CreateEmpty();
 
             var author = "Woumpousse";
-            library.Entries.Add( new LibraryEntry( Puzzle1, author ) );
-            library.Entries.Add( new LibraryEntry( Puzzle2, author ) );
-            library.Entries.Add( new LibraryEntry( Puzzle3, author ) );
-            library.Entries.Add( new LibraryEntry( Puzzle4, author ) );
-            library.Entries.Add( new LibraryEntry( Puzzle5, author ) );
-            library.Entries.Add( new LibraryEntry( Puzzle6, author ) );            
+
+            library.Create( Puzzle1, author );
+            library.Create( Puzzle2, author );
+            library.Create( Puzzle3, author );
+            library.Create( Puzzle4, author );
+            library.Create( Puzzle5, author );
+            library.Create( Puzzle6, author );
 
             return library;
         }

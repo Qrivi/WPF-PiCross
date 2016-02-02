@@ -10,7 +10,7 @@ using IO;
 
 namespace PiCross.PiCross.Facade.IO
 {
-    internal class LibraryEntrySerializer : ISerializer<ILibraryEntry>
+    internal class LibraryEntrySerializer : ISerializer<LibraryEntry>
     {
         private readonly ISerializer<Puzzle> puzzleSerializer;
 
@@ -26,23 +26,23 @@ namespace PiCross.PiCross.Facade.IO
             }
         }
 
-        public void Write( StreamWriter streamWriter, ILibraryEntry entry )
+        public void Write( StreamWriter streamWriter, LibraryEntry entry )
         {
             new Writer( streamWriter, entry, puzzleSerializer ).Write();
         }
 
-        public ILibraryEntry Read( StreamReader streamReader )
+        public LibraryEntry Read( StreamReader streamReader )
         {
             return new Reader( streamReader, puzzleSerializer ).Read();
         }
 
         private class Writer : WriterBase
         {
-            private readonly ILibraryEntry libraryEntry;
+            private readonly LibraryEntry libraryEntry;
 
             private readonly ISerializer<Puzzle> puzzleSerializer;
 
-            internal Writer( StreamWriter streamWriter, ILibraryEntry libraryEntry, ISerializer<Puzzle> puzzleSerializer )
+            internal Writer( StreamWriter streamWriter, LibraryEntry libraryEntry, ISerializer<Puzzle> puzzleSerializer )
                 : base( streamWriter )
             {
                 if ( libraryEntry == null )
@@ -62,6 +62,7 @@ namespace PiCross.PiCross.Facade.IO
 
             internal void Write()
             {
+                streamWriter.WriteLine( libraryEntry.UID );
                 streamWriter.WriteLine( libraryEntry.Author );
                 puzzleSerializer.Write( streamWriter, libraryEntry.Puzzle );
             }
@@ -83,12 +84,13 @@ namespace PiCross.PiCross.Facade.IO
                 }
             }
 
-            internal ILibraryEntry Read()
+            internal LibraryEntry Read()
             {
+                var uid = ReadInteger();
                 var author = streamReader.ReadLine();
                 var puzzle = puzzleSerializer.Read( streamReader );
 
-                return new LibraryEntry( puzzle, author );
+                return new LibraryEntry( uid, puzzle, author );
             }
         }
     }

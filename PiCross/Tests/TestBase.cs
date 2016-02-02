@@ -153,9 +153,7 @@ namespace PiCross.Tests
 
             foreach ( var puzzle in puzzles )
             {
-                var entry = new LibraryEntry( puzzle, author );
-
-                library.Entries.Add( entry );
+                library.Create( puzzle, author );
             }
 
             return library;

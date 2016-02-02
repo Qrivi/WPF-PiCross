@@ -30,6 +30,11 @@ namespace IO
             }
         }
 
+        protected int ReadInteger()
+        {
+            return ReadIntegers( expectedCount: 1 )[0];
+        }
+
         protected int[] ReadIntegers( int? expectedCount = null )
         {
             var line = streamReader.ReadLine();

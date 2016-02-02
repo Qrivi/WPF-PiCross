@@ -14,6 +14,8 @@ namespace PiCross
     {
         private readonly ObservableCollection<ILibraryEntry> entries;
 
+        private int nextUID;
+
         public static Library CreateEmpty()
         {
             return new Library();
@@ -22,6 +24,7 @@ namespace PiCross
         private Library()
         {
             this.entries = new ObservableCollection<ILibraryEntry>();
+            nextUID = 0;
         }
 
         public ObservableCollection<ILibraryEntry> Entries
@@ -32,10 +35,9 @@ namespace PiCross
             }
         }
 
-        public ILibraryEntry Create( Size size, string author )
+        public ILibraryEntry Create( Puzzle puzzle, string author)
         {
-            var puzzle = Puzzle.CreateEmpty( size );
-            var newEntry = new LibraryEntry( puzzle, author );
+            var newEntry = new LibraryEntry( nextUID++, puzzle, author );
 
             entries.Add( newEntry );
 
@@ -45,14 +47,25 @@ namespace PiCross
 
     internal class LibraryEntry : ILibraryEntry
     {
+        private readonly int uid;
+
         private Puzzle puzzle;
 
         private readonly string author;
 
-        public LibraryEntry( Puzzle puzzle, string author )
+        public LibraryEntry( int uid, Puzzle puzzle, string author )
         {
+            this.uid = uid;
             this.puzzle = puzzle;
             this.author = author;
+        }
+
+        public int UID
+        {
+            get
+            {
+                return uid;
+            }
         }
 
         public Puzzle Puzzle
@@ -76,12 +89,12 @@ namespace PiCross
 
         public bool Equals( LibraryEntry that )
         {
-            return that != null && this.puzzle.Equals( that.puzzle ) && this.author == that.author;
+            return this.uid == that.uid;
         }
 
         public override int GetHashCode()
         {
-            return puzzle.GetHashCode() ^ author.GetHashCode();
+            return uid.GetHashCode();
         }
     }
 }

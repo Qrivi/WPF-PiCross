@@ -132,7 +132,7 @@ namespace PiCross.Facade.IO
                 var puzzle = ReadPuzzle();
                 var author = ReadAuthor();
 
-                return new LibraryEntry( puzzle, author );
+                return new LibraryEntry( -1, puzzle, author );
             }
 
             private Puzzle ReadPuzzle()
