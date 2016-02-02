@@ -7,9 +7,97 @@ using System.Threading.Tasks;
 using PiCross.Facade.IO;
 using PiCross.Game;
 using IO;
+using PiCross.PiCross.Game;
 
 namespace PiCross.PiCross.Facade.IO
 {
+    internal class LibrarySerializer : ISerializer<Library>
+    {
+        private readonly ISerializer<LibraryEntry> libraryEntrySerializer;
+
+        public LibrarySerializer()
+        {
+            libraryEntrySerializer = new LibraryEntrySerializer(new PuzzleSerializer());
+        }
+
+        public void Write( StreamWriter writer, Library obj )
+        {
+            new Writer( writer, obj, libraryEntrySerializer ).Write();
+        }
+
+        public Library Read( StreamReader reader )
+        {
+            return new Reader( reader, libraryEntrySerializer ).Read();
+        }
+
+        private class Reader : ReaderBase
+        {
+            private readonly ISerializer<LibraryEntry> libraryEntrySerializer;
+
+            public Reader( StreamReader streamReader, ISerializer<LibraryEntry> libraryEntrySerializer)
+                : base( streamReader )
+            {
+                if ( libraryEntrySerializer == null )
+                {
+                    throw new ArgumentNullException( "libraryEntrySerializer" );
+                }
+                else
+                {
+                    this.libraryEntrySerializer = libraryEntrySerializer;
+                }
+            }
+
+            public Library Read()
+            {
+                var count = ReadInteger();
+                var library = Library.CreateEmpty();
+                
+                for ( var i = 0; i != count; ++i )
+                {
+                    var libraryEntry = libraryEntrySerializer.Read( streamReader );
+                    library.Entries.Add( libraryEntry );
+                }
+
+                return library;
+            }
+        }
+
+        private class Writer : WriterBase
+        {
+            private readonly ISerializer<LibraryEntry> libraryEntrySerializer;
+
+            private readonly Library library;
+
+            public Writer(StreamWriter streamWriter, Library library, ISerializer<LibraryEntry> libraryEntrySerializer)
+                :base(streamWriter)
+            {
+                if ( library == null )
+                {
+                    throw new ArgumentNullException( "library" );
+                }
+                else if ( libraryEntrySerializer == null )
+                {
+                    throw new ArgumentNullException( "libraryEntrySerializer" );
+                }
+                else
+                {
+                    this.library = library;
+                    this.libraryEntrySerializer = libraryEntrySerializer;
+                }
+            }
+
+            public void Write()
+            {
+                streamWriter.WriteLine( library.Entries.Count );
+
+                foreach ( var libraryEntry in library.Entries )
+                {
+                    libraryEntrySerializer.Write( streamWriter, (LibraryEntry) libraryEntry );
+                }
+            }
+        }
+    }
+
     internal class LibraryEntrySerializer : ISerializer<LibraryEntry>
     {
         private readonly ISerializer<Puzzle> puzzleSerializer;
