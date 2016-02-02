@@ -6,8 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using DataStructures;
 using PiCross.Game;
+using PiCross.Facade.IO;
 
-namespace PiCross.Facade.IO
+namespace PiCross
 {
     internal class Library : ILibrary
     {

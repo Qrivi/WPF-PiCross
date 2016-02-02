@@ -76,7 +76,7 @@
     <Compile Include="PiCross\Facade\IO\ILibrary.cs" />
     <Compile Include="PiCross\Facade\IO\IPuzzleFormat.cs" />
     <Compile Include="PiCross\Facade\IO\IPlayerDatabase.cs" />
-    <Compile Include="PiCross\Facade\IO\Library.cs" />
+    <Compile Include="PiCross\Game\Library.cs" />
     <Compile Include="PiCross\Game\LibraryEntrySerializer.cs" />
     <Compile Include="PiCross\Facade\IO\LibraryIO.cs" />
     <Compile Include="PiCross\Facade\IO\PlayerDatabase.cs" />
