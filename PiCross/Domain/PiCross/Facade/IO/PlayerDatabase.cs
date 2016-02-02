@@ -131,23 +131,23 @@ namespace PiCross.Facade.IO
 
     public class PlayerPuzzleInformation : IPlayerPuzzleInformation
     {
-        private readonly Dictionary<Puzzle, IPlayerPuzzleInformationEntry> entries;
+        private readonly Dictionary<ILibraryEntry, IPlayerPuzzleInformationEntry> entries;
 
         public PlayerPuzzleInformation()
         {
-            this.entries = new Dictionary<Puzzle, IPlayerPuzzleInformationEntry>();
+            this.entries = new Dictionary<ILibraryEntry, IPlayerPuzzleInformationEntry>();
         }
 
-        public IPlayerPuzzleInformationEntry this[Puzzle puzzle]
+        public IPlayerPuzzleInformationEntry this[ILibraryEntry libraryEntry]
         {
             get
             {
-                if ( !entries.ContainsKey( puzzle ) )
+                if ( !entries.ContainsKey( libraryEntry ) )
                 {
-                    entries[puzzle] = new PlayerPuzzleInformationEntry();
+                    entries[libraryEntry] = new PlayerPuzzleInformationEntry();
                 }
 
-                return entries[puzzle];
+                return entries[libraryEntry];
             }
         }
     }
