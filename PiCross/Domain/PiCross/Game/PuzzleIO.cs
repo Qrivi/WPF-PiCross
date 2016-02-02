@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DataStructures;
 using PiCross.Game;
-using PiCross.IO;
+using IO;
 
 namespace PiCross.PiCross.Game
 {

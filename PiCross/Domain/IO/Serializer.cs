@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PiCross.IO
+namespace IO
 {
     public interface ISerializer<T>
     {

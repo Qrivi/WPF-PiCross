@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PiCross.IO
+namespace IO
 {
     public class MagicCookieDecorator<T> : ISerializer<T>
     {
