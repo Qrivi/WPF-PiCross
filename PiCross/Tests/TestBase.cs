@@ -108,11 +108,11 @@ namespace PiCross.Tests
             return playGrid;
         }
 
-        protected static PiCross.Facade.Playing.PlayablePuzzleImplementation CreateManualPuzzle( params string[] rows )
+        protected static PlayablePuzzleImplementation CreateManualPuzzle( params string[] rows )
         {
             var playGrid = CreatePlayGrid( rows );
 
-            return new PiCross.Facade.Playing.PlayablePuzzleImplementation( playGrid );
+            return new PlayablePuzzleImplementation( playGrid );
         }
 
         protected static void OverwritePlayGrid( PlayGrid grid, params string[] rows)
@@ -127,9 +127,9 @@ namespace PiCross.Tests
             return new PuzzleEditor_ManualAmbiguity( editorGrid );
         }
 
-        protected static PiCross.Game.Puzzle CreatePuzzle(params string[] rows)
+        protected static Puzzle CreatePuzzle(params string[] rows)
         {
-            return PiCross.Game.Puzzle.FromRowStrings( rows );
+            return Puzzle.FromRowStrings( rows );
         }
 
         protected static SolverGrid CreateSolverGrid(params string[] rows)
@@ -141,12 +141,12 @@ namespace PiCross.Tests
 
         protected static AmbiguityChecker CreateAmbiguityChecker(params string[] rows)
         {
-            var puzzle = PiCross.Game.Puzzle.FromRowStrings( rows );
+            var puzzle = Puzzle.FromRowStrings( rows );
 
             return new AmbiguityChecker( columnConstraints: puzzle.ColumnConstraints, rowConstraints: puzzle.RowConstraints );
         }
 
-        protected static ILibrary CreateLibrary(params PiCross.Game.Puzzle[] puzzles)
+        protected static ILibrary CreateLibrary(params Puzzle[] puzzles)
         {
             var author = "test";
             var library = Library.CreateEmpty();

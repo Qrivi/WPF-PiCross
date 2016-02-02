@@ -54,6 +54,8 @@
     <Compile Include="Cells\Flag.cs" />
     <Compile Include="Cells\FutureCell.cs" />
     <Compile Include="Cells\ValidatedCell.cs" />
+    <Compile Include="IO\MagicCookieDecorator.cs" />
+    <Compile Include="IO\Serializer.cs" />
     <Compile Include="PiCross\Facade\Chronometer.cs" />
     <Compile Include="DataStructures\Grid.cs" />
     <Compile Include="Cells\Cell.cs" />
@@ -86,6 +88,7 @@
     <Compile Include="PiCross\Game\PlayGrid.cs" />
     <Compile Include="PiCross\Game\Puzzle.cs" />
     <Compile Include="DataStructures\Size.cs" />
+    <Compile Include="PiCross\Game\PuzzleIO.cs" />
     <Compile Include="PiCross\Game\PuzzleUID.cs" />
     <Compile Include="PiCross\Game\SolverGrid.cs" />
     <Compile Include="PiCross\Game\Slice.cs" />
