@@ -14,7 +14,7 @@ namespace PiCross.PiCross.Game
     {
         public void Write( StreamWriter writer, Puzzle puzzle )
         {
-            new PuzzleWriter( writer, puzzle ).Write();
+            new Writer( writer, puzzle ).Write();
         }
 
         public Puzzle Read( StreamReader reader )
@@ -53,11 +53,11 @@ namespace PiCross.PiCross.Game
             }
         }
 
-        private class PuzzleWriter : WriterBase
+        private class Writer : WriterBase
         {
             private readonly Puzzle puzzle;
 
-            internal PuzzleWriter( StreamWriter streamWriter, Puzzle puzzle )
+            internal Writer( StreamWriter streamWriter, Puzzle puzzle )
                 : base( streamWriter )
             {
                 if ( puzzle == null )
