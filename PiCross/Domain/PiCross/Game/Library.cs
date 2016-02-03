@@ -10,7 +10,7 @@ using PiCross.Facade.IO;
 
 namespace PiCross
 {
-    internal class Library : ILibrary
+    public class Library : ILibrary
     {
         private readonly List<ILibraryEntry> entries;
 

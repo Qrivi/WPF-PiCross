@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PiCross.Game
 {
-    internal class GameData
+    public class GameData
     {
         private readonly Library library;
 
