@@ -132,7 +132,15 @@ namespace PiCross.Game
             puzzleInformation = new PlayerPuzzleInformation();
         }
 
-        public IPlayerPuzzleInformation PuzzleInformation
+        IPlayerPuzzleInformation IPlayerProfile.PuzzleInformation
+        {
+            get
+            {
+                return PuzzleInformation;
+            }
+        }
+
+        public PlayerPuzzleInformation PuzzleInformation
         {
             get { return puzzleInformation; }
         }
