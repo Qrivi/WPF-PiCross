@@ -12,7 +12,7 @@ namespace PiCross
 {
     public class Library : ILibrary
     {
-        private readonly List<ILibraryEntry> entries;
+        private readonly List<LibraryEntry> entries;
 
         private int nextUID;
 
@@ -23,11 +23,19 @@ namespace PiCross
 
         private Library()
         {
-            this.entries = new List<ILibraryEntry>();
+            this.entries = new List<LibraryEntry>();
             nextUID = 0;
         }
 
-        public IList<ILibraryEntry> Entries
+        IList<ILibraryEntry> ILibrary.Entries
+        {
+            get
+            {
+                return Entries.Cast<ILibraryEntry>().ToList();
+            }
+        }
+
+        public IList<LibraryEntry> Entries
         {
             get
             {
@@ -35,7 +43,12 @@ namespace PiCross
             }
         }
 
-        public ILibraryEntry Create( Puzzle puzzle, string author)
+        ILibraryEntry ILibrary.Create(Puzzle puzzle, string author)
+        {
+            return Create( puzzle, author );
+        }
+
+        public LibraryEntry Create( Puzzle puzzle, string author)
         {
             var newEntry = new LibraryEntry( nextUID++, puzzle, author );
 
@@ -45,7 +58,7 @@ namespace PiCross
         }
     }
 
-    internal class LibraryEntry : ILibraryEntry
+    public class LibraryEntry : ILibraryEntry
     {
         private readonly int uid;
 

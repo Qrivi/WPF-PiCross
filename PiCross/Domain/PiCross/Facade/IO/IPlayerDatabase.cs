@@ -34,6 +34,7 @@ namespace PiCross.Facade.IO
 
     public interface IPlayerPuzzleInformationEntry
     {
+        // TODO Simplify
         Cell<TimeSpan?> BestTime { get; }
     }
 }
