@@ -44,5 +44,20 @@ namespace PiCross.Game
                 return playerDatabase;
             }
         }
+
+        public override bool Equals( object obj )
+        {
+            return Equals( obj as GameData );
+        }
+
+        public bool Equals(GameData gameData)
+        {
+            return gameData != null && library.Equals( gameData.library ) && playerDatabase.Equals( gameData.playerDatabase );
+        }
+
+        public override int GetHashCode()
+        {
+            return library.GetHashCode() ^ playerDatabase.GetHashCode();
+        }
     }
 }

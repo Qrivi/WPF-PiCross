@@ -99,6 +99,7 @@
     <Compile Include="PiCross\Game\StepwiseSolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Cells\Util.cs" />
+    <Compile Include="Utility\Extensions.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

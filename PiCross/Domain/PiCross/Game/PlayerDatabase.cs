@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Cells;
 using PiCross.Game;
 using PiCross.Facade.IO;
+using Utility;
 
 namespace PiCross.Game
 {
@@ -15,7 +16,7 @@ namespace PiCross.Game
     {
         private readonly Dictionary<string, PlayerProfile> playerProfiles;
 
-        private readonly List<string> names;
+        private readonly List<string> names; // TODO Remove this
 
         public PlayerDatabase()
         {
@@ -51,11 +52,11 @@ namespace PiCross.Game
             return !string.IsNullOrWhiteSpace( name );
         }
 
-        IPlayerProfile IPlayerDatabase.CreateNewProfile(string name)
+        IPlayerProfile IPlayerDatabase.CreateNewProfile( string name )
         {
             return CreateNewProfile( name );
         }
-        
+
         public PlayerProfile CreateNewProfile( string name )
         {
             if ( !IsValidPlayerName( name ) )
@@ -77,13 +78,13 @@ namespace PiCross.Game
             }
         }
 
-        public void DeleteProfile(string name)
+        public void DeleteProfile( string name )
         {
             if ( name == null )
             {
                 throw new ArgumentNullException( "name" );
             }
-            else if ( !playerProfiles.ContainsKey(name))
+            else if ( !playerProfiles.ContainsKey( name ) )
             {
                 throw new ArgumentException( "No player with name " + name );
             }
@@ -118,6 +119,21 @@ namespace PiCross.Game
                 return names;
             }
         }
+
+        public override bool Equals( object obj )
+        {
+            return Equals( obj as PlayerDatabase );
+        }
+
+        public bool Equals( PlayerDatabase playerDatabase )
+        {
+            return playerDatabase != null && playerProfiles.EqualItems( playerDatabase.playerProfiles );
+        }
+
+        public override int GetHashCode()
+        {
+            return playerProfiles.GetHashCode();
+        }
     }
 
     public class PlayerProfile : IPlayerProfile
@@ -149,6 +165,21 @@ namespace PiCross.Game
         {
             get { return name; }
         }
+
+        public override bool Equals( object obj )
+        {
+            return Equals( obj as PlayerProfile );
+        }
+
+        public bool Equals( PlayerProfile playerProfile )
+        {
+            return playerProfile != null && name == playerProfile.name && puzzleInformation.Equals( playerProfile.puzzleInformation );
+        }
+
+        public override int GetHashCode()
+        {
+            return name.GetHashCode();
+        }
     }
 
     public class PlayerPuzzleInformation : IPlayerPuzzleInformation
@@ -172,6 +203,21 @@ namespace PiCross.Game
                 return entries[libraryEntry];
             }
         }
+
+        public override bool Equals( object obj )
+        {
+            return Equals( obj as PlayerPuzzleInformation );
+        }
+
+        public bool Equals( PlayerPuzzleInformation playerPuzzleInformation )
+        {
+            return playerPuzzleInformation != null && entries.EqualItems( playerPuzzleInformation.entries );
+        }
+
+        public override int GetHashCode()
+        {
+            return this.entries.GetHashCode();
+        }
     }
 
     public class PlayerPuzzleInformationEntry : IPlayerPuzzleInformationEntry
@@ -189,6 +235,21 @@ namespace PiCross.Game
             {
                 return bestTime;
             }
+        }
+
+        public override bool Equals( object obj )
+        {
+            return Equals( obj as PlayerPuzzleInformationEntry );
+        }
+
+        public bool Equals(PlayerPuzzleInformationEntry  entry)
+        {
+            return entry != null && bestTime.Equals( entry.bestTime );
+        }
+
+        public override int GetHashCode()
+        {
+            return bestTime.GetHashCode();
         }
     }
 }

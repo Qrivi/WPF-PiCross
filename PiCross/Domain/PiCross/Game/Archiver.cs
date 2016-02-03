@@ -4,6 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using IO;
 
@@ -11,6 +12,14 @@ namespace PiCross.Game
 {
     public class Archiver
     {
+        public GameData Read(Stream stream)
+        {
+            using ( var zipArchive = new ZipArchive( stream, ZipArchiveMode.Read, true ) )
+            {
+                return new Reader( zipArchive ).Read();
+            }
+        }
+
         public void Write( GameData gameData, Stream stream )
         {
             using ( var zipArchive = new ZipArchive( stream, ZipArchiveMode.Create, true ) )
@@ -29,13 +38,148 @@ namespace PiCross.Game
             return string.Format( "players/{0}.txt", playerProfile.Name );
         }
 
+        private static int ExtractEntryID(string filename)
+        {
+            var regex = new Regex( @"^library/entry(\d+)\.txt$" );
+            var match = regex.Match( filename );
+
+            if ( match.Success )
+            {
+                return int.Parse( match.Groups[1].Value );
+            }
+            else
+            {
+                throw new IOException();
+            }
+        }
+
+        private static string ExtractPlayerName( string filename )
+        {
+            var regex = new Regex( @"^players/(.*)\.txt$" );
+            var match = regex.Match( filename );
+
+            if ( match.Success )
+            {
+                return match.Groups[1].Value;
+            }
+            else
+            {
+                throw new IOException();
+            }
+        }
+
+
+        private class Reader
+        {
+            private readonly ZipArchive zipArchive;
+
+            private Library library;
+
+            private PlayerDatabase playerDatabase;
+
+            public Reader(ZipArchive zipArchive)
+            {
+                if ( zipArchive == null )
+                {
+                    throw new ArgumentNullException( "zipArchive" );
+                }
+                else
+                {
+                    this.zipArchive = zipArchive;                    
+                }
+            }
+
+            public GameData Read()
+            {
+                this.library = Library.CreateEmpty();
+                this.playerDatabase = new PlayerDatabase();
+
+                var libraryFiles = new List<ZipArchiveEntry>();
+                var playerFiles = new List<ZipArchiveEntry>();
+
+                foreach ( var zipEntry in zipArchive.Entries )
+                {
+                    if ( zipEntry.FullName.StartsWith( "library/" ) )
+                    {
+                        libraryFiles.Add( zipEntry );
+                    }
+                    else if ( zipEntry.FullName.StartsWith( "players/" ) )
+                    {
+                        playerFiles.Add( zipEntry );
+                    }
+                    else
+                    {
+                        throw new IOException();
+                    }
+                }
+
+                foreach ( var libraryFile in libraryFiles)
+                {
+                    ReadLibraryEntry( libraryFile );
+                }
+
+                foreach ( var playerFile in playerFiles )
+                {
+                    ReadPlayerInformation( playerFile );
+                }
+
+                return new GameData( library, playerDatabase );
+            }
+
+            private void ReadLibraryEntry(ZipArchiveEntry entry)
+            {
+                using ( var zipStream = entry.Open() )
+                {
+                    using ( var zipStreamReader = new StreamReader(zipStream))
+                    {
+                        var uid = Archiver.ExtractEntryID( entry.FullName );
+                        var author = zipStreamReader.ReadLine();
+                        var puzzle = new PuzzleSerializer().Read( zipStreamReader );
+
+                        library.Add( new LibraryEntry( uid, puzzle, author ) );
+                    }
+                }
+            }
+
+            private void ReadPlayerInformation(ZipArchiveEntry entry)
+            {
+                var playerName = Archiver.ExtractPlayerName( entry.FullName );
+                var playerProfile = this.playerDatabase.CreateNewProfile( playerName );
+
+                using ( var zipStream = entry.Open() )
+                {
+                    using ( var zipStreamReader = new StreamReader( zipStream ) )
+                    {
+                        string line;
+
+                        while ( (line = zipStreamReader.ReadLine()) != null )
+                        {
+                            var parts = line.Split( ' ' );
+                            var uid = int.Parse( parts[0] );
+                            var bestTime = double.Parse( parts[1] );
+                            var libraryEntry = library.GetEntryWithId( uid );
+
+                            playerProfile.PuzzleInformation[libraryEntry].BestTime.Value = TimeSpan.FromMilliseconds( bestTime );
+                        }
+                    }
+                }
+            }
+        }
+
         private class Writer
         {
             private readonly ZipArchive zipArchive;
 
             public Writer(ZipArchive zipArchive )
             {
-                this.zipArchive = zipArchive;
+                if ( zipArchive == null )
+                {
+                    throw new ArgumentNullException( "zipArchive" );
+                }
+                else
+                {
+                    this.zipArchive = zipArchive;
+                }
             }
 
             public void Write(GameData gameData)
