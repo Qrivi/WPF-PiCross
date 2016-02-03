@@ -13,10 +13,13 @@ namespace PiCross.Game
     {
         public void Write( GameData gameData, Stream stream )
         {
-            new Writer( gameData, stream ).Write();
+            using ( var zipArchive = new ZipArchive( stream, ZipArchiveMode.Create, true ) )
+            {
+                new Writer( gameData, zipArchive ).Write();
+            }
         }
 
-        private static string GetLibraryEntryPath(LibraryEntry libraryEntry)
+        private static string GetLibraryEntryPath( LibraryEntry libraryEntry )
         {
             return string.Format( "library/entry{0}.txt", libraryEntry.UID.ToString().PadLeft( 5, '0' ) );
         }
@@ -27,13 +30,10 @@ namespace PiCross.Game
 
             private readonly GameData gameData;
 
-            private readonly ISerializer<LibraryEntry> libraryEntrySerializer;
-
-            public Writer( GameData gameData, Stream stream )
+            public Writer( GameData gameData, ZipArchive zipArchive )
             {
                 this.gameData = gameData;
-                zipArchive = new ZipArchive( stream, ZipArchiveMode.Create );
-                libraryEntrySerializer = new LibraryEntrySerializer( new PuzzleSerializer() );
+                this.zipArchive = zipArchive;
             }
 
             public void Write()
@@ -54,17 +54,23 @@ namespace PiCross.Game
 
             private void WriteLibraryEntry( LibraryEntry libraryEntry )
             {
-                var path = Archiver.GetLibraryEntryPath(libraryEntry);
+                var path = Archiver.GetLibraryEntryPath( libraryEntry );
                 var zipEntry = zipArchive.CreateEntry( path, CompressionLevel.Optimal );
-                
+
                 using ( var zipStream = zipEntry.Open() )
                 {
-                    using ( var zipStreamWriter = new StreamWriter(zipStream))
+                    using ( var zipStreamWriter = new StreamWriter( zipStream ) )
                     {
-                        libraryEntrySerializer.Write( zipStreamWriter, libraryEntry );
+                        zipStreamWriter.WriteLine( libraryEntry.Author );
+                        WritePuzzle( zipStreamWriter, libraryEntry.Puzzle );
                     }
                 }
-            }            
+            }
+
+            private void WritePuzzle(StreamWriter streamWriter, Puzzle puzzle)
+            {
+                new PuzzleSerializer().Write( streamWriter, puzzle );
+            }
         }
     }
 }

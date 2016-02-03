@@ -14,7 +14,7 @@ namespace IO
         T Read( StreamReader reader );
     }
 
-    public abstract class ReaderBase
+    public abstract class ReaderBase 
     {
         protected readonly StreamReader streamReader;
 

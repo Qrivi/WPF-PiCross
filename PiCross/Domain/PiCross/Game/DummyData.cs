@@ -4,14 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PiCross.Game;
+using PiCross.Facade.IO;
 
-namespace PiCross.Facade.IO
+namespace PiCross.Game
 {
     public class DummyData
     {
-        private readonly ILibrary library;
+        private readonly Library library;
 
-        private readonly IPlayerDatabase players;
+        private readonly PlayerDatabase players;
 
         public DummyData()
         {
@@ -19,11 +20,11 @@ namespace PiCross.Facade.IO
             this.players = CreateDummyPlayerDatabase();
         }
 
-        public ILibrary Puzzles { get { return library; } }
+        public Library Puzzles { get { return library; } }
 
-        public IPlayerDatabase Players { get { return players; } }
+        public PlayerDatabase Players { get { return players; } }
 
-        private static IPlayerDatabase CreateDummyPlayerDatabase()
+        private static PlayerDatabase CreateDummyPlayerDatabase()
         {
             var db = new PlayerDatabase();
 
@@ -127,7 +128,7 @@ namespace PiCross.Facade.IO
             }
         }
 
-        private static ILibrary CreateDummyLibrary()
+        private static Library CreateDummyLibrary()
         {
             var library = Library.CreateEmpty();
 

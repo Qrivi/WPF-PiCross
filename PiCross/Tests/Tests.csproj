@@ -75,6 +75,7 @@
     <Compile Include="Slice_KnownPrefix.cs" />
     <Compile Include="SolvingTests.cs" />
     <Compile Include="TestBase.cs" />
+    <Compile Include="ArchiverTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Domain.csproj">

@@ -75,7 +75,7 @@
     <Compile Include="PiCross\Facade\Editing\PuzzleEditor_ManualAmbiguity.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="PiCross\Facade\IO\DummyData.cs" />
+    <Compile Include="PiCross\Game\DummyData.cs" />
     <Compile Include="PiCross\Facade\IO\ILibrary.cs" />
     <Compile Include="PiCross\Facade\IO\IPuzzleFormat.cs" />
     <Compile Include="PiCross\Facade\IO\IPlayerDatabase.cs" />
