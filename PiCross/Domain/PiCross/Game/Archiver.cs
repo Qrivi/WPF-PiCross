@@ -86,8 +86,7 @@ namespace PiCross.Game
                         {
                             foreach ( var libraryEntry in library.Entries )
                             {
-                                // TODO Remove cast
-                                int uid = ((LibraryEntry) libraryEntry).UID;
+                                int uid = libraryEntry.UID;
                                 var puzzleInformation = playerProfile.PuzzleInformation[libraryEntry];
                                 
                                 if ( puzzleInformation.BestTime.Value.HasValue )
