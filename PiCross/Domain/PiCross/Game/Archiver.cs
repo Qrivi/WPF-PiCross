@@ -15,7 +15,7 @@ namespace PiCross.Game
         {
             using ( var zipArchive = new ZipArchive( stream, ZipArchiveMode.Create, true ) )
             {
-                new Writer( gameData, zipArchive ).Write();
+                new Writer( zipArchive ).Write(gameData);
             }
         }
 
@@ -24,27 +24,28 @@ namespace PiCross.Game
             return string.Format( "library/entry{0}.txt", libraryEntry.UID.ToString().PadLeft( 5, '0' ) );
         }
 
+        private static string GetPlayerProfilePath( PlayerProfile playerProfile )
+        {
+            return string.Format( "players/{0}.txt", playerProfile.Name );
+        }
+
         private class Writer
         {
             private readonly ZipArchive zipArchive;
 
-            private readonly GameData gameData;
-
-            public Writer( GameData gameData, ZipArchive zipArchive )
+            public Writer(ZipArchive zipArchive )
             {
-                this.gameData = gameData;
                 this.zipArchive = zipArchive;
             }
 
-            public void Write()
+            public void Write(GameData gameData)
             {
-                WriteLibrary();
+                WriteLibrary(gameData.Library);
+                WritePlayerDatabase( gameData.Library, gameData.PlayerDatabase );
             }
 
-            private void WriteLibrary()
+            private void WriteLibrary(Library library)
             {
-                var library = gameData.Library;
-
                 foreach ( var libraryEntry in library.Entries )
                 {
                     // TODO Remove cast
@@ -70,6 +71,37 @@ namespace PiCross.Game
             private void WritePuzzle(StreamWriter streamWriter, Puzzle puzzle)
             {
                 new PuzzleSerializer().Write( streamWriter, puzzle );
+            }
+
+            private void WritePlayerDatabase(Library library, PlayerDatabase playerDatabase)
+            {
+                foreach ( var playerName in playerDatabase.PlayerNames)
+                {
+                    // TODO Remove cast
+                    var playerProfile = (PlayerProfile) playerDatabase[playerName];
+                    var path = Archiver.GetPlayerProfilePath( playerProfile );
+                    var zipEntry = zipArchive.CreateEntry(path, CompressionLevel.Optimal);
+                    
+                    using ( var zipStream = zipEntry.Open() )
+                    {
+                        using ( var zipStreamWriter = new StreamWriter(zipStream) )
+                        {
+                            foreach ( var libraryEntry in library.Entries )
+                            {
+                                // TODO Remove cast
+                                int uid = ((LibraryEntry) libraryEntry).UID;
+                                var puzzleInformation = playerProfile.PuzzleInformation[libraryEntry];
+                                
+                                if ( puzzleInformation.BestTime.Value.HasValue )
+                                {
+                                    var bestTime = puzzleInformation.BestTime.Value.Value;
+
+                                    zipStreamWriter.WriteLine("{0} {1}", uid, bestTime.TotalMilliseconds);
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
