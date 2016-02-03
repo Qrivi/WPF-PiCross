@@ -37,6 +37,41 @@ namespace PiCross.Tests
             AssertEqual( gameData, gameData2 );
         }
 
+        [TestMethod]
+        public void LoadingSavedGameData3()
+        {
+            var library = Library.CreateEmpty();
+            var players = new PlayerDatabase();
+
+            library.Create( Puzzle1, "x" );
+            library.Create( Puzzle2, "y" );
+            library.Create( Puzzle3, "z" );
+
+            var gameData = new GameData( library, players );
+            var gameData2 = SaveThenLoad( gameData );
+
+            AssertEqual( gameData, gameData2 );
+        }
+
+        [TestMethod]
+        public void LoadingSavedGameData4()
+        {
+            var library = Library.CreateEmpty();
+            var players = new PlayerDatabase();
+
+            var e1 = library.Create( Puzzle1, "x" );
+            var e2 = library.Create( Puzzle2, "y" );
+            var e3 = library.Create( Puzzle3, "z" );
+
+            var dieter = players.CreateNewProfile( "dieter" );
+            dieter.PuzzleInformation[e1].BestTime.Value = TimeSpan.FromMilliseconds( 10000 );
+
+            var gameData = new GameData( library, players );
+            var gameData2 = SaveThenLoad( gameData );
+
+            AssertEqual( gameData, gameData2 );
+        }
+
         private Puzzle Puzzle1
         {
             get
@@ -76,7 +111,7 @@ namespace PiCross.Tests
         private void AssertEqual(GameData x, GameData y)
         {
             AssertEqual( x.Library, y.Library );
-            AssertEqual( x.PlayerDatabase, y.PlayerDatabase );
+            AssertEqual( x.Library, x.PlayerDatabase, y.PlayerDatabase );
         }
 
         private void AssertEqual(Library x, Library y)
@@ -95,7 +130,7 @@ namespace PiCross.Tests
             }
         }
 
-        private void AssertEqual(PlayerDatabase x, PlayerDatabase y)
+        private void AssertEqual(Library library, PlayerDatabase x, PlayerDatabase y)
         {
             Assert.AreEqual( x, y );
         }

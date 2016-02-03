@@ -184,14 +184,22 @@ namespace PiCross.Game
 
     public class PlayerPuzzleInformation : IPlayerPuzzleInformation
     {
-        private readonly Dictionary<ILibraryEntry, IPlayerPuzzleInformationEntry> entries;
+        private readonly Dictionary<LibraryEntry, PlayerPuzzleInformationEntry> entries;
 
         public PlayerPuzzleInformation()
         {
-            this.entries = new Dictionary<ILibraryEntry, IPlayerPuzzleInformationEntry>();
+            this.entries = new Dictionary<LibraryEntry, PlayerPuzzleInformationEntry>();
         }
 
-        public IPlayerPuzzleInformationEntry this[ILibraryEntry libraryEntry]
+        IPlayerPuzzleInformationEntry IPlayerPuzzleInformation.this[ILibraryEntry libraryEntry]
+        {
+            get
+            {
+                return this[(LibraryEntry) libraryEntry];
+            }
+        }
+
+        public PlayerPuzzleInformationEntry this[LibraryEntry libraryEntry]
         {
             get
             {
@@ -211,8 +219,17 @@ namespace PiCross.Game
 
         public bool Equals( PlayerPuzzleInformation playerPuzzleInformation )
         {
-            return playerPuzzleInformation != null && entries.EqualItems( playerPuzzleInformation.entries );
-        }
+            if ( playerPuzzleInformation == null )
+            {
+                return false;
+            }
+            else
+            {
+                var libraryEntries = new HashSet<LibraryEntry>( this.entries.Keys.Concat(playerPuzzleInformation.entries.Keys) );
+
+                return libraryEntries.All( entry => this[entry].Equals( playerPuzzleInformation[entry] ) );
+            }
+        }        
 
         public override int GetHashCode()
         {
