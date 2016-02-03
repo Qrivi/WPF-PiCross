@@ -82,6 +82,30 @@ namespace DataStructures
             return Grid.CreateVirtual( grid.Size, p => function( p ) );
         }
 
+        public static void ForEach<T>(this IGrid<T> grid, Action<Vector2D> action )
+        {
+            foreach ( var position in grid.AllPositions )
+            {
+                action( position );
+            }
+        }
+
+        public static void ForEach<T>( this IGrid<T> grid, Action<T> action )
+        {
+            foreach ( var position in grid.AllPositions )
+            {
+                action( grid[position] );
+            }
+        }
+
+        public static void ForEach<T>( this IGrid<T> grid, Action<Vector2D, T> action )
+        {
+            foreach ( var position in grid.AllPositions )
+            {
+                action( position, grid[position] );
+            }
+        }
+
         public static IGrid<T> Copy<T>( this IGrid<T> grid )
         {
             return Grid.Create( grid.Size, p => grid[p] );
