@@ -23,7 +23,15 @@ namespace PiCross.Game
             names = new List<string>();
         }
 
-        public IPlayerProfile this[string name]
+        IPlayerProfile IPlayerDatabase.this[string name]
+        {
+            get
+            {
+                return this[name];
+            }
+        }
+
+        public PlayerProfile this[string name]
         {
             get
             {
@@ -42,8 +50,13 @@ namespace PiCross.Game
         {
             return !string.IsNullOrWhiteSpace( name );
         }
+
+        IPlayerProfile IPlayerDatabase.CreateNewProfile(string name)
+        {
+            return CreateNewProfile( name );
+        }
         
-        public IPlayerProfile CreateNewProfile( string name )
+        public PlayerProfile CreateNewProfile( string name )
         {
             if ( !IsValidPlayerName( name ) )
             {
