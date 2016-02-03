@@ -76,8 +76,7 @@ namespace PiCross.Game
             {
                 foreach ( var playerName in playerDatabase.PlayerNames)
                 {
-                    // TODO Remove cast
-                    var playerProfile = (PlayerProfile) playerDatabase[playerName];
+                    var playerProfile = playerDatabase[playerName];
                     var path = Archiver.GetPlayerProfilePath( playerProfile );
                     var zipEntry = zipArchive.CreateEntry(path, CompressionLevel.Optimal);
                     
