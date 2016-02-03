@@ -48,8 +48,7 @@ namespace PiCross.Game
             {
                 foreach ( var libraryEntry in library.Entries )
                 {
-                    // TODO Remove cast
-                    WriteLibraryEntry( (LibraryEntry) libraryEntry );
+                    WriteLibraryEntry( libraryEntry );
                 }
             }
 
