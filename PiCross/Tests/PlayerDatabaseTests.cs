@@ -34,21 +34,6 @@ namespace PiCross.Tests
 
         [TestMethod]
         [TestCategory( "PlayerDatabase" )]
-        public void AddingNotifiesObservers()
-        {
-            var name = "mathy";
-            var pdb = new PlayerDatabase();
-            var flag = false;
-
-            pdb.PlayerNames.CollectionChanged += (sender, args) => flag = true;
-
-            Assert.IsFalse( flag );
-            pdb.CreateNewProfile( name );
-            Assert.IsTrue( flag );
-        }
-
-        [TestMethod]
-        [TestCategory( "PlayerDatabase" )]
         public void NamesAreSorted()
         {            
             var pdb = new PlayerDatabase();
@@ -75,23 +60,6 @@ namespace PiCross.Tests
             Assert.IsTrue( pdb.PlayerNames.Contains( name ) );
             pdb.DeleteProfile( name );
             Assert.IsFalse( pdb.PlayerNames.Contains( name ) );
-        }
-
-        [TestMethod]
-        [TestCategory( "PlayerDatabase" )]
-        public void RemovingNotifiesObservers()
-        {
-            var name = "mathy";
-            var pdb = new PlayerDatabase();
-            var flag = false;
-
-            pdb.CreateNewProfile( name );
-
-            pdb.PlayerNames.CollectionChanged += ( sender, args ) => flag = true;
-
-            Assert.IsFalse( flag );
-            pdb.DeleteProfile( name );
-            Assert.IsTrue( flag );
         }
     }
 }

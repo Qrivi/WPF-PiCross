@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 using PiCross.Facade.IO;
 using PiCross.Game;
 using IO;
-using PiCross.PiCross.Game;
 
-namespace PiCross.PiCross.Facade.IO
+namespace PiCross.Facade.IO
 {
     internal class LibrarySerializer : ISerializer<Library>
     {

@@ -8,7 +8,7 @@ using DataStructures;
 using PiCross.Game;
 using IO;
 
-namespace PiCross.PiCross.Game
+namespace PiCross.Game
 {
     internal class PuzzleSerializer : ISerializer<Puzzle>
     {
