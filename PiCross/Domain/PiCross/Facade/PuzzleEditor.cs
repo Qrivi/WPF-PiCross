@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PiCross.Game;
 
-namespace PiCross.Facade.Editing
+namespace PiCross.Facade
 {
     public static class PuzzleEditor
     {

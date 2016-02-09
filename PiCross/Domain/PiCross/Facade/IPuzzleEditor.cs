@@ -7,7 +7,7 @@ using Cells;
 using DataStructures;
 using PiCross.Game;
 
-namespace PiCross.Facade.Editing
+namespace PiCross.Facade
 {
     public interface IPuzzleEditor
     {

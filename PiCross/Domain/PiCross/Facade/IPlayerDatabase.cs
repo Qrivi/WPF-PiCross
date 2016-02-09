@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Cells;
 using PiCross.Game;
 
-namespace PiCross.Facade.IO
+namespace PiCross.Facade
 {
     public interface IPlayerDatabase
     {

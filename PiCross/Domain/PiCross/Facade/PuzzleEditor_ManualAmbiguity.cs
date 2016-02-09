@@ -5,7 +5,7 @@ using DataStructures;
 using PiCross.Game;
 using AmbiguityEnum = PiCross.Game.Ambiguity;
 
-namespace PiCross.Facade.Editing
+namespace PiCross.Facade
 {
     public class PuzzleEditor_ManualAmbiguity : IPuzzleEditor
     {

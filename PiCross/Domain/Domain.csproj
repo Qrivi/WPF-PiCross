@@ -57,6 +57,7 @@
     <Compile Include="Cells\ValidatedCell.cs" />
     <Compile Include="IO\MagicCookieDecorator.cs" />
     <Compile Include="IO\Serializer.cs" />
+    <Compile Include="PiCross\Facade\PiCrossFacade.cs" />
     <Compile Include="PiCross\Game\Archiver.cs" />
     <Compile Include="PiCross\Game\GameData.cs" />
     <Compile Include="Utility\Chronometer.cs" />
@@ -70,20 +71,20 @@
     <Compile Include="Cells\Var.cs" />
     <Compile Include="DataStructures\Signal.cs" />
     <Compile Include="DataStructures\Vector2D.cs" />
-    <Compile Include="PiCross\Facade\Editing\IPuzzleEditor.cs" />
-    <Compile Include="PiCross\Facade\Editing\PuzzleEditor.cs" />
-    <Compile Include="PiCross\Facade\Editing\PuzzleEditor_ManualAmbiguity.cs">
+    <Compile Include="PiCross\Facade\IPuzzleEditor.cs" />
+    <Compile Include="PiCross\Facade\PuzzleEditor.cs" />
+    <Compile Include="PiCross\Facade\PuzzleEditor_ManualAmbiguity.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PiCross\Game\DummyData.cs" />
-    <Compile Include="PiCross\Facade\IO\ILibrary.cs" />
-    <Compile Include="PiCross\Facade\IO\IPuzzleFormat.cs" />
-    <Compile Include="PiCross\Facade\IO\IPlayerDatabase.cs" />
+    <Compile Include="PiCross\Facade\ILibrary.cs" />
+    <Compile Include="PiCross\Facade\IPuzzleFormat.cs" />
+    <Compile Include="PiCross\Facade\IPlayerDatabase.cs" />
     <Compile Include="PiCross\Game\Library.cs" />
     <Compile Include="PiCross\Game\LibrarySerializer.cs" />
     <Compile Include="PiCross\Game\PlayerDatabase.cs" />
-    <Compile Include="PiCross\Facade\Playing\PlayablePuzzleImplementation.cs" />
-    <Compile Include="PiCross\Facade\Playing\IPlayablePuzzle.cs" />
+    <Compile Include="PiCross\Facade\PlayablePuzzleImplementation.cs" />
+    <Compile Include="PiCross\Facade\IPlayablePuzzle.cs" />
     <Compile Include="PiCross\Game\Ambiguity.cs" />
     <Compile Include="PiCross\Game\AmbiguityChecker.cs" />
     <Compile Include="PiCross\Game\Constraints.cs" />

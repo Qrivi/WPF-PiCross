@@ -4,9 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataStructures;
-using PiCross.Facade.Editing;
-using PiCross.Facade.IO;
-using PiCross.Facade.Playing;
+using PiCross.Facade;
 using PiCross.Game;
 
 namespace PiCross.Tests
