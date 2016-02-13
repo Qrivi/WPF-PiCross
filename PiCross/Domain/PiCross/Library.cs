@@ -133,7 +133,7 @@ namespace PiCross
         }
     }
 
-    public class PuzzleLibraryEntry : IPuzzleLibraryEntry, IComparable<PuzzleLibraryEntry>
+    internal class PuzzleLibraryEntry : IPuzzleLibraryEntry, IComparable<PuzzleLibraryEntry>
     {
         private readonly int uid;
 

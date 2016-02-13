@@ -8,7 +8,7 @@ using System.Diagnostics;
 
 namespace PiCross
 {
-    public class Slice
+    internal class Slice
     {
         private readonly ISequence<Square> squares;
 

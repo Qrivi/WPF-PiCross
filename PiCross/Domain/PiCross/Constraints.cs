@@ -51,7 +51,7 @@ namespace PiCross
             // NOP
         }
 
-        public IEnumerable<Slice> GenerateSlices( int sliceLength )
+        internal IEnumerable<Slice> GenerateSlices( int sliceLength )
         {
             return GeneratePatterns( sliceLength, values ).Select( x => new Slice( x ) );
         }
@@ -132,7 +132,7 @@ namespace PiCross
             }
         }
 
-        public int SatisfiedPrefixLength( Slice slice )
+        internal int SatisfiedPrefixLength( Slice slice )
         {
             var knownPrefix = slice.KnownPrefix;
             var knownConstraints = knownPrefix.DeriveConstraints();
@@ -145,7 +145,7 @@ namespace PiCross
             return new Constraints( this.values.Reverse() );
         }
 
-        public int SatisfiedSuffixLength( Slice slice )
+        internal int SatisfiedSuffixLength( Slice slice )
         {
             return this.Reverse().SatisfiedPrefixLength( slice.Reverse() );
         }
@@ -158,7 +158,7 @@ namespace PiCross
             }
         }
 
-        public bool IsSatisfied( Slice slice )
+        internal bool IsSatisfied( Slice slice )
         {
             if ( slice.IsFullyKnown )
             {
@@ -172,7 +172,7 @@ namespace PiCross
             }
         }
 
-        public Range UnsatisfiedValueRange( Slice slice )
+        internal Range UnsatisfiedValueRange( Slice slice )
         {
             var knownPrefix = slice.KnownPrefix;
             var rest = slice.Lift( xs => xs.DropPrefix( knownPrefix.Squares.Length ) );

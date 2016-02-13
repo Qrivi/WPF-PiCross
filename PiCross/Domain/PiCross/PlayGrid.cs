@@ -85,7 +85,7 @@ namespace PiCross
         }
     }
 
-    public class PlayGridConstraints
+    internal class PlayGridConstraints
     {
         private readonly ISequence<PlayGridConstraintValue> values;
 
@@ -119,7 +119,7 @@ namespace PiCross
         }
     }
 
-    public class PlayGridConstraintValue
+    internal class PlayGridConstraintValue
     {
         private readonly Slice slice;
 

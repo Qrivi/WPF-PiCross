@@ -8,7 +8,7 @@ using Cells;
 
 namespace PiCross
 {
-    public class SolverGrid
+    internal class SolverGrid
     {
         private readonly IGrid<IVar<Square>> squares;
 

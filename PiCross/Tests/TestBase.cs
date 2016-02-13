@@ -10,7 +10,7 @@ namespace PiCross.Tests
 {
     public class TestBase
     {
-        protected static Slice CreateSlice( string str )
+        internal static Slice CreateSlice( string str )
         {
             return Slice.FromString( str );
         }
@@ -129,7 +129,7 @@ namespace PiCross.Tests
             return Puzzle.FromRowStrings( rows );
         }
 
-        protected static SolverGrid CreateSolverGrid(params string[] rows)
+        internal static SolverGrid CreateSolverGrid(params string[] rows)
         {
             var editorGrid = EditorGrid.FromStrings( rows );
 

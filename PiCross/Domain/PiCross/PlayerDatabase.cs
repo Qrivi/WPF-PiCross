@@ -126,7 +126,7 @@ namespace PiCross
         }
     }
 
-    public class PlayerProfile : IPlayerProfile
+    internal class PlayerProfile : IPlayerProfile
     {
         private readonly string name;
 
@@ -172,7 +172,7 @@ namespace PiCross
         }
     }
 
-    public class PlayerPuzzleInformation : IPlayerPuzzleInformation
+    internal class PlayerPuzzleInformation : IPlayerPuzzleInformation
     {
         private readonly Dictionary<PuzzleLibraryEntry, PlayerPuzzleInformationEntry> entries;
 
