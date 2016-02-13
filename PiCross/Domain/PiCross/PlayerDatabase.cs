@@ -215,11 +215,11 @@ namespace PiCross
             }
             else
             {
-                var libraryEntries = new HashSet<PuzzleLibraryEntry>( this.entries.Keys.Concat(playerPuzzleInformation.entries.Keys) );
+                var libraryEntries = new HashSet<PuzzleLibraryEntry>( this.entries.Keys.Concat( playerPuzzleInformation.entries.Keys ) );
 
                 return libraryEntries.All( entry => this[entry].Equals( playerPuzzleInformation[entry] ) );
             }
-        }        
+        }
 
         public override int GetHashCode()
         {
@@ -249,7 +249,7 @@ namespace PiCross
             return Equals( obj as PlayerPuzzleInformationEntry );
         }
 
-        public bool Equals(PlayerPuzzleInformationEntry  entry)
+        public bool Equals( PlayerPuzzleInformationEntry entry )
         {
             return entry != null && bestTime.Equals( entry.bestTime );
         }
