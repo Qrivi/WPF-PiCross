@@ -7,7 +7,7 @@ using AmbiguityEnum = PiCross.Ambiguity;
 
 namespace PiCross
 {
-    public class PuzzleEditor_ManualAmbiguity : IPuzzleEditor
+    internal class PuzzleEditor_ManualAmbiguity : IPuzzleEditor
     {
         private readonly EditorGrid editorGrid;
 

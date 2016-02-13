@@ -8,7 +8,7 @@ using Cells;
 
 namespace PiCross
 {
-    public class EditorGrid
+    internal class EditorGrid
     {
         private readonly IGrid<IVar<Square>> grid;
 

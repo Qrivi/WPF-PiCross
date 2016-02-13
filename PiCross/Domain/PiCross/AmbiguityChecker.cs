@@ -7,7 +7,7 @@ using DataStructures;
 
 namespace PiCross
 {
-    public class AmbiguityChecker
+    internal class AmbiguityChecker
     {
         private readonly SolverGrid solver;
 

@@ -88,14 +88,14 @@ namespace PiCross.Tests
             } );
         }
 
-        protected static EditorGrid ParseEditorGrid( params string[] rows )
+        internal static EditorGrid ParseEditorGrid( params string[] rows )
         {
             var editorGridData = ParseFullyKnown( rows );
 
             return new EditorGrid( editorGridData );
         }
 
-        protected static PlayGrid CreatePlayGrid( params string[] rows )
+        internal static PlayGrid CreatePlayGrid( params string[] rows )
         {
             var editorGrid = ParseEditorGrid( rows );
             var playGrid = editorGrid.CreatePlayGrid();
@@ -112,7 +112,7 @@ namespace PiCross.Tests
             return new PlayablePuzzleImplementation( playGrid );
         }
 
-        protected static void OverwritePlayGrid( PlayGrid grid, params string[] rows)
+        internal static void OverwritePlayGrid( PlayGrid grid, params string[] rows)
         {
             grid.Squares.Overwrite( Square.CreateGrid( rows ) );
         }
@@ -136,7 +136,7 @@ namespace PiCross.Tests
             return editorGrid.CreateSolverGrid();
         }
 
-        protected static AmbiguityChecker CreateAmbiguityChecker(params string[] rows)
+        internal static AmbiguityChecker CreateAmbiguityChecker(params string[] rows)
         {
             var puzzle = Puzzle.FromRowStrings( rows );
 
