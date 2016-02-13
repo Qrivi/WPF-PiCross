@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataStructures;
 using PiCross;
 
 namespace PiCross
@@ -36,6 +37,13 @@ namespace PiCross
             var puzzleEditor = new PuzzleEditor_ManualAmbiguity( editorGrid );
 
             return puzzleEditor;
+        }
+
+        public IStepwisePuzzleSolver CreateStepwisePuzzleSolver(ISequence<Constraints> rowConstraints, ISequence<Constraints> columnConstraints)
+        {
+            var solverGrid = new SolverGrid( columnConstraints: columnConstraints, rowConstraints: rowConstraints );
+
+            return new StepwiseSolver( solverGrid );
         }
     }
 }

@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataStructures;
 
 namespace PiCross
 {
-    public class StepwiseSolver
+    internal class StepwiseSolver : IStepwisePuzzleSolver
     {
         private readonly SolverGrid solverGrid;
 
@@ -55,11 +56,19 @@ namespace PiCross
             }
         }
 
-        public SolverGrid Grid
+        public IGrid<Square> Grid
         {
             get
             {
-                return solverGrid;
+                return solverGrid.Squares;
+            }
+        }
+
+        public bool IsSolved
+        {
+            get
+            {
+                return solverGrid.IsSolved;
             }
         }
 
