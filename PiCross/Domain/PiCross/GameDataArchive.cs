@@ -80,9 +80,25 @@ namespace PiCross.PiCross
             }
         }
 
+        public void UpdateLibraryEntry( PuzzleLibraryEntry entry )
+        {
+            var path = GetLibraryEntryPath( entry.UID );
+
+            using ( var writer = OpenZipArchiveEntryForWriting( path ) )
+            {
+                writer.WriteLine( entry.Author );
+                new PuzzleSerializer().Write( writer, entry.Puzzle );
+            }
+        }
+
         private StreamReader OpenZipArchiveEntry( string path )
         {
             return new StreamReader( zipArchive.GetEntry( path ).Open() );
+        }
+
+        private StreamWriter OpenZipArchiveEntryForWriting(string path)
+        {
+            return new StreamWriter( zipArchive.GetEntry( path ).Open() );
         }
 
         private static string GetLibraryEntryPath( int id )
