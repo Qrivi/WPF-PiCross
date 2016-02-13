@@ -7,7 +7,7 @@ using PiCross;
 
 namespace PiCross.Game
 {
-    public class GameData : IGameData
+    internal class GameData : IGameData
     {
         private readonly PuzzleLibrary library;
 

@@ -10,7 +10,7 @@ using PiCross;
 
 namespace PiCross.Game
 {
-    public class PlayablePuzzleImplementation : IPlayablePuzzle
+    internal class PlayablePuzzleImplementation : IPlayablePuzzle
     {
         private readonly PlayGrid playGrid;
 

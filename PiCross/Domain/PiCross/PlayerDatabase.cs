@@ -12,7 +12,7 @@ using Utility;
 
 namespace PiCross.Game
 {
-    public class PlayerDatabase : IPlayerDatabase
+    internal class PlayerDatabase : IPlayerDatabase
     {
         private readonly Dictionary<string, PlayerProfile> playerProfiles;
 

@@ -10,7 +10,7 @@ using IO;
 
 namespace PiCross.Game
 {
-    public class GameDataIO
+    internal class GameDataIO
     {
         public GameData Read(Stream stream)
         {

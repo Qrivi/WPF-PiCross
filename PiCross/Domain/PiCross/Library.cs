@@ -10,7 +10,7 @@ using PiCross;
 
 namespace PiCross
 {
-    public class PuzzleLibrary : IPuzzleLibrary
+    internal class PuzzleLibrary : IPuzzleLibrary
     {
         private readonly List<PuzzleLibraryEntry> entries;
 
