@@ -59,7 +59,7 @@ namespace PiCross.Game
             }
         }
 
-        public bool IsAmbuigityResolved
+        public bool IsAmbiguityResolved
         {
             get
             {
