@@ -9,7 +9,22 @@ using System.Threading.Tasks;
 
 namespace PiCross.PiCross
 {
-    internal class GameDataArchive : IDisposable
+    internal interface IGameDataArchive : IDisposable
+    {
+        IList<int> PuzzleLibraryUIDs { get; }
+
+        IList<string> PlayerNames { get; }
+
+        InMemoryPuzzleLibraryEntry ReadPuzzleLibraryEntry( int id );
+
+        InMemoryPlayerProfile ReadPlayerProfile( string playerName );
+
+        void UpdateLibraryEntry( InMemoryPuzzleLibraryEntry entry );
+
+        void UpdatePlayerProfile( InMemoryPlayerProfile playerProfile );
+    }
+
+    internal class GameDataArchive : IGameDataArchive
     {
         private readonly ZipArchive zipArchive;
 
@@ -172,6 +187,119 @@ namespace PiCross.PiCross
         public void Dispose()
         {
             this.zipArchive.Dispose();
+        }
+    }
+
+    internal class AutoCloseGameDataArchive : IGameDataArchive
+    {
+        private readonly string path;
+
+        public AutoCloseGameDataArchive( string path )
+        {
+            this.path = path;
+        }
+
+        private ZipArchive OpenZipArchiveForReading()
+        {
+            return new ZipArchive( new FileStream( path, FileMode.Open, FileAccess.Read ), ZipArchiveMode.Read );
+        }
+
+        private ZipArchive OpenZipArchiveForWriting()
+        {
+            return new ZipArchive( new FileStream( path, FileMode.Open, FileAccess.Write ), ZipArchiveMode.Update );
+        }
+
+        private void WithReadOnlyZipArchive( Action<ZipArchive> action )
+        {
+            using ( var zipArchive = OpenZipArchiveForReading() )
+            {
+                action( zipArchive );
+            }
+        }
+
+        private T WithReadOnlyZipArchive<T>( Func<ZipArchive, T> function )
+        {
+            using ( var zipArchive = OpenZipArchiveForReading() )
+            {
+                return function( zipArchive );
+            }
+        }
+
+        private void WithWriteableZipArchive( Action<ZipArchive> action )
+        {
+            using ( var zipArchive = OpenZipArchiveForWriting() )
+            {
+                action( zipArchive );
+            }
+        }
+
+        private T WithWriteableZipArchive<T>( Func<ZipArchive, T> function )
+        {
+            using ( var zipArchive = OpenZipArchiveForWriting() )
+            {
+                return function( zipArchive );
+            }
+        }
+
+        private void WithReadOnlyArchive( Action<GameDataArchive> action )
+        {
+            WithReadOnlyZipArchive( archive => action( new GameDataArchive( archive ) ) );
+        }
+
+        private T WithReadOnlyArchive<T>( Func<GameDataArchive, T> function )
+        {
+            return WithReadOnlyZipArchive( archive => function( new GameDataArchive( archive ) ) );
+        }
+
+        private void WithWriteableArchive( Action<GameDataArchive> action )
+        {
+            WithWriteableZipArchive( archive => action( new GameDataArchive( archive ) ) );
+        }
+
+        private T WithWriteableArchive<T>( Func<GameDataArchive, T> function )
+        {
+            return WithWriteableZipArchive( archive => function( new GameDataArchive( archive ) ) );
+        }
+
+        public IList<int> PuzzleLibraryUIDs
+        {
+            get
+            {
+                return WithReadOnlyArchive( archive => archive.PuzzleLibraryUIDs );
+            }
+        }
+
+        public IList<string> PlayerNames
+        {
+            get
+            {
+                return WithReadOnlyArchive( archive => archive.PlayerNames );
+            }
+        }
+
+        public InMemoryPuzzleLibraryEntry ReadPuzzleLibraryEntry( int id )
+        {
+            return WithReadOnlyArchive( archive => archive.ReadPuzzleLibraryEntry( id ) );
+        }
+
+        public InMemoryPlayerProfile ReadPlayerProfile( string playerName )
+        {
+            return WithReadOnlyArchive( archive => archive.ReadPlayerProfile( playerName ) );
+        }
+
+        public void UpdateLibraryEntry( InMemoryPuzzleLibraryEntry entry )
+        {
+            WithWriteableArchive( archive => archive.UpdateLibraryEntry( entry ) );
+        }
+
+        public void UpdatePlayerProfile( InMemoryPlayerProfile playerProfile )
+        {
+            WithWriteableArchive( archive => archive.UpdatePlayerProfile( playerProfile ) );
+        }
+
+        public void Dispose()
+        {
+            // BOP
         }
     }
 }
