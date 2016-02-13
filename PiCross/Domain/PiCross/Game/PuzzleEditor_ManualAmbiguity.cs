@@ -2,10 +2,10 @@
 using System.Linq;
 using Cells;
 using DataStructures;
-using PiCross.Game;
+using PiCross.Facade;
 using AmbiguityEnum = PiCross.Game.Ambiguity;
 
-namespace PiCross.Facade
+namespace PiCross.Game
 {
     public class PuzzleEditor_ManualAmbiguity : IPuzzleEditor
     {
