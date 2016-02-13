@@ -83,7 +83,6 @@
     <Compile Include="PiCross\IPlayerDatabase.cs" />
     <Compile Include="PiCross\PuzzleLibrary.cs" />
     <Compile Include="PiCross\LibrarySerializer.cs" />
-    <Compile Include="PiCross\InMemoryPlayerDatabase.cs" />
     <Compile Include="PiCross\PlayablePuzzle.cs" />
     <Compile Include="PiCross\IPlayablePuzzle.cs" />
     <Compile Include="PiCross\Ambiguity.cs" />
