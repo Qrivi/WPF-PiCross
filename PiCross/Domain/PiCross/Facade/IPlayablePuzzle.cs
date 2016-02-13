@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Cells;
 
-namespace PiCross.Facade
+namespace PiCross
 {
     public interface IPlayablePuzzle
     {

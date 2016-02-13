@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cells;
-using PiCross.Facade;
+using PiCross;
 
 namespace PiCross.Game
 {

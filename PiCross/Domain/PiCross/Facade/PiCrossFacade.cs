@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PiCross.Game;
 
-namespace PiCross.Facade
+namespace PiCross
 {
     public class PiCrossFacade
     {

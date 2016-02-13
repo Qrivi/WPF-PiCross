@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using DataStructures;
 using PiCross.Game;
 
-namespace PiCross.Facade
+namespace PiCross
 {
     public interface IPuzzleLibrary
     {

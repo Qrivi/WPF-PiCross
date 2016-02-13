@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PiCross.Game;
-using PiCross.Facade;
+using PiCross;
 
 namespace PiCross.Game
 {
