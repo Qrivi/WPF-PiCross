@@ -23,10 +23,15 @@ namespace PiCross.Game
             // NOP
         }
 
-        public EditorGrid( Size size )
+        private EditorGrid( Size size )
             : this( Grid.Create( size, _ => new Var<Square>( Square.UNKNOWN ) ) )
         {
             // NOP
+        }
+
+        public static EditorGrid FromSize(Size size)
+        {
+            return new EditorGrid( size );
         }
 
         public static EditorGrid FromStrings( params string[] rows )
