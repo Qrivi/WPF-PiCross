@@ -75,22 +75,6 @@ namespace PiCross.Game
             }
         }
 
-        public Size Size
-        {
-            get
-            {
-                return editorGrid.Size;
-            }
-        }
-
-        public IPuzzleEditorSquare this[Vector2D position]
-        {
-            get
-            {
-                return facadeGrid[position];
-            }
-        }
-
         public ISequence<IPuzzleEditorConstraints> ColumnConstraints
         {
             get
