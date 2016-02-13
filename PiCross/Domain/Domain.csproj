@@ -58,7 +58,7 @@
     <Compile Include="IO\Serializer.cs" />
     <Compile Include="PiCross\Facade\IGameData.cs" />
     <Compile Include="PiCross\Facade\PiCrossFacade.cs" />
-    <Compile Include="PiCross\Game\Archiver.cs" />
+    <Compile Include="PiCross\Game\GameDataIO.cs" />
     <Compile Include="PiCross\Game\GameData.cs" />
     <Compile Include="Utility\Chronometer.cs" />
     <Compile Include="DataStructures\Grid.cs" />
