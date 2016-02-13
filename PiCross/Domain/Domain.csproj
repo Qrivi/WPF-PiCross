@@ -91,7 +91,6 @@
     <Compile Include="PiCross\Puzzle.cs" />
     <Compile Include="DataStructures\Size.cs" />
     <Compile Include="PiCross\PuzzleIO.cs" />
-    <Compile Include="PiCross\PuzzleUID.cs" />
     <Compile Include="PiCross\SolverGrid.cs" />
     <Compile Include="PiCross\Slice.cs" />
     <Compile Include="PiCross\Square.cs" />
