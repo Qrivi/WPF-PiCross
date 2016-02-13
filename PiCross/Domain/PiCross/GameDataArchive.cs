@@ -51,7 +51,7 @@ namespace PiCross.PiCross
                     var uid = int.Parse( parts[0] );
                     var bestTime = double.Parse( parts[1] );
 
-                    // playerProfile.PuzzleInformation[libraryEntry].BestTime.Value = TimeSpan.FromMilliseconds( bestTime );
+                    playerProfile.PuzzleInformation[uid].BestTime.Value = TimeSpan.FromMilliseconds( bestTime );
                 }
 
                 return playerProfile;
