@@ -181,6 +181,14 @@ namespace PiCross
             this.entries = new Dictionary<int, PlayerPuzzleInformationEntry>();
         }
 
+        public IEnumerable<int> EntryUIDs
+        {
+            get
+            {
+                return entries.Keys;
+            }
+        }
+
         IPlayerPuzzleInformationEntry IPlayerPuzzleInformation.this[IPuzzleLibraryEntry libraryEntry]
         {
             get
