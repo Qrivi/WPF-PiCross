@@ -79,8 +79,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PiCross\DummyData.cs" />
-    <Compile Include="PiCross\IPuzzleLibrary.cs" />
-    <Compile Include="PiCross\IPlayerDatabase.cs" />
     <Compile Include="PiCross\PuzzleLibrary.cs" />
     <Compile Include="PiCross\LibrarySerializer.cs" />
     <Compile Include="PiCross\PlayablePuzzle.cs" />
