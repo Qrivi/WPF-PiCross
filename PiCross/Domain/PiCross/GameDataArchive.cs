@@ -103,7 +103,12 @@ namespace PiCross.PiCross
 
         private Stream OpenZipArchive( string path )
         {
-            return zipArchive.GetEntry( path ).Open();
+            return zipArchive.GetEntry( path ).Open() ?? CreateAndOpenZipArchive( path );
+        }
+
+        private Stream CreateAndOpenZipArchive(string path)
+        {
+            return zipArchive.CreateEntry( path, CompressionLevel.Optimal ).Open();
         }
 
         private static string GetLibraryEntryPath( int id )
