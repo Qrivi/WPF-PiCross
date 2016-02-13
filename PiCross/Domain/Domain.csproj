@@ -81,7 +81,7 @@
     <Compile Include="PiCross\Game\Library.cs" />
     <Compile Include="PiCross\Game\LibrarySerializer.cs" />
     <Compile Include="PiCross\Game\PlayerDatabase.cs" />
-    <Compile Include="PiCross\Facade\PlayablePuzzleImplementation.cs" />
+    <Compile Include="PiCross\Game\PlayablePuzzleImplementation.cs" />
     <Compile Include="PiCross\Facade\IPlayablePuzzle.cs" />
     <Compile Include="PiCross\Game\Ambiguity.cs" />
     <Compile Include="PiCross\Game\AmbiguityChecker.cs" />
