@@ -7,7 +7,7 @@ using AmbiguityEnum = PiCross.Ambiguity;
 
 namespace PiCross
 {
-    internal class PuzzleEditor_ManualAmbiguity : IPuzzleEditor
+    internal class PuzzleEditor : IPuzzleEditor
     {
         private readonly EditorGrid editorGrid;
 
@@ -21,7 +21,7 @@ namespace PiCross
 
         private readonly IGrid<Cell<Ambiguity>> ambiguityGrid;
 
-        public PuzzleEditor_ManualAmbiguity( EditorGrid editorGrid )
+        public PuzzleEditor( EditorGrid editorGrid )
         {
             if ( editorGrid == null )
             {
@@ -133,7 +133,7 @@ namespace PiCross
 
             private readonly Cell<Ambiguity> ambiguity;
 
-            public PuzzleEditorSquare( PuzzleEditor_ManualAmbiguity parent, Vector2D position, Cell<Ambiguity> ambiguity )
+            public PuzzleEditorSquare( PuzzleEditor parent, Vector2D position, Cell<Ambiguity> ambiguity )
             {
                 this.contents = new PuzzleEditorSquareContentsCell( parent, position );
                 this.position = position;
@@ -172,13 +172,13 @@ namespace PiCross
 
         private class PuzzleEditorSquareContentsCell : ManualCell<bool>
         {
-            private readonly PuzzleEditor_ManualAmbiguity parent;
+            private readonly PuzzleEditor parent;
 
             private readonly IVar<Square> contents;
 
             private readonly Vector2D position;
 
-            public PuzzleEditorSquareContentsCell( PuzzleEditor_ManualAmbiguity parent, Vector2D position )
+            public PuzzleEditorSquareContentsCell( PuzzleEditor parent, Vector2D position )
                 : base( SquareToBool( parent.editorGrid.Squares[position] ) )
             {
                 this.parent = parent;

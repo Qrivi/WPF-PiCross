@@ -73,7 +73,7 @@
     <Compile Include="DataStructures\Signal.cs" />
     <Compile Include="DataStructures\Vector2D.cs" />
     <Compile Include="PiCross\IPuzzleEditor.cs" />
-    <Compile Include="PiCross\PuzzleEditor_ManualAmbiguity.cs">
+    <Compile Include="PiCross\PuzzleEditor.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PiCross\DummyData.cs" />
