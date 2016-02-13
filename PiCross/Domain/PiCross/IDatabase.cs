@@ -1,0 +1,56 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace PiCross
+{
+    internal interface IDatabase
+    {
+        IPuzzleDatabase PuzzleDatabase { get; }
+
+        IPlayerDatabase2 PlayerDatabase { get; }
+    }
+
+    internal interface IPuzzleDatabase
+    {
+        IList<IPuzzleDatabaseEntry> Entries { get; }
+
+        IPuzzleDatabaseEntry this[int id] { get; }
+
+        IPuzzleDatabaseEntry Create( Puzzle puzzle, string author );
+
+        void Add( IPuzzleDatabaseEntry libraryEntry );
+    }
+
+    internal interface IPuzzleDatabaseEntry
+    {
+        int UID { get; }
+
+        Puzzle Puzzle { get; set; }
+
+        string Author { get; set; }
+    }
+
+    internal interface IPlayerDatabase2
+    {
+        IPlayerProfileData this[string name] { get; }
+
+        IPlayerProfileData CreateNewProfile( string name );
+
+        IList<string> PlayerNames { get; }
+    }
+
+    internal interface IPlayerProfileData
+    {
+        IPlayerPuzzleData this[int id] { get; }
+
+        string Name { get; }
+    }
+
+    internal interface IPlayerPuzzleData
+    {
+        TimeSpan? BestTime { get; }
+    }
+}
