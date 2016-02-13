@@ -10,6 +10,10 @@ namespace PiCross.Facade
 {
     public class PiCrossFacade
     {
-       
+        public IGameData CreateEmptyGameData()
+        {
+            return new GameData( PuzzleLibrary.CreateEmpty(), new PlayerDatabase() );
+        }
+
     }
 }
