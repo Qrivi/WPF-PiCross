@@ -71,9 +71,9 @@ namespace PiCross.PiCross
                 {
                     var parts = reader.ReadLine().Split( ' ' );
                     var uid = int.Parse( parts[0] );
-                    var bestTime = double.Parse( parts[1] );
+                    var bestTime = long.Parse( parts[1] );
 
-                    playerProfile.PuzzleInformation[uid].BestTime.Value = TimeSpan.FromMilliseconds( bestTime );
+                    playerProfile.PuzzleInformation[uid].BestTime.Value = TimeSpan.FromTicks( bestTime );
                 }
 
                 return playerProfile;
@@ -88,6 +88,24 @@ namespace PiCross.PiCross
             {
                 writer.WriteLine( entry.Author );
                 new PuzzleSerializer().Write( writer, entry.Puzzle );
+            }
+        }
+
+        public void UpdatePlayerProfile( PlayerProfile playerProfile )
+        {
+            var path = GetPlayerProfilePath( playerProfile.Name );
+
+            using ( var writer = OpenZipArchiveEntryForWriting( path ) )
+            {
+                foreach ( var id in playerProfile.PuzzleInformation.EntryUIDs )
+                {
+                    var bestTime = playerProfile.PuzzleInformation[id].BestTime;
+
+                    if ( bestTime.Value.HasValue )
+                    {
+                        writer.WriteLine( "{0} {1}", id, bestTime.Value.Value.Ticks );
+                    }
+                }
             }
         }
 
@@ -106,7 +124,7 @@ namespace PiCross.PiCross
             return zipArchive.GetEntry( path ).Open() ?? CreateAndOpenZipArchive( path );
         }
 
-        private Stream CreateAndOpenZipArchive(string path)
+        private Stream CreateAndOpenZipArchive( string path )
         {
             return zipArchive.CreateEntry( path, CompressionLevel.Optimal ).Open();
         }
