@@ -9,7 +9,7 @@ using Cells;
 
 namespace PiCross
 {
-    internal class PlayablePuzzleImplementation : IPlayablePuzzle
+    internal class PlayablePuzzle : IPlayablePuzzle
     {
         private readonly PlayGrid playGrid;
 
@@ -21,13 +21,13 @@ namespace PiCross
 
         private readonly Cell<bool> isSolved;
 
-        public PlayablePuzzleImplementation( ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints )
+        public PlayablePuzzle( ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints )
             : this( new PlayGrid( columnConstraints: columnConstraints, rowConstraints: rowConstraints ) )
         {
             // NOP            
         }
 
-        public PlayablePuzzleImplementation( PlayGrid playGrid )
+        public PlayablePuzzle( PlayGrid playGrid )
         {
             if ( playGrid == null )
             {
@@ -145,7 +145,7 @@ namespace PiCross
 
             private readonly Vector2D position;
 
-            public PlayablePuzzleSquare( PlayablePuzzleImplementation parent, IVar<Square> contents, Vector2D position )
+            public PlayablePuzzleSquare( PlayablePuzzle parent, IVar<Square> contents, Vector2D position )
             {
                 this.contents = new PlayablePuzzleSquareContentsCell( parent, contents, position );
                 this.position = position;
@@ -178,13 +178,13 @@ namespace PiCross
 
         private class PlayablePuzzleSquareContentsCell : ManualCell<Square>
         {
-            private readonly PlayablePuzzleImplementation parent;
+            private readonly PlayablePuzzle parent;
 
             private readonly IVar<Square> contents;
 
             private readonly Vector2D position;
 
-            public PlayablePuzzleSquareContentsCell( PlayablePuzzleImplementation parent, IVar<Square> contents, Vector2D position )
+            public PlayablePuzzleSquareContentsCell( PlayablePuzzle parent, IVar<Square> contents, Vector2D position )
                 : base( contents.Value )
             {
                 this.parent = parent;

@@ -48,7 +48,7 @@ namespace PiCross
 
         public IPlayablePuzzle CreatePlayablePuzzle(Puzzle puzzle)
         {
-            return new PlayablePuzzleImplementation( columnConstraints: puzzle.ColumnConstraints, rowConstraints: puzzle.RowConstraints );
+            return new PlayablePuzzle( columnConstraints: puzzle.ColumnConstraints, rowConstraints: puzzle.RowConstraints );
         }
     }
 }

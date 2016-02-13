@@ -105,11 +105,11 @@ namespace PiCross.Tests
             return playGrid;
         }
 
-        internal static PlayablePuzzleImplementation CreateManualPuzzle( params string[] rows )
+        internal static PlayablePuzzle CreateManualPuzzle( params string[] rows )
         {
             var playGrid = CreatePlayGrid( rows );
 
-            return new PlayablePuzzleImplementation( playGrid );
+            return new PlayablePuzzle( playGrid );
         }
 
         internal static void OverwritePlayGrid( PlayGrid grid, params string[] rows)
