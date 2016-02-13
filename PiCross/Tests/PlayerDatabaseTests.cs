@@ -13,7 +13,7 @@ namespace PiCross.Tests
         public void IndexingYieldsSameObjectAsAdding()
         {
             var name = "mathy";
-            var pdb = new PlayerDatabase();
+            var pdb = CreateEmptyPlayerDatabase();
 
             var profile = pdb.CreateNewProfile( name );
 
@@ -25,7 +25,7 @@ namespace PiCross.Tests
         public void AddingAddsToNameCollection()
         {
             var name = "mathy";
-            var pdb = new PlayerDatabase();
+            var pdb = CreateEmptyPlayerDatabase();
 
             pdb.CreateNewProfile( name );
 
@@ -36,7 +36,7 @@ namespace PiCross.Tests
         [TestCategory( "PlayerDatabase" )]
         public void NamesAreSorted()
         {            
-            var pdb = new PlayerDatabase();
+            var pdb = CreateEmptyPlayerDatabase();
                         
             pdb.CreateNewProfile( "b" );
             pdb.CreateNewProfile( "a" );
@@ -53,13 +53,18 @@ namespace PiCross.Tests
         public void RemovingRemovesName()
         {
             var name = "mathy";
-            var pdb = new PlayerDatabase();
+            var pdb = CreateEmptyPlayerDatabase();
 
             pdb.CreateNewProfile( name );
 
             Assert.IsTrue( pdb.PlayerNames.Contains( name ) );
             pdb.DeleteProfile( name );
             Assert.IsFalse( pdb.PlayerNames.Contains( name ) );
+        }
+
+        private PlayerDatabase CreateEmptyPlayerDatabase()
+        {
+            return PlayerDatabase.CreateEmpty();
         }
     }
 }

@@ -33,7 +33,7 @@ namespace PiCross.Game
 
         private static PlayerDatabase CreateDummyPlayerDatabase()
         {
-            var db = new PlayerDatabase();
+            var db = PlayerDatabase.CreateEmpty();
 
             var woumpousse = db.CreateNewProfile( "Woumpousse" );
             var pimousse = db.CreateNewProfile( "Pimousse" );

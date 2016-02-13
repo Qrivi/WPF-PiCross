@@ -16,7 +16,12 @@ namespace PiCross.Game
     {
         private readonly Dictionary<string, PlayerProfile> playerProfiles;
 
-        public PlayerDatabase()
+        public static PlayerDatabase CreateEmpty()
+        {
+            return new PlayerDatabase();
+        }
+
+        private PlayerDatabase()
         {
             playerProfiles = new Dictionary<string, PlayerProfile>();
         }

@@ -92,7 +92,7 @@ namespace PiCross.Game
             public GameData Read()
             {
                 this.library = PuzzleLibrary.CreateEmpty();
-                this.playerDatabase = new PlayerDatabase();
+                this.playerDatabase = PlayerDatabase.CreateEmpty();
 
                 var libraryFiles = new List<ZipArchiveEntry>();
                 var playerFiles = new List<ZipArchiveEntry>();

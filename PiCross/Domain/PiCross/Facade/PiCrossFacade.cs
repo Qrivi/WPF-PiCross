@@ -12,7 +12,7 @@ namespace PiCross.Facade
     {
         public IGameData CreateEmptyGameData()
         {
-            return new GameData( PuzzleLibrary.CreateEmpty(), new PlayerDatabase() );
+            return new GameData( PuzzleLibrary.CreateEmpty(), PlayerDatabase.CreateEmpty() );
         }
 
         public IGameData CreateDummyGameData()

@@ -15,7 +15,7 @@ namespace PiCross.Tests
         public void LoadingSavedGameData1()
         {
             var library = PuzzleLibrary.CreateEmpty();
-            var players = new PlayerDatabase();
+            var players = CreateEmptyPlayerDatabase();
 
             var gameData = new GameData(library, players);
             var gameData2 = SaveThenLoad( gameData );
@@ -27,7 +27,7 @@ namespace PiCross.Tests
         public void LoadingSavedGameData2()
         {
             var library = PuzzleLibrary.CreateEmpty();
-            var players = new PlayerDatabase();
+            var players = CreateEmptyPlayerDatabase();
 
             library.Create( Puzzle1, "x" );
 
@@ -41,7 +41,7 @@ namespace PiCross.Tests
         public void LoadingSavedGameData3()
         {
             var library = PuzzleLibrary.CreateEmpty();
-            var players = new PlayerDatabase();
+            var players = CreateEmptyPlayerDatabase();
 
             library.Create( Puzzle1, "x" );
             library.Create( Puzzle2, "y" );
@@ -57,7 +57,7 @@ namespace PiCross.Tests
         public void LoadingSavedGameData4()
         {
             var library = PuzzleLibrary.CreateEmpty();
-            var players = new PlayerDatabase();
+            var players = CreateEmptyPlayerDatabase();
 
             var e1 = library.Create( Puzzle1, "x" );
             var e2 = library.Create( Puzzle2, "y" );
@@ -133,6 +133,11 @@ namespace PiCross.Tests
         private void AssertEqual(PuzzleLibrary library, PlayerDatabase x, PlayerDatabase y)
         {
             Assert.AreEqual( x, y );
+        }
+
+        private PlayerDatabase CreateEmptyPlayerDatabase()
+        {
+            return PlayerDatabase.CreateEmpty();
         }
     }
 }
