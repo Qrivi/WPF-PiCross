@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PiCross;
 
-namespace PiCross.Game
+namespace PiCross
 {
     internal class GameData : IGameData
     {

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Cells;
 
-namespace PiCross.Game
+namespace PiCross
 {
     public class SolverGrid
     {

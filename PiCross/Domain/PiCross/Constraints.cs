@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Cells;
 using System.Diagnostics;
 
-namespace PiCross.Game
+namespace PiCross
 {
     public sealed class Constraints
     {

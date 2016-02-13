@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DataStructures;
 
-namespace PiCross.Game
+namespace PiCross
 {
     public abstract class Square
     {

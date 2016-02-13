@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
-using PiCross.Game;
+using PiCross;
 using System.Text;
 
 

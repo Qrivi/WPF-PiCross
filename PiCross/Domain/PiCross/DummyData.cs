@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using PiCross.Game;
 using PiCross;
 
-namespace PiCross.Game
+namespace PiCross
 {
     internal class DummyData
     {

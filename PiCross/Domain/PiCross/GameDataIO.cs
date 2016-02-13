@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using IO;
 
-namespace PiCross.Game
+namespace PiCross
 {
     internal class GameDataIO
     {

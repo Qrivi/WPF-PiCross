@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataStructures;
-using PiCross.Game;
+using PiCross;
 using IO;
 
-namespace PiCross.Game
+namespace PiCross
 {
     internal class PuzzleSerializer : ISerializer<Puzzle>
     {

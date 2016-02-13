@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using DataStructures;
 using PiCross;
-using PiCross.Game;
 
 namespace PiCross.Tests
 {

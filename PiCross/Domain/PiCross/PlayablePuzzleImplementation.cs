@@ -1,14 +1,13 @@
 ﻿using DataStructures;
-using PiCross.Game;
+using PiCross;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cells;
-using PiCross;
 
-namespace PiCross.Game
+namespace PiCross
 {
     internal class PlayablePuzzleImplementation : IPlayablePuzzle
     {

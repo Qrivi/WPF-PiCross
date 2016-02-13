@@ -3,9 +3,9 @@ using System.Linq;
 using Cells;
 using DataStructures;
 using PiCross;
-using AmbiguityEnum = PiCross.Game.Ambiguity;
+using AmbiguityEnum = PiCross.Ambiguity;
 
-namespace PiCross.Game
+namespace PiCross
 {
     public class PuzzleEditor_ManualAmbiguity : IPuzzleEditor
     {

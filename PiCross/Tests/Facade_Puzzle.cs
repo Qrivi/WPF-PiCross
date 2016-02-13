@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Cells;
 using DataStructures;
-using PiCross.Game;
+using PiCross;
 
 namespace PiCross.Tests
 {

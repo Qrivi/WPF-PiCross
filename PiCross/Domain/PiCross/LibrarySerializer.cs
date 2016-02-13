@@ -5,10 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using PiCross;
-using PiCross.Game;
 using IO;
 
-namespace PiCross.Game
+namespace PiCross
 {
     internal class LibrarySerializer : ISerializer<PuzzleLibrary>
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using PiCross.Game;
+using PiCross;
 using DataStructures;
 
 namespace PiCross.Tests

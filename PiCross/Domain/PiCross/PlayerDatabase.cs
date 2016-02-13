@@ -6,11 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cells;
-using PiCross.Game;
 using PiCross;
 using Utility;
 
-namespace PiCross.Game
+namespace PiCross
 {
     internal class PlayerDatabase : IPlayerDatabase
     {
