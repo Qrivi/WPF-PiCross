@@ -29,5 +29,13 @@ namespace PiCross.Facade
                 return io.Read( fileStream );
             }
         }
+
+        public IPuzzleEditor CreatePuzzleEditor(Puzzle puzzle)
+        {
+            var editorGrid = EditorGrid.FromPuzzle( puzzle );
+            var puzzleEditor = new PuzzleEditor_ManualAmbiguity( editorGrid );
+
+            return puzzleEditor;
+        }
     }
 }
