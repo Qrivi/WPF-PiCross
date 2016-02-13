@@ -45,5 +45,10 @@ namespace PiCross
 
             return new StepwiseSolver( solverGrid );
         }
+
+        public IPlayablePuzzle CreatePlayablePuzzle(Puzzle puzzle)
+        {
+            return new PlayablePuzzleImplementation( columnConstraints: puzzle.ColumnConstraints, rowConstraints: puzzle.RowConstraints );
+        }
     }
 }
