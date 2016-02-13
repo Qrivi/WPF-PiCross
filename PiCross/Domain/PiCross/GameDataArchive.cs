@@ -49,7 +49,7 @@ namespace PiCross.PiCross
         {
             var path = GetLibraryEntryPath( id );
 
-            using ( var reader = OpenZipArchiveEntry( path ) )
+            using ( var reader = OpenZipArchiveEntryForReading( path ) )
             {
                 var author = reader.ReadLine();
                 var puzzle = ReadPuzzle( reader );
@@ -62,7 +62,7 @@ namespace PiCross.PiCross
         {
             var path = GetPlayerProfilePath( playerName );
 
-            using ( var reader = OpenZipArchiveEntry( path ) )
+            using ( var reader = OpenZipArchiveEntryForReading( path ) )
             {
                 var playerProfile = new PlayerProfile( playerName );
                 var entryCount = int.Parse( reader.ReadLine() );
@@ -91,7 +91,7 @@ namespace PiCross.PiCross
             }
         }
 
-        private StreamReader OpenZipArchiveEntry( string path )
+        private StreamReader OpenZipArchiveEntryForReading( string path )
         {
             return new StreamReader( zipArchive.GetEntry( path ).Open() );
         }
