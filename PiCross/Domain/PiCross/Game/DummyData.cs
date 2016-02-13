@@ -8,11 +8,18 @@ using PiCross.Facade;
 
 namespace PiCross.Game
 {
-    public class DummyData
+    internal class DummyData
     {
         private readonly PuzzleLibrary library;
 
         private readonly PlayerDatabase players;
+
+        public static GameData Create()
+        {
+            var data = new DummyData();
+
+            return new GameData( data.library, data.players );
+        }
 
         public DummyData()
         {

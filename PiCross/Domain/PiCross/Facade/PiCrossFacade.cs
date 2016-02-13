@@ -15,6 +15,11 @@ namespace PiCross.Facade
             return new GameData( PuzzleLibrary.CreateEmpty(), new PlayerDatabase() );
         }
 
+        public IGameData CreateDummyGameData()
+        {
+            return DummyData.Create();
+        }
+
         public IGameData LoadGameData( string path )
         {
             var io = new GameDataIO();
