@@ -93,12 +93,17 @@ namespace PiCross.PiCross
 
         private StreamReader OpenZipArchiveEntryForReading( string path )
         {
-            return new StreamReader( zipArchive.GetEntry( path ).Open() );
+            return new StreamReader( OpenZipArchive( path ) );
         }
 
-        private StreamWriter OpenZipArchiveEntryForWriting(string path)
+        private StreamWriter OpenZipArchiveEntryForWriting( string path )
         {
-            return new StreamWriter( zipArchive.GetEntry( path ).Open() );
+            return new StreamWriter( OpenZipArchive( path ) );
+        }
+
+        private Stream OpenZipArchive( string path )
+        {
+            return zipArchive.GetEntry( path ).Open();
         }
 
         private static string GetLibraryEntryPath( int id )
