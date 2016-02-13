@@ -14,10 +14,10 @@ namespace PiCross.Tests
         [TestMethod]
         public void LoadingSavedGameData1()
         {
-            var library = PuzzleLibrary.CreateEmpty();
+            var library = InMemoryPuzzleLibrary.CreateEmpty();
             var players = CreateEmptyPlayerDatabase();
 
-            var gameData = new GameData(library, players);
+            var gameData = new InMemoryGameData(library, players);
             var gameData2 = SaveThenLoad( gameData );
 
             AssertEqual( gameData, gameData2 );
@@ -26,12 +26,12 @@ namespace PiCross.Tests
         [TestMethod]
         public void LoadingSavedGameData2()
         {
-            var library = PuzzleLibrary.CreateEmpty();
+            var library = InMemoryPuzzleLibrary.CreateEmpty();
             var players = CreateEmptyPlayerDatabase();
 
             library.Create( Puzzle1, "x" );
 
-            var gameData = new GameData( library, players );
+            var gameData = new InMemoryGameData( library, players );
             var gameData2 = SaveThenLoad( gameData );
 
             AssertEqual( gameData, gameData2 );
@@ -40,14 +40,14 @@ namespace PiCross.Tests
         [TestMethod]
         public void LoadingSavedGameData3()
         {
-            var library = PuzzleLibrary.CreateEmpty();
+            var library = InMemoryPuzzleLibrary.CreateEmpty();
             var players = CreateEmptyPlayerDatabase();
 
             library.Create( Puzzle1, "x" );
             library.Create( Puzzle2, "y" );
             library.Create( Puzzle3, "z" );
 
-            var gameData = new GameData( library, players );
+            var gameData = new InMemoryGameData( library, players );
             var gameData2 = SaveThenLoad( gameData );
 
             AssertEqual( gameData, gameData2 );
@@ -56,7 +56,7 @@ namespace PiCross.Tests
         [TestMethod]
         public void LoadingSavedGameData4()
         {
-            var library = PuzzleLibrary.CreateEmpty();
+            var library = InMemoryPuzzleLibrary.CreateEmpty();
             var players = CreateEmptyPlayerDatabase();
 
             var e1 = library.Create( Puzzle1, "x" );
@@ -66,7 +66,7 @@ namespace PiCross.Tests
             var dieter = players.CreateNewProfile( "dieter" );
             dieter.PuzzleInformation[e1].BestTime.Value = TimeSpan.FromMilliseconds( 10000 );
 
-            var gameData = new GameData( library, players );
+            var gameData = new InMemoryGameData( library, players );
             var gameData2 = SaveThenLoad( gameData );
 
             AssertEqual( gameData, gameData2 );
@@ -96,7 +96,7 @@ namespace PiCross.Tests
             }
         }
         
-        private GameData SaveThenLoad(GameData gameData)
+        private InMemoryGameData SaveThenLoad(InMemoryGameData gameData)
         {
             using ( var stream = new MemoryStream() )
             {
@@ -108,19 +108,19 @@ namespace PiCross.Tests
             }
         }
 
-        private void AssertEqual(GameData x, GameData y)
+        private void AssertEqual(InMemoryGameData x, InMemoryGameData y)
         {
             AssertEqual( x.Library, y.Library );
             AssertEqual( x.Library, x.PlayerDatabase, y.PlayerDatabase );
         }
 
-        private void AssertEqual(PuzzleLibrary x, PuzzleLibrary y)
+        private void AssertEqual(InMemoryPuzzleLibrary x, InMemoryPuzzleLibrary y)
         {
             ContainsSameEntriesAs( x, y );
             ContainsSameEntriesAs( y, x );
         }
 
-        private void ContainsSameEntriesAs(PuzzleLibrary x, PuzzleLibrary y)
+        private void ContainsSameEntriesAs(InMemoryPuzzleLibrary x, InMemoryPuzzleLibrary y)
         {
             foreach ( var xEntry in x.Entries )
             {
@@ -130,7 +130,7 @@ namespace PiCross.Tests
             }
         }
 
-        private void AssertEqual(PuzzleLibrary library, InMemoryPlayerDatabase x, InMemoryPlayerDatabase y)
+        private void AssertEqual(InMemoryPuzzleLibrary library, InMemoryPlayerDatabase x, InMemoryPlayerDatabase y)
         {
             Assert.AreEqual( x, y );
         }

@@ -7,13 +7,13 @@ using PiCross;
 
 namespace PiCross
 {
-    internal class GameData : IGameData
+    internal class InMemoryGameData : IGameData
     {
-        private readonly PuzzleLibrary library;
+        private readonly InMemoryPuzzleLibrary library;
 
         private readonly InMemoryPlayerDatabase playerDatabase;
 
-        public GameData(PuzzleLibrary library, InMemoryPlayerDatabase playerDatabase)
+        public InMemoryGameData(InMemoryPuzzleLibrary library, InMemoryPlayerDatabase playerDatabase)
         {
             if ( library == null )
             {
@@ -46,7 +46,7 @@ namespace PiCross
             }
         }
 
-        public PuzzleLibrary Library
+        public InMemoryPuzzleLibrary Library
         {
             get
             {
@@ -64,10 +64,10 @@ namespace PiCross
 
         public override bool Equals( object obj )
         {
-            return Equals( obj as GameData );
+            return Equals( obj as InMemoryGameData );
         }
 
-        public bool Equals(GameData gameData)
+        public bool Equals(InMemoryGameData gameData)
         {
             return gameData != null && library.Equals( gameData.library ) && playerDatabase.Equals( gameData.playerDatabase );
         }

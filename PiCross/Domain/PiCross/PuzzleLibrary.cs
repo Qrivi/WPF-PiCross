@@ -9,20 +9,20 @@ using PiCross;
 
 namespace PiCross
 {
-    internal class PuzzleLibrary : IPuzzleLibrary
+    internal class InMemoryPuzzleLibrary : IPuzzleLibrary
     {
-        private readonly List<PuzzleLibraryEntry> entries;
+        private readonly List<InMemoryPuzzleLibraryEntry> entries;
 
         private int nextUID;
 
-        public static PuzzleLibrary CreateEmpty()
+        public static InMemoryPuzzleLibrary CreateEmpty()
         {
-            return new PuzzleLibrary();
+            return new InMemoryPuzzleLibrary();
         }
 
-        private PuzzleLibrary()
+        private InMemoryPuzzleLibrary()
         {
-            this.entries = new List<PuzzleLibraryEntry>();
+            this.entries = new List<InMemoryPuzzleLibraryEntry>();
             nextUID = 0;
         }
 
@@ -34,7 +34,7 @@ namespace PiCross
             }
         }
 
-        public IList<PuzzleLibraryEntry> Entries
+        public IList<InMemoryPuzzleLibraryEntry> Entries
         {
             get
             {
@@ -42,7 +42,7 @@ namespace PiCross
             }
         }
 
-        public PuzzleLibraryEntry GetEntryWithId(int id)
+        public InMemoryPuzzleLibraryEntry GetEntryWithId(int id)
         {
             var result = entries.Find( entry => entry.UID == id );
 
@@ -61,16 +61,16 @@ namespace PiCross
             return Create( puzzle, author );
         }
 
-        public PuzzleLibraryEntry Create( Puzzle puzzle, string author)
+        public InMemoryPuzzleLibraryEntry Create( Puzzle puzzle, string author)
         {
-            var newEntry = new PuzzleLibraryEntry( nextUID++, puzzle, author );
+            var newEntry = new InMemoryPuzzleLibraryEntry( nextUID++, puzzle, author );
 
             entries.Add( newEntry );
 
             return newEntry;
         }
 
-        public void Add(PuzzleLibraryEntry libraryEntry)
+        public void Add(InMemoryPuzzleLibraryEntry libraryEntry)
         {
             if ( libraryEntry == null )
             {
@@ -93,10 +93,10 @@ namespace PiCross
 
         public override bool Equals( object obj )
         {
-            return Equals( obj as PuzzleLibrary );
+            return Equals( obj as InMemoryPuzzleLibrary );
         }
 
-        public bool Equals(PuzzleLibrary library)
+        public bool Equals(InMemoryPuzzleLibrary library)
         {
             if ( library == null )
             {
@@ -133,7 +133,7 @@ namespace PiCross
         }
     }
 
-    internal class PuzzleLibraryEntry : IPuzzleLibraryEntry, IComparable<PuzzleLibraryEntry>
+    internal class InMemoryPuzzleLibraryEntry : IPuzzleLibraryEntry, IComparable<InMemoryPuzzleLibraryEntry>
     {
         private readonly int uid;
 
@@ -141,7 +141,7 @@ namespace PiCross
 
         private readonly string author;
 
-        public PuzzleLibraryEntry( int uid, Puzzle puzzle, string author )
+        public InMemoryPuzzleLibraryEntry( int uid, Puzzle puzzle, string author )
         {
             this.uid = uid;
             this.puzzle = puzzle;
@@ -172,10 +172,10 @@ namespace PiCross
 
         public override bool Equals( object obj )
         {
-            return Equals( obj as PuzzleLibraryEntry );
+            return Equals( obj as InMemoryPuzzleLibraryEntry );
         }
 
-        public bool Equals( PuzzleLibraryEntry that )
+        public bool Equals( InMemoryPuzzleLibraryEntry that )
         {
             return this.uid == that.uid;
         }
@@ -185,7 +185,7 @@ namespace PiCross
             return uid.GetHashCode();
         }
 
-        public int CompareTo( PuzzleLibraryEntry other )
+        public int CompareTo( InMemoryPuzzleLibraryEntry other )
         {
             return this.uid.CompareTo( other.uid );
         }

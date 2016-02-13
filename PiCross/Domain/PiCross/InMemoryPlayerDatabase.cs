@@ -193,11 +193,11 @@ namespace PiCross
         {
             get
             {
-                return this[(PuzzleLibraryEntry) libraryEntry];
+                return this[(InMemoryPuzzleLibraryEntry) libraryEntry];
             }
         }
 
-        public InMemoryPlayerPuzzleInformationEntry this[PuzzleLibraryEntry libraryEntry]
+        public InMemoryPlayerPuzzleInformationEntry this[InMemoryPuzzleLibraryEntry libraryEntry]
         {
             get
             {

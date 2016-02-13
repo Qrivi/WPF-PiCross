@@ -45,7 +45,7 @@ namespace PiCross.PiCross
             }
         }
 
-        public PuzzleLibraryEntry ReadPuzzleLibraryEntry( int id )
+        public InMemoryPuzzleLibraryEntry ReadPuzzleLibraryEntry( int id )
         {
             var path = GetLibraryEntryPath( id );
 
@@ -54,7 +54,7 @@ namespace PiCross.PiCross
                 var author = reader.ReadLine();
                 var puzzle = ReadPuzzle( reader );
 
-                return new PuzzleLibraryEntry( id, puzzle, author );
+                return new InMemoryPuzzleLibraryEntry( id, puzzle, author );
             }
         }
 
@@ -80,7 +80,7 @@ namespace PiCross.PiCross
             }
         }
 
-        public void UpdateLibraryEntry( PuzzleLibraryEntry entry )
+        public void UpdateLibraryEntry( InMemoryPuzzleLibraryEntry entry )
         {
             var path = GetLibraryEntryPath( entry.UID );
 

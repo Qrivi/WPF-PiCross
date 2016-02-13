@@ -12,7 +12,7 @@ namespace PiCross
 {
     internal class GameDataIO
     {
-        public GameData Read(Stream stream)
+        public InMemoryGameData Read(Stream stream)
         {
             using ( var zipArchive = new ZipArchive( stream, ZipArchiveMode.Read, true ) )
             {
@@ -20,7 +20,7 @@ namespace PiCross
             }
         }
 
-        public void Write( GameData gameData, Stream stream )
+        public void Write( InMemoryGameData gameData, Stream stream )
         {
             using ( var zipArchive = new ZipArchive( stream, ZipArchiveMode.Create, true ) )
             {
@@ -28,7 +28,7 @@ namespace PiCross
             }
         }
 
-        private static string GetLibraryEntryPath( PuzzleLibraryEntry libraryEntry )
+        private static string GetLibraryEntryPath( InMemoryPuzzleLibraryEntry libraryEntry )
         {
             return string.Format( "library/entry{0}.txt", libraryEntry.UID.ToString().PadLeft( 5, '0' ) );
         }
@@ -73,7 +73,7 @@ namespace PiCross
         {
             private readonly ZipArchive zipArchive;
 
-            private PuzzleLibrary library;
+            private InMemoryPuzzleLibrary library;
 
             private InMemoryPlayerDatabase playerDatabase;
 
@@ -89,9 +89,9 @@ namespace PiCross
                 }
             }
 
-            public GameData Read()
+            public InMemoryGameData Read()
             {
-                this.library = PuzzleLibrary.CreateEmpty();
+                this.library = InMemoryPuzzleLibrary.CreateEmpty();
                 this.playerDatabase = InMemoryPlayerDatabase.CreateEmpty();
 
                 var libraryFiles = new List<ZipArchiveEntry>();
@@ -123,7 +123,7 @@ namespace PiCross
                     ReadPlayerInformation( playerFile );
                 }
 
-                return new GameData( library, playerDatabase );
+                return new InMemoryGameData( library, playerDatabase );
             }
 
             private void ReadLibraryEntry(ZipArchiveEntry entry)
@@ -136,7 +136,7 @@ namespace PiCross
                         var author = zipStreamReader.ReadLine();
                         var puzzle = new PuzzleSerializer().Read( zipStreamReader );
 
-                        library.Add( new PuzzleLibraryEntry( uid, puzzle, author ) );
+                        library.Add( new InMemoryPuzzleLibraryEntry( uid, puzzle, author ) );
                     }
                 }
             }
@@ -182,13 +182,13 @@ namespace PiCross
                 }
             }
 
-            public void Write(GameData gameData)
+            public void Write(InMemoryGameData gameData)
             {
                 WriteLibrary(gameData.Library);
                 WritePlayerDatabase( gameData.Library, gameData.PlayerDatabase );
             }
 
-            private void WriteLibrary(PuzzleLibrary library)
+            private void WriteLibrary(InMemoryPuzzleLibrary library)
             {
                 foreach ( var libraryEntry in library.Entries )
                 {
@@ -196,7 +196,7 @@ namespace PiCross
                 }
             }
 
-            private void WriteLibraryEntry( PuzzleLibraryEntry libraryEntry )
+            private void WriteLibraryEntry( InMemoryPuzzleLibraryEntry libraryEntry )
             {
                 var path = GameDataIO.GetLibraryEntryPath( libraryEntry );
                 var zipEntry = zipArchive.CreateEntry( path, CompressionLevel.Optimal );
@@ -216,7 +216,7 @@ namespace PiCross
                 new PuzzleSerializer().Write( streamWriter, puzzle );
             }
 
-            private void WritePlayerDatabase(PuzzleLibrary library, InMemoryPlayerDatabase playerDatabase)
+            private void WritePlayerDatabase(InMemoryPuzzleLibrary library, InMemoryPlayerDatabase playerDatabase)
             {
                 foreach ( var playerName in playerDatabase.PlayerNames)
                 {
