@@ -56,6 +56,7 @@
     <Compile Include="Cells\FutureCell.cs" />
     <Compile Include="Cells\ValidatedCell.cs" />
     <Compile Include="IO\Serializer.cs" />
+    <Compile Include="PiCross\Facade\IGameData.cs" />
     <Compile Include="PiCross\Facade\PiCrossFacade.cs" />
     <Compile Include="PiCross\Game\Archiver.cs" />
     <Compile Include="PiCross\Game\GameData.cs" />

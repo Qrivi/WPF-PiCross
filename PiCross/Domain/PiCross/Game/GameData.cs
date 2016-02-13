@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PiCross.Facade;
 
 namespace PiCross.Game
 {
-    public class GameData
+    public class GameData : IGameData
     {
         private readonly PuzzleLibrary library;
 
@@ -26,6 +27,22 @@ namespace PiCross.Game
             {
                 this.library = library;
                 this.playerDatabase = playerDatabase;
+            }
+        }
+
+        IPuzzleLibrary IGameData.PuzzleLibrary
+        {
+            get
+            {
+                return Library;
+            }
+        }
+
+        IPlayerDatabase IGameData.PlayerDatabase
+        {
+            get
+            {
+                return PlayerDatabase;
             }
         }
 
