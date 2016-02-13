@@ -130,14 +130,14 @@ namespace PiCross.Tests
             }
         }
 
-        private void AssertEqual(PuzzleLibrary library, PlayerDatabase x, PlayerDatabase y)
+        private void AssertEqual(PuzzleLibrary library, InMemoryPlayerDatabase x, InMemoryPlayerDatabase y)
         {
             Assert.AreEqual( x, y );
         }
 
-        private PlayerDatabase CreateEmptyPlayerDatabase()
+        private InMemoryPlayerDatabase CreateEmptyPlayerDatabase()
         {
-            return PlayerDatabase.CreateEmpty();
+            return InMemoryPlayerDatabase.CreateEmpty();
         }
     }
 }

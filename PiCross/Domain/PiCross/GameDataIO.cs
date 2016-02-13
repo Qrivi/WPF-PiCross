@@ -33,7 +33,7 @@ namespace PiCross
             return string.Format( "library/entry{0}.txt", libraryEntry.UID.ToString().PadLeft( 5, '0' ) );
         }
 
-        private static string GetPlayerProfilePath( PlayerProfile playerProfile )
+        private static string GetPlayerProfilePath( InMemoryPlayerProfile playerProfile )
         {
             return string.Format( "players/{0}.txt", playerProfile.Name );
         }
@@ -75,7 +75,7 @@ namespace PiCross
 
             private PuzzleLibrary library;
 
-            private PlayerDatabase playerDatabase;
+            private InMemoryPlayerDatabase playerDatabase;
 
             public Reader(ZipArchive zipArchive)
             {
@@ -92,7 +92,7 @@ namespace PiCross
             public GameData Read()
             {
                 this.library = PuzzleLibrary.CreateEmpty();
-                this.playerDatabase = PlayerDatabase.CreateEmpty();
+                this.playerDatabase = InMemoryPlayerDatabase.CreateEmpty();
 
                 var libraryFiles = new List<ZipArchiveEntry>();
                 var playerFiles = new List<ZipArchiveEntry>();
@@ -216,7 +216,7 @@ namespace PiCross
                 new PuzzleSerializer().Write( streamWriter, puzzle );
             }
 
-            private void WritePlayerDatabase(PuzzleLibrary library, PlayerDatabase playerDatabase)
+            private void WritePlayerDatabase(PuzzleLibrary library, InMemoryPlayerDatabase playerDatabase)
             {
                 foreach ( var playerName in playerDatabase.PlayerNames)
                 {

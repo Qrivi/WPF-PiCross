@@ -11,18 +11,18 @@ using Utility;
 
 namespace PiCross
 {
-    internal class PlayerDatabase : IPlayerDatabase
+    internal class InMemoryPlayerDatabase : IPlayerDatabase
     {
-        private readonly Dictionary<string, PlayerProfile> playerProfiles;
+        private readonly Dictionary<string, InMemoryPlayerProfile> playerProfiles;
 
-        public static PlayerDatabase CreateEmpty()
+        public static InMemoryPlayerDatabase CreateEmpty()
         {
-            return new PlayerDatabase();
+            return new InMemoryPlayerDatabase();
         }
 
-        private PlayerDatabase()
+        private InMemoryPlayerDatabase()
         {
-            playerProfiles = new Dictionary<string, PlayerProfile>();
+            playerProfiles = new Dictionary<string, InMemoryPlayerProfile>();
         }
 
         IPlayerProfile IPlayerDatabase.this[string name]
@@ -33,7 +33,7 @@ namespace PiCross
             }
         }
 
-        public PlayerProfile this[string name]
+        public InMemoryPlayerProfile this[string name]
         {
             get
             {
@@ -58,7 +58,7 @@ namespace PiCross
             return CreateNewProfile( name );
         }
 
-        public PlayerProfile CreateNewProfile( string name )
+        public InMemoryPlayerProfile CreateNewProfile( string name )
         {
             if ( !IsValidPlayerName( name ) )
             {
@@ -70,7 +70,7 @@ namespace PiCross
             }
             else
             {
-                var profile = new PlayerProfile( name );
+                var profile = new InMemoryPlayerProfile( name );
 
                 AddToDictionary( profile );
 
@@ -94,7 +94,7 @@ namespace PiCross
             }
         }
 
-        private void AddToDictionary( PlayerProfile profile )
+        private void AddToDictionary( InMemoryPlayerProfile profile )
         {
             playerProfiles[profile.Name] = profile;
         }
@@ -112,10 +112,10 @@ namespace PiCross
 
         public override bool Equals( object obj )
         {
-            return Equals( obj as PlayerDatabase );
+            return Equals( obj as InMemoryPlayerDatabase );
         }
 
-        public bool Equals( PlayerDatabase playerDatabase )
+        public bool Equals( InMemoryPlayerDatabase playerDatabase )
         {
             return playerDatabase != null && playerProfiles.EqualItems( playerDatabase.playerProfiles );
         }
@@ -126,16 +126,16 @@ namespace PiCross
         }
     }
 
-    internal class PlayerProfile : IPlayerProfile
+    internal class InMemoryPlayerProfile : IPlayerProfile
     {
         private readonly string name;
 
-        private readonly PlayerPuzzleInformation puzzleInformation;
+        private readonly InMemoryPlayerPuzzleInformation puzzleInformation;
 
-        public PlayerProfile( string name )
+        public InMemoryPlayerProfile( string name )
         {
             this.name = name;
-            puzzleInformation = new PlayerPuzzleInformation();
+            puzzleInformation = new InMemoryPlayerPuzzleInformation();
         }
 
         IPlayerPuzzleInformation IPlayerProfile.PuzzleInformation
@@ -146,7 +146,7 @@ namespace PiCross
             }
         }
 
-        public PlayerPuzzleInformation PuzzleInformation
+        public InMemoryPlayerPuzzleInformation PuzzleInformation
         {
             get { return puzzleInformation; }
         }
@@ -158,10 +158,10 @@ namespace PiCross
 
         public override bool Equals( object obj )
         {
-            return Equals( obj as PlayerProfile );
+            return Equals( obj as InMemoryPlayerProfile );
         }
 
-        public bool Equals( PlayerProfile playerProfile )
+        public bool Equals( InMemoryPlayerProfile playerProfile )
         {
             return playerProfile != null && name == playerProfile.name && puzzleInformation.Equals( playerProfile.puzzleInformation );
         }
@@ -172,13 +172,13 @@ namespace PiCross
         }
     }
 
-    internal class PlayerPuzzleInformation : IPlayerPuzzleInformation
+    internal class InMemoryPlayerPuzzleInformation : IPlayerPuzzleInformation
     {
-        private readonly Dictionary<int, PlayerPuzzleInformationEntry> entries;
+        private readonly Dictionary<int, InMemoryPlayerPuzzleInformationEntry> entries;
 
-        public PlayerPuzzleInformation()
+        public InMemoryPlayerPuzzleInformation()
         {
-            this.entries = new Dictionary<int, PlayerPuzzleInformationEntry>();
+            this.entries = new Dictionary<int, InMemoryPlayerPuzzleInformationEntry>();
         }
 
         public IEnumerable<int> EntryUIDs
@@ -197,7 +197,7 @@ namespace PiCross
             }
         }
 
-        public PlayerPuzzleInformationEntry this[PuzzleLibraryEntry libraryEntry]
+        public InMemoryPlayerPuzzleInformationEntry this[PuzzleLibraryEntry libraryEntry]
         {
             get
             {
@@ -205,13 +205,13 @@ namespace PiCross
             }
         }
 
-        public PlayerPuzzleInformationEntry this[int id]
+        public InMemoryPlayerPuzzleInformationEntry this[int id]
         {
             get
             {
                 if ( !entries.ContainsKey( id ) )
                 {
-                    entries[id] = new PlayerPuzzleInformationEntry();
+                    entries[id] = new InMemoryPlayerPuzzleInformationEntry();
                 }
 
                 return entries[id];
@@ -220,10 +220,10 @@ namespace PiCross
 
         public override bool Equals( object obj )
         {
-            return Equals( obj as PlayerPuzzleInformation );
+            return Equals( obj as InMemoryPlayerPuzzleInformation );
         }
 
-        public bool Equals( PlayerPuzzleInformation playerPuzzleInformation )
+        public bool Equals( InMemoryPlayerPuzzleInformation playerPuzzleInformation )
         {
             if ( playerPuzzleInformation == null )
             {
@@ -243,11 +243,11 @@ namespace PiCross
         }
     }
 
-    public class PlayerPuzzleInformationEntry : IPlayerPuzzleInformationEntry
+    public class InMemoryPlayerPuzzleInformationEntry : IPlayerPuzzleInformationEntry
     {
         private readonly Cell<TimeSpan?> bestTime;
 
-        public PlayerPuzzleInformationEntry()
+        public InMemoryPlayerPuzzleInformationEntry()
         {
             this.bestTime = Cell.Create<TimeSpan?>( null );
         }
@@ -262,10 +262,10 @@ namespace PiCross
 
         public override bool Equals( object obj )
         {
-            return Equals( obj as PlayerPuzzleInformationEntry );
+            return Equals( obj as InMemoryPlayerPuzzleInformationEntry );
         }
 
-        public bool Equals( PlayerPuzzleInformationEntry entry )
+        public bool Equals( InMemoryPlayerPuzzleInformationEntry entry )
         {
             return entry != null && bestTime.Equals( entry.bestTime );
         }

@@ -58,13 +58,13 @@ namespace PiCross.PiCross
             }
         }
 
-        public PlayerProfile ReadPlayerProfile( string playerName )
+        public InMemoryPlayerProfile ReadPlayerProfile( string playerName )
         {
             var path = GetPlayerProfilePath( playerName );
 
             using ( var reader = OpenZipArchiveEntryForReading( path ) )
             {
-                var playerProfile = new PlayerProfile( playerName );
+                var playerProfile = new InMemoryPlayerProfile( playerName );
                 var entryCount = int.Parse( reader.ReadLine() );
 
                 for ( var i = 0; i != entryCount; ++i )
@@ -91,7 +91,7 @@ namespace PiCross.PiCross
             }
         }
 
-        public void UpdatePlayerProfile( PlayerProfile playerProfile )
+        public void UpdatePlayerProfile( InMemoryPlayerProfile playerProfile )
         {
             var path = GetPlayerProfilePath( playerProfile.Name );
 

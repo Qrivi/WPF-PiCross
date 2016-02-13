@@ -61,9 +61,9 @@ namespace PiCross.Tests
             Assert.IsFalse( pdb.PlayerNames.Contains( name ) );
         }
 
-        private PlayerDatabase CreateEmptyPlayerDatabase()
+        private InMemoryPlayerDatabase CreateEmptyPlayerDatabase()
         {
-            return PlayerDatabase.CreateEmpty();
+            return InMemoryPlayerDatabase.CreateEmpty();
         }
     }
 }

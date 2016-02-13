@@ -11,9 +11,9 @@ namespace PiCross
     {
         private readonly PuzzleLibrary library;
 
-        private readonly PlayerDatabase playerDatabase;
+        private readonly InMemoryPlayerDatabase playerDatabase;
 
-        public GameData(PuzzleLibrary library, PlayerDatabase playerDatabase)
+        public GameData(PuzzleLibrary library, InMemoryPlayerDatabase playerDatabase)
         {
             if ( library == null )
             {
@@ -54,7 +54,7 @@ namespace PiCross
             }
         }
 
-        public PlayerDatabase PlayerDatabase
+        public InMemoryPlayerDatabase PlayerDatabase
         {
             get
             {
