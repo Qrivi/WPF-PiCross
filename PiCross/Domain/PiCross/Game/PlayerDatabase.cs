@@ -16,12 +16,9 @@ namespace PiCross.Game
     {
         private readonly Dictionary<string, PlayerProfile> playerProfiles;
 
-        private readonly List<string> names; // TODO Remove this
-
         public PlayerDatabase()
         {
             playerProfiles = new Dictionary<string, PlayerProfile>();
-            names = new List<string>();
         }
 
         IPlayerProfile IPlayerDatabase.this[string name]
@@ -72,7 +69,6 @@ namespace PiCross.Game
                 var profile = new PlayerProfile( name );
 
                 AddToDictionary( profile );
-                AddToNames( profile.Name );
 
                 return profile;
             }
@@ -91,7 +87,6 @@ namespace PiCross.Game
             else
             {
                 this.playerProfiles.Remove( name );
-                this.names.Remove( name );
             }
         }
 
@@ -100,23 +95,14 @@ namespace PiCross.Game
             playerProfiles[profile.Name] = profile;
         }
 
-        private void AddToNames( string name )
-        {
-            var index = 0;
-
-            while ( index < this.names.Count && name.CompareTo( this.names[index] ) > 0 )
-            {
-                index++;
-            }
-
-            names.Insert( index, name );
-        }
-
         public IList<string> PlayerNames
         {
             get
             {
-                return names;
+                return ( from profile in this.playerProfiles
+                         let name = profile.Key
+                         orderby name ascending
+                         select name ).ToList();
             }
         }
 
