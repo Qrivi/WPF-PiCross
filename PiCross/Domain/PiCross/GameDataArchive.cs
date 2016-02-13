@@ -23,6 +23,28 @@ namespace PiCross.PiCross
             return new PuzzleSerializer().Read( streamReader );
         }
 
+        public IList<int> PuzzleLibraryUIDs
+        {
+            get
+            {
+                return ( from entry in this.zipArchive.Entries
+                         let uid = ExtractEntryID( entry.FullName )
+                         where uid.HasValue
+                         select uid.Value ).ToList();
+            }
+        }
+
+        public IList<string> PlayerNames
+        {
+            get
+            {
+                return ( from entry in this.zipArchive.Entries
+                         let playerName = ExtractPlayerName( entry.FullName )
+                         where playerName != null
+                         select playerName ).ToList();
+            }
+        }
+
         public PuzzleLibraryEntry ReadPuzzleLibraryEntry( int id )
         {
             var path = GetLibraryEntryPath( id );
@@ -73,7 +95,7 @@ namespace PiCross.PiCross
             return string.Format( "players/{0}.txt", playerName );
         }
 
-        private static int ExtractEntryID( string filename )
+        private static int? ExtractEntryID( string filename )
         {
             var regex = new Regex( @"^library/entry(\d+)\.txt$" );
             var match = regex.Match( filename );
@@ -84,7 +106,7 @@ namespace PiCross.PiCross
             }
             else
             {
-                throw new IOException();
+                return null;
             }
         }
 
@@ -99,7 +121,7 @@ namespace PiCross.PiCross
             }
             else
             {
-                throw new IOException();
+                return null;
             }
         }
 
