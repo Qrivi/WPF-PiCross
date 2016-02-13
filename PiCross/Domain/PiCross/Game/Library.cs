@@ -10,32 +10,32 @@ using PiCross.Facade;
 
 namespace PiCross
 {
-    public class Library : ILibrary
+    public class PuzzleLibrary : IPuzzleLibrary
     {
-        private readonly List<LibraryEntry> entries;
+        private readonly List<PuzzleLibraryEntry> entries;
 
         private int nextUID;
 
-        public static Library CreateEmpty()
+        public static PuzzleLibrary CreateEmpty()
         {
-            return new Library();
+            return new PuzzleLibrary();
         }
 
-        private Library()
+        private PuzzleLibrary()
         {
-            this.entries = new List<LibraryEntry>();
+            this.entries = new List<PuzzleLibraryEntry>();
             nextUID = 0;
         }
 
-        IList<ILibraryEntry> ILibrary.Entries
+        IList<IPuzzleLibraryEntry> IPuzzleLibrary.Entries
         {
             get
             {
-                return Entries.Cast<ILibraryEntry>().ToList();
+                return Entries.Cast<IPuzzleLibraryEntry>().ToList();
             }
         }
 
-        public IList<LibraryEntry> Entries
+        public IList<PuzzleLibraryEntry> Entries
         {
             get
             {
@@ -43,7 +43,7 @@ namespace PiCross
             }
         }
 
-        public LibraryEntry GetEntryWithId(int id)
+        public PuzzleLibraryEntry GetEntryWithId(int id)
         {
             var result = entries.Find( entry => entry.UID == id );
 
@@ -57,21 +57,21 @@ namespace PiCross
             }
         }
 
-        ILibraryEntry ILibrary.Create(Puzzle puzzle, string author)
+        IPuzzleLibraryEntry IPuzzleLibrary.Create(Puzzle puzzle, string author)
         {
             return Create( puzzle, author );
         }
 
-        public LibraryEntry Create( Puzzle puzzle, string author)
+        public PuzzleLibraryEntry Create( Puzzle puzzle, string author)
         {
-            var newEntry = new LibraryEntry( nextUID++, puzzle, author );
+            var newEntry = new PuzzleLibraryEntry( nextUID++, puzzle, author );
 
             entries.Add( newEntry );
 
             return newEntry;
         }
 
-        public void Add(LibraryEntry libraryEntry)
+        public void Add(PuzzleLibraryEntry libraryEntry)
         {
             if ( libraryEntry == null )
             {
@@ -94,10 +94,10 @@ namespace PiCross
 
         public override bool Equals( object obj )
         {
-            return Equals( obj as Library );
+            return Equals( obj as PuzzleLibrary );
         }
 
-        public bool Equals(Library library)
+        public bool Equals(PuzzleLibrary library)
         {
             if ( library == null )
             {
@@ -121,9 +121,9 @@ namespace PiCross
             return entries.Select( x => x.GetHashCode() ).Aggregate( ( acc, n ) => acc ^ n );
         }
 
-        public IDictionary<int, ILibraryEntry> ToDictionary()
+        public IDictionary<int, IPuzzleLibraryEntry> ToDictionary()
         {
-            var result = new Dictionary<int, ILibraryEntry>();
+            var result = new Dictionary<int, IPuzzleLibraryEntry>();
 
             foreach ( var entry in this.entries )
             {
@@ -134,7 +134,7 @@ namespace PiCross
         }
     }
 
-    public class LibraryEntry : ILibraryEntry, IComparable<LibraryEntry>
+    public class PuzzleLibraryEntry : IPuzzleLibraryEntry, IComparable<PuzzleLibraryEntry>
     {
         private readonly int uid;
 
@@ -142,7 +142,7 @@ namespace PiCross
 
         private readonly string author;
 
-        public LibraryEntry( int uid, Puzzle puzzle, string author )
+        public PuzzleLibraryEntry( int uid, Puzzle puzzle, string author )
         {
             this.uid = uid;
             this.puzzle = puzzle;
@@ -173,10 +173,10 @@ namespace PiCross
 
         public override bool Equals( object obj )
         {
-            return Equals( obj as LibraryEntry );
+            return Equals( obj as PuzzleLibraryEntry );
         }
 
-        public bool Equals( LibraryEntry that )
+        public bool Equals( PuzzleLibraryEntry that )
         {
             return this.uid == that.uid;
         }
@@ -186,7 +186,7 @@ namespace PiCross
             return uid.GetHashCode();
         }
 
-        public int CompareTo( LibraryEntry other )
+        public int CompareTo( PuzzleLibraryEntry other )
         {
             return this.uid.CompareTo( other.uid );
         }

@@ -55,7 +55,6 @@
     <Compile Include="Cells\Flag.cs" />
     <Compile Include="Cells\FutureCell.cs" />
     <Compile Include="Cells\ValidatedCell.cs" />
-    <Compile Include="IO\MagicCookieDecorator.cs" />
     <Compile Include="IO\Serializer.cs" />
     <Compile Include="PiCross\Facade\PiCrossFacade.cs" />
     <Compile Include="PiCross\Game\Archiver.cs" />
@@ -77,8 +76,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PiCross\Game\DummyData.cs" />
-    <Compile Include="PiCross\Facade\ILibrary.cs" />
-    <Compile Include="PiCross\Facade\IPuzzleFormat.cs" />
+    <Compile Include="PiCross\Facade\IPuzzleLibrary.cs" />
     <Compile Include="PiCross\Facade\IPlayerDatabase.cs" />
     <Compile Include="PiCross\Game\Library.cs" />
     <Compile Include="PiCross\Game\LibrarySerializer.cs" />

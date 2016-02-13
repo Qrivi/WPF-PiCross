@@ -144,10 +144,10 @@ namespace PiCross.Tests
             return new AmbiguityChecker( columnConstraints: puzzle.ColumnConstraints, rowConstraints: puzzle.RowConstraints );
         }
 
-        protected static ILibrary CreateLibrary(params Puzzle[] puzzles)
+        protected static IPuzzleLibrary CreateLibrary(params Puzzle[] puzzles)
         {
             var author = "test";
-            var library = Library.CreateEmpty();
+            var library = PuzzleLibrary.CreateEmpty();
 
             foreach ( var puzzle in puzzles )
             {

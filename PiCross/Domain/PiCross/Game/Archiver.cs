@@ -10,7 +10,7 @@ using IO;
 
 namespace PiCross.Game
 {
-    public class Archiver
+    public class GameDataIO
     {
         public GameData Read(Stream stream)
         {
@@ -28,7 +28,7 @@ namespace PiCross.Game
             }
         }
 
-        private static string GetLibraryEntryPath( LibraryEntry libraryEntry )
+        private static string GetLibraryEntryPath( PuzzleLibraryEntry libraryEntry )
         {
             return string.Format( "library/entry{0}.txt", libraryEntry.UID.ToString().PadLeft( 5, '0' ) );
         }
@@ -73,7 +73,7 @@ namespace PiCross.Game
         {
             private readonly ZipArchive zipArchive;
 
-            private Library library;
+            private PuzzleLibrary library;
 
             private PlayerDatabase playerDatabase;
 
@@ -91,7 +91,7 @@ namespace PiCross.Game
 
             public GameData Read()
             {
-                this.library = Library.CreateEmpty();
+                this.library = PuzzleLibrary.CreateEmpty();
                 this.playerDatabase = new PlayerDatabase();
 
                 var libraryFiles = new List<ZipArchiveEntry>();
@@ -132,18 +132,18 @@ namespace PiCross.Game
                 {
                     using ( var zipStreamReader = new StreamReader(zipStream))
                     {
-                        var uid = Archiver.ExtractEntryID( entry.FullName );
+                        var uid = GameDataIO.ExtractEntryID( entry.FullName );
                         var author = zipStreamReader.ReadLine();
                         var puzzle = new PuzzleSerializer().Read( zipStreamReader );
 
-                        library.Add( new LibraryEntry( uid, puzzle, author ) );
+                        library.Add( new PuzzleLibraryEntry( uid, puzzle, author ) );
                     }
                 }
             }
 
             private void ReadPlayerInformation(ZipArchiveEntry entry)
             {
-                var playerName = Archiver.ExtractPlayerName( entry.FullName );
+                var playerName = GameDataIO.ExtractPlayerName( entry.FullName );
                 var playerProfile = this.playerDatabase.CreateNewProfile( playerName );
 
                 using ( var zipStream = entry.Open() )
@@ -188,7 +188,7 @@ namespace PiCross.Game
                 WritePlayerDatabase( gameData.Library, gameData.PlayerDatabase );
             }
 
-            private void WriteLibrary(Library library)
+            private void WriteLibrary(PuzzleLibrary library)
             {
                 foreach ( var libraryEntry in library.Entries )
                 {
@@ -196,9 +196,9 @@ namespace PiCross.Game
                 }
             }
 
-            private void WriteLibraryEntry( LibraryEntry libraryEntry )
+            private void WriteLibraryEntry( PuzzleLibraryEntry libraryEntry )
             {
-                var path = Archiver.GetLibraryEntryPath( libraryEntry );
+                var path = GameDataIO.GetLibraryEntryPath( libraryEntry );
                 var zipEntry = zipArchive.CreateEntry( path, CompressionLevel.Optimal );
 
                 using ( var zipStream = zipEntry.Open() )
@@ -216,12 +216,12 @@ namespace PiCross.Game
                 new PuzzleSerializer().Write( streamWriter, puzzle );
             }
 
-            private void WritePlayerDatabase(Library library, PlayerDatabase playerDatabase)
+            private void WritePlayerDatabase(PuzzleLibrary library, PlayerDatabase playerDatabase)
             {
                 foreach ( var playerName in playerDatabase.PlayerNames)
                 {
                     var playerProfile = playerDatabase[playerName];
-                    var path = Archiver.GetPlayerProfilePath( playerProfile );
+                    var path = GameDataIO.GetPlayerProfilePath( playerProfile );
                     var zipEntry = zipArchive.CreateEntry(path, CompressionLevel.Optimal);
                     
                     using ( var zipStream = zipEntry.Open() )

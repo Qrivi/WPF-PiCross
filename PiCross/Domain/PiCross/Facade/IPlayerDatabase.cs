@@ -29,7 +29,7 @@ namespace PiCross.Facade
 
     public interface IPlayerPuzzleInformation
     {
-        IPlayerPuzzleInformationEntry this[ILibraryEntry libraryEntry] { get; }
+        IPlayerPuzzleInformationEntry this[IPuzzleLibraryEntry libraryEntry] { get; }
     }
 
     public interface IPlayerPuzzleInformationEntry

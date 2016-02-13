@@ -11,14 +11,14 @@ using PiCross.Game;
 
 namespace PiCross.Facade
 {
-    public interface ILibrary
+    public interface IPuzzleLibrary
     {
-        IList<ILibraryEntry> Entries { get; }
+        IList<IPuzzleLibraryEntry> Entries { get; }
 
-        ILibraryEntry Create( Puzzle puzzle, string author );
+        IPuzzleLibraryEntry Create( Puzzle puzzle, string author );
     }
 
-    public interface ILibraryEntry
+    public interface IPuzzleLibraryEntry
     {
         Puzzle Puzzle { get; set; }
 

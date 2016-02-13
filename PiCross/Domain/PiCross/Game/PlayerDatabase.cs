@@ -184,22 +184,22 @@ namespace PiCross.Game
 
     public class PlayerPuzzleInformation : IPlayerPuzzleInformation
     {
-        private readonly Dictionary<LibraryEntry, PlayerPuzzleInformationEntry> entries;
+        private readonly Dictionary<PuzzleLibraryEntry, PlayerPuzzleInformationEntry> entries;
 
         public PlayerPuzzleInformation()
         {
-            this.entries = new Dictionary<LibraryEntry, PlayerPuzzleInformationEntry>();
+            this.entries = new Dictionary<PuzzleLibraryEntry, PlayerPuzzleInformationEntry>();
         }
 
-        IPlayerPuzzleInformationEntry IPlayerPuzzleInformation.this[ILibraryEntry libraryEntry]
+        IPlayerPuzzleInformationEntry IPlayerPuzzleInformation.this[IPuzzleLibraryEntry libraryEntry]
         {
             get
             {
-                return this[(LibraryEntry) libraryEntry];
+                return this[(PuzzleLibraryEntry) libraryEntry];
             }
         }
 
-        public PlayerPuzzleInformationEntry this[LibraryEntry libraryEntry]
+        public PlayerPuzzleInformationEntry this[PuzzleLibraryEntry libraryEntry]
         {
             get
             {
@@ -225,7 +225,7 @@ namespace PiCross.Game
             }
             else
             {
-                var libraryEntries = new HashSet<LibraryEntry>( this.entries.Keys.Concat(playerPuzzleInformation.entries.Keys) );
+                var libraryEntries = new HashSet<PuzzleLibraryEntry>( this.entries.Keys.Concat(playerPuzzleInformation.entries.Keys) );
 
                 return libraryEntries.All( entry => this[entry].Equals( playerPuzzleInformation[entry] ) );
             }

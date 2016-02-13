@@ -10,30 +10,30 @@ using IO;
 
 namespace PiCross.Game
 {
-    internal class LibrarySerializer : ISerializer<Library>
+    internal class LibrarySerializer : ISerializer<PuzzleLibrary>
     {
-        private readonly ISerializer<LibraryEntry> libraryEntrySerializer;
+        private readonly ISerializer<PuzzleLibraryEntry> libraryEntrySerializer;
 
         public LibrarySerializer()
         {
             libraryEntrySerializer = new LibraryEntrySerializer(new PuzzleSerializer());
         }
 
-        public void Write( StreamWriter writer, Library obj )
+        public void Write( StreamWriter writer, PuzzleLibrary obj )
         {
             new Writer( writer, obj, libraryEntrySerializer ).Write();
         }
 
-        public Library Read( StreamReader reader )
+        public PuzzleLibrary Read( StreamReader reader )
         {
             return new Reader( reader, libraryEntrySerializer ).Read();
         }
 
         private class Reader : ReaderBase
         {
-            private readonly ISerializer<LibraryEntry> libraryEntrySerializer;
+            private readonly ISerializer<PuzzleLibraryEntry> libraryEntrySerializer;
 
-            public Reader( StreamReader streamReader, ISerializer<LibraryEntry> libraryEntrySerializer)
+            public Reader( StreamReader streamReader, ISerializer<PuzzleLibraryEntry> libraryEntrySerializer)
                 : base( streamReader )
             {
                 if ( libraryEntrySerializer == null )
@@ -46,10 +46,10 @@ namespace PiCross.Game
                 }
             }
 
-            public Library Read()
+            public PuzzleLibrary Read()
             {
                 var count = ReadInteger();
-                var library = Library.CreateEmpty();
+                var library = PuzzleLibrary.CreateEmpty();
                 
                 for ( var i = 0; i != count; ++i )
                 {
@@ -63,11 +63,11 @@ namespace PiCross.Game
 
         private class Writer : WriterBase
         {
-            private readonly ISerializer<LibraryEntry> libraryEntrySerializer;
+            private readonly ISerializer<PuzzleLibraryEntry> libraryEntrySerializer;
 
-            private readonly Library library;
+            private readonly PuzzleLibrary library;
 
-            public Writer(StreamWriter streamWriter, Library library, ISerializer<LibraryEntry> libraryEntrySerializer)
+            public Writer(StreamWriter streamWriter, PuzzleLibrary library, ISerializer<PuzzleLibraryEntry> libraryEntrySerializer)
                 :base(streamWriter)
             {
                 if ( library == null )
@@ -91,13 +91,13 @@ namespace PiCross.Game
 
                 foreach ( var libraryEntry in library.Entries )
                 {
-                    libraryEntrySerializer.Write( streamWriter, (LibraryEntry) libraryEntry );
+                    libraryEntrySerializer.Write( streamWriter, (PuzzleLibraryEntry) libraryEntry );
                 }
             }
         }
     }
 
-    internal class LibraryEntrySerializer : ISerializer<LibraryEntry>
+    internal class LibraryEntrySerializer : ISerializer<PuzzleLibraryEntry>
     {
         private readonly ISerializer<Puzzle> puzzleSerializer;
 
@@ -113,23 +113,23 @@ namespace PiCross.Game
             }
         }
 
-        public void Write( StreamWriter streamWriter, LibraryEntry entry )
+        public void Write( StreamWriter streamWriter, PuzzleLibraryEntry entry )
         {
             new Writer( streamWriter, entry, puzzleSerializer ).Write();
         }
 
-        public LibraryEntry Read( StreamReader streamReader )
+        public PuzzleLibraryEntry Read( StreamReader streamReader )
         {
             return new Reader( streamReader, puzzleSerializer ).Read();
         }
 
         private class Writer : WriterBase
         {
-            private readonly LibraryEntry libraryEntry;
+            private readonly PuzzleLibraryEntry libraryEntry;
 
             private readonly ISerializer<Puzzle> puzzleSerializer;
 
-            internal Writer( StreamWriter streamWriter, LibraryEntry libraryEntry, ISerializer<Puzzle> puzzleSerializer )
+            internal Writer( StreamWriter streamWriter, PuzzleLibraryEntry libraryEntry, ISerializer<Puzzle> puzzleSerializer )
                 : base( streamWriter )
             {
                 if ( libraryEntry == null )
@@ -171,13 +171,13 @@ namespace PiCross.Game
                 }
             }
 
-            internal LibraryEntry Read()
+            internal PuzzleLibraryEntry Read()
             {
                 var uid = ReadInteger();
                 var author = streamReader.ReadLine();
                 var puzzle = puzzleSerializer.Read( streamReader );
 
-                return new LibraryEntry( uid, puzzle, author );
+                return new PuzzleLibraryEntry( uid, puzzle, author );
             }
         }
     }

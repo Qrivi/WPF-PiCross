@@ -14,7 +14,7 @@ namespace PiCross.Tests
         [TestMethod]
         public void LoadingSavedGameData1()
         {
-            var library = Library.CreateEmpty();
+            var library = PuzzleLibrary.CreateEmpty();
             var players = new PlayerDatabase();
 
             var gameData = new GameData(library, players);
@@ -26,7 +26,7 @@ namespace PiCross.Tests
         [TestMethod]
         public void LoadingSavedGameData2()
         {
-            var library = Library.CreateEmpty();
+            var library = PuzzleLibrary.CreateEmpty();
             var players = new PlayerDatabase();
 
             library.Create( Puzzle1, "x" );
@@ -40,7 +40,7 @@ namespace PiCross.Tests
         [TestMethod]
         public void LoadingSavedGameData3()
         {
-            var library = Library.CreateEmpty();
+            var library = PuzzleLibrary.CreateEmpty();
             var players = new PlayerDatabase();
 
             library.Create( Puzzle1, "x" );
@@ -56,7 +56,7 @@ namespace PiCross.Tests
         [TestMethod]
         public void LoadingSavedGameData4()
         {
-            var library = Library.CreateEmpty();
+            var library = PuzzleLibrary.CreateEmpty();
             var players = new PlayerDatabase();
 
             var e1 = library.Create( Puzzle1, "x" );
@@ -100,7 +100,7 @@ namespace PiCross.Tests
         {
             using ( var stream = new MemoryStream() )
             {
-                var archiver = new Archiver();
+                var archiver = new GameDataIO();
 
                 archiver.Write( gameData, stream );
                 stream.Seek( 0, SeekOrigin.Begin );
@@ -114,13 +114,13 @@ namespace PiCross.Tests
             AssertEqual( x.Library, x.PlayerDatabase, y.PlayerDatabase );
         }
 
-        private void AssertEqual(Library x, Library y)
+        private void AssertEqual(PuzzleLibrary x, PuzzleLibrary y)
         {
             ContainsSameEntriesAs( x, y );
             ContainsSameEntriesAs( y, x );
         }
 
-        private void ContainsSameEntriesAs(Library x, Library y)
+        private void ContainsSameEntriesAs(PuzzleLibrary x, PuzzleLibrary y)
         {
             foreach ( var xEntry in x.Entries )
             {
@@ -130,7 +130,7 @@ namespace PiCross.Tests
             }
         }
 
-        private void AssertEqual(Library library, PlayerDatabase x, PlayerDatabase y)
+        private void AssertEqual(PuzzleLibrary library, PlayerDatabase x, PlayerDatabase y)
         {
             Assert.AreEqual( x, y );
         }

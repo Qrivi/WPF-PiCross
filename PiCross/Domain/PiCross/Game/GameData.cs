@@ -8,11 +8,11 @@ namespace PiCross.Game
 {
     public class GameData
     {
-        private readonly Library library;
+        private readonly PuzzleLibrary library;
 
         private readonly PlayerDatabase playerDatabase;
 
-        public GameData(Library library, PlayerDatabase playerDatabase)
+        public GameData(PuzzleLibrary library, PlayerDatabase playerDatabase)
         {
             if ( library == null )
             {
@@ -29,7 +29,7 @@ namespace PiCross.Game
             }
         }
 
-        public Library Library
+        public PuzzleLibrary Library
         {
             get
             {

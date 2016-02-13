@@ -10,7 +10,7 @@ namespace PiCross.Game
 {
     public class DummyData
     {
-        private readonly Library library;
+        private readonly PuzzleLibrary library;
 
         private readonly PlayerDatabase players;
 
@@ -20,7 +20,7 @@ namespace PiCross.Game
             this.players = CreateDummyPlayerDatabase();
         }
 
-        public Library Puzzles { get { return library; } }
+        public PuzzleLibrary Puzzles { get { return library; } }
 
         public PlayerDatabase Players { get { return players; } }
 
@@ -128,9 +128,9 @@ namespace PiCross.Game
             }
         }
 
-        private static Library CreateDummyLibrary()
+        private static PuzzleLibrary CreateDummyLibrary()
         {
-            var library = Library.CreateEmpty();
+            var library = PuzzleLibrary.CreateEmpty();
 
             var author = "Woumpousse";
 
