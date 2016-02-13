@@ -329,22 +329,6 @@ namespace PiCross
             }
         }
 
-        public void DeleteProfile( string name )
-        {
-            if ( name == null )
-            {
-                throw new ArgumentNullException( "name" );
-            }
-            else if ( !playerProfiles.ContainsKey( name ) )
-            {
-                throw new ArgumentException( "No player with name " + name );
-            }
-            else
-            {
-                this.playerProfiles.Remove( name );
-            }
-        }
-
         private void AddToDictionary( InMemoryPlayerProfile profile )
         {
             playerProfiles[profile.Name] = profile;

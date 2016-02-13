@@ -47,19 +47,6 @@ namespace PiCross.Tests
             Assert.AreEqual( "c", pdb.PlayerNames[2] );
         }
 
-        [TestMethod]
-        [TestCategory( "PlayerDatabase" )]
-        public void RemovingRemovesName()
-        {
-            var name = "mathy";
-            var pdb = CreateEmptyPlayerDatabase();
-
-            pdb.CreateNewProfile( name );
-
-            Assert.IsTrue( pdb.PlayerNames.Contains( name ) );
-            pdb.DeleteProfile( name );
-            Assert.IsFalse( pdb.PlayerNames.Contains( name ) );
-        }
 
         private InMemoryPlayerDatabase CreateEmptyPlayerDatabase()
         {
