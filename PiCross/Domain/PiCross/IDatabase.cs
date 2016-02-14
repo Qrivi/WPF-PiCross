@@ -53,6 +53,6 @@ namespace PiCross
 
     internal interface IPlayerPuzzleData
     {
-        TimeSpan? BestTime { get; }
+        TimeSpan? BestTime { get; set; }
     }
 }

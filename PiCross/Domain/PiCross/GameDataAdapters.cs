@@ -97,7 +97,7 @@ namespace PiCross
     {
         private readonly IPlayerDatabase2 database;
 
-        public PlayerDatabaseAdapter(IPlayerDatabase2 database)
+        public PlayerDatabaseAdapter( IPlayerDatabase2 database )
         {
             this.database = database;
         }
@@ -172,11 +172,15 @@ namespace PiCross
             this.data = data;
         }
 
-        public Cell<TimeSpan?> BestTime
+        public TimeSpan? BestTime
         {
             get
             {
-                return Cell.Create( data.BestTime ); // TODO Should definitely not be a cell
+                return data.BestTime;
+            }
+            set
+            {
+                data.BestTime = value;
             }
         }
     }

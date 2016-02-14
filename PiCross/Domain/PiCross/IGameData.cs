@@ -39,8 +39,7 @@ namespace PiCross
 
     public interface IPlayerPuzzleInformationEntry
     {
-        // TODO Simplify
-        Cell<TimeSpan?> BestTime { get; }
+        TimeSpan? BestTime { get; set; }
     }
 
     public interface IPuzzleLibrary
