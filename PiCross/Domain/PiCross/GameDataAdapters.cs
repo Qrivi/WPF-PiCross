@@ -21,7 +21,7 @@ namespace PiCross
             get { return new PuzzleLibraryAdapter( database.PuzzleDatabase ); }
         }
 
-        public IPlayerDatabase PlayerDatabase
+        public IPlayerLibrary PlayerDatabase
         {
             get { return new PlayerDatabaseAdapter( database.PlayerDatabase ); }
         }
@@ -93,11 +93,11 @@ namespace PiCross
         }
     }
 
-    internal class PlayerDatabaseAdapter : IPlayerDatabase
+    internal class PlayerDatabaseAdapter : IPlayerLibrary
     {
-        private readonly IPlayerDatabase2 database;
+        private readonly IPlayerDatabase database;
 
-        public PlayerDatabaseAdapter( IPlayerDatabase2 database )
+        public PlayerDatabaseAdapter( IPlayerDatabase database )
         {
             this.database = database;
         }
@@ -132,26 +132,6 @@ namespace PiCross
             this.data = data;
         }
 
-        public IPlayerPuzzleInformation PuzzleInformation
-        {
-            get { return new PlayerPuzzleInformationAdapter( data ); }
-        }
-
-        public string Name
-        {
-            get { return data.Name; }
-        }
-    }
-
-    internal class PlayerPuzzleInformationAdapter : IPlayerPuzzleInformation
-    {
-        private readonly IPlayerProfileData data;
-
-        public PlayerPuzzleInformationAdapter( IPlayerProfileData data )
-        {
-            this.data = data;
-        }
-
         public IPlayerPuzzleInformationEntry this[IPuzzleLibraryEntry libraryEntry]
         {
             get
@@ -160,6 +140,11 @@ namespace PiCross
 
                 return new PlayerPuzzleInformationEntryAdapter( data[entry.UID] );
             }
+        }
+
+        public string Name
+        {
+            get { return data.Name; }
         }
     }
 

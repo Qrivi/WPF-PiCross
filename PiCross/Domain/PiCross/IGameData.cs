@@ -11,10 +11,10 @@ namespace PiCross
     {
         IPuzzleLibrary PuzzleLibrary { get; }
 
-        IPlayerDatabase PlayerDatabase { get; }
+        IPlayerLibrary PlayerDatabase { get; }
     }
 
-    public interface IPlayerDatabase
+    public interface IPlayerLibrary
     {
         IPlayerProfile this[string name] { get; }
 
@@ -27,14 +27,9 @@ namespace PiCross
 
     public interface IPlayerProfile
     {
-        IPlayerPuzzleInformation PuzzleInformation { get; }
+        IPlayerPuzzleInformationEntry this[IPuzzleLibraryEntry libraryEntry] { get; }
 
         string Name { get; }
-    }
-
-    public interface IPlayerPuzzleInformation
-    {
-        IPlayerPuzzleInformationEntry this[IPuzzleLibraryEntry libraryEntry] { get; }
     }
 
     public interface IPlayerPuzzleInformationEntry

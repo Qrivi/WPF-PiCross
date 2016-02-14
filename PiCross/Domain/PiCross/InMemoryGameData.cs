@@ -48,7 +48,7 @@ namespace PiCross
             }
         }
 
-        IPlayerDatabase2 IDatabase.PlayerDatabase
+        IPlayerDatabase IDatabase.PlayerDatabase
         {
             get
             {
@@ -282,7 +282,7 @@ namespace PiCross
         }
     }
 
-    internal class InMemoryPlayerDatabase : IPlayerDatabase2
+    internal class InMemoryPlayerDatabase : IPlayerDatabase
     {
         private readonly Dictionary<string, InMemoryPlayerProfile> playerProfiles;
 
@@ -367,7 +367,7 @@ namespace PiCross
             return playerProfiles.GetHashCode();
         }
 
-        IPlayerProfileData IPlayerDatabase2.this[string name]
+        IPlayerProfileData IPlayerDatabase.this[string name]
         {
             get
             {
@@ -375,7 +375,7 @@ namespace PiCross
             }
         }
 
-        IPlayerProfileData IPlayerDatabase2.CreateNewProfile( string name )
+        IPlayerProfileData IPlayerDatabase.CreateNewProfile( string name )
         {
             return CreateNewProfile( name );
         }

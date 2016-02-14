@@ -10,7 +10,7 @@ namespace PiCross
     {
         IPuzzleDatabase PuzzleDatabase { get; }
 
-        IPlayerDatabase2 PlayerDatabase { get; }
+        IPlayerDatabase PlayerDatabase { get; }
     }
 
     internal interface IPuzzleDatabase
@@ -33,7 +33,7 @@ namespace PiCross
         string Author { get; set; }
     }
 
-    internal interface IPlayerDatabase2
+    internal interface IPlayerDatabase
     {
         IPlayerProfileData this[string name] { get; }
 
