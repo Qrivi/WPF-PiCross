@@ -9,13 +9,13 @@ using Utility;
 
 namespace PiCross
 {
-    internal class InMemoryGameData : IGameData
+    internal class InMemoryGameData : IDatabase
     {
         private readonly InMemoryPuzzleLibrary library;
 
         private readonly InMemoryPlayerDatabase playerDatabase;
 
-        public InMemoryGameData(InMemoryPuzzleLibrary library, InMemoryPlayerDatabase playerDatabase)
+        public InMemoryGameData( InMemoryPuzzleLibrary library, InMemoryPlayerDatabase playerDatabase )
         {
             if ( library == null )
             {
@@ -32,15 +32,23 @@ namespace PiCross
             }
         }
 
-        IPuzzleLibrary IGameData.PuzzleLibrary
+        IPuzzleDatabase IDatabase.PuzzleDatabase
         {
             get
             {
-                return Library;
+                return PuzzleDatabase;
             }
         }
 
-        IPlayerDatabase IGameData.PlayerDatabase
+        public InMemoryPuzzleLibrary PuzzleDatabase
+        {
+            get
+            {
+                return this.library;
+            }
+        }
+
+        IPlayerDatabase2 IDatabase.PlayerDatabase
         {
             get
             {
@@ -48,19 +56,11 @@ namespace PiCross
             }
         }
 
-        public InMemoryPuzzleLibrary Library
-        {
-            get
-            {
-                return library;
-            }
-        }
-
         public InMemoryPlayerDatabase PlayerDatabase
         {
             get
             {
-                return playerDatabase;
+                return this.playerDatabase;
             }
         }
 
@@ -69,7 +69,7 @@ namespace PiCross
             return Equals( obj as InMemoryGameData );
         }
 
-        public bool Equals(InMemoryGameData gameData)
+        public bool Equals( InMemoryGameData gameData )
         {
             return gameData != null && library.Equals( gameData.library ) && playerDatabase.Equals( gameData.playerDatabase );
         }
@@ -80,7 +80,7 @@ namespace PiCross
         }
     }
 
-    internal class InMemoryPuzzleLibrary : IPuzzleLibrary
+    internal class InMemoryPuzzleLibrary : IPuzzleDatabase
     {
         private readonly List<InMemoryPuzzleLibraryEntry> entries;
 
@@ -97,14 +97,6 @@ namespace PiCross
             nextUID = 0;
         }
 
-        IList<IPuzzleLibraryEntry> IPuzzleLibrary.Entries
-        {
-            get
-            {
-                return Entries.Cast<IPuzzleLibraryEntry>().ToList();
-            }
-        }
-
         public IList<InMemoryPuzzleLibraryEntry> Entries
         {
             get
@@ -113,23 +105,21 @@ namespace PiCross
             }
         }
 
-        public InMemoryPuzzleLibraryEntry GetEntryWithId( int id )
+        public InMemoryPuzzleLibraryEntry this[int id]
         {
-            var result = entries.Find( entry => entry.UID == id );
-
-            if ( result == null )
+            get
             {
-                throw new ArgumentException( "No entry found" );
-            }
-            else
-            {
-                return result;
-            }
-        }
+                var result = entries.Find( entry => entry.UID == id );
 
-        IPuzzleLibraryEntry IPuzzleLibrary.Create( Puzzle puzzle, string author )
-        {
-            return Create( puzzle, author );
+                if ( result == null )
+                {
+                    throw new ArgumentException( "No entry found" );
+                }
+                else
+                {
+                    return result;
+                }
+            }
         }
 
         public InMemoryPuzzleLibraryEntry Create( Puzzle puzzle, string author )
@@ -191,26 +181,52 @@ namespace PiCross
             return entries.Select( x => x.GetHashCode() ).Aggregate( ( acc, n ) => acc ^ n );
         }
 
-        public IDictionary<int, IPuzzleLibraryEntry> ToDictionary()
+        //public IDictionary<int, IPuzzleLibraryEntry> ToDictionary()
+        //{
+        //    var result = new Dictionary<int, IPuzzleLibraryEntry>();
+
+        //    foreach ( var entry in this.entries )
+        //    {
+        //        result[entry.UID] = entry;
+        //    }
+
+        //    return result;
+        //}
+
+        IEnumerable<IPuzzleDatabaseEntry> IPuzzleDatabase.Entries
         {
-            var result = new Dictionary<int, IPuzzleLibraryEntry>();
-
-            foreach ( var entry in this.entries )
+            get
             {
-                result[entry.UID] = entry;
+                return Entries;
             }
+        }
 
-            return result;
+        IPuzzleDatabaseEntry IPuzzleDatabase.this[int id]
+        {
+            get
+            {
+                return this[id];
+            }
+        }
+
+        IPuzzleDatabaseEntry IPuzzleDatabase.Create( Puzzle puzzle, string author )
+        {
+            return Create( puzzle, author );
+        }
+
+        void IPuzzleDatabase.Add( IPuzzleDatabaseEntry libraryEntry )
+        {
+            Add( (InMemoryPuzzleLibraryEntry) libraryEntry );
         }
     }
 
-    internal class InMemoryPuzzleLibraryEntry : IPuzzleLibraryEntry, IComparable<InMemoryPuzzleLibraryEntry>
+    internal class InMemoryPuzzleLibraryEntry : IPuzzleDatabaseEntry
     {
         private readonly int uid;
 
         private Puzzle puzzle;
 
-        private readonly string author;
+        private string author;
 
         public InMemoryPuzzleLibraryEntry( int uid, Puzzle puzzle, string author )
         {
@@ -239,7 +255,11 @@ namespace PiCross
             }
         }
 
-        public string Author { get { return author; } }
+        public string Author
+        {
+            get { return author; }
+            set { author = value; }
+        }
 
         public override bool Equals( object obj )
         {
@@ -262,7 +282,7 @@ namespace PiCross
         }
     }
 
-    internal class InMemoryPlayerDatabase : IPlayerDatabase
+    internal class InMemoryPlayerDatabase : IPlayerDatabase2
     {
         private readonly Dictionary<string, InMemoryPlayerProfile> playerProfiles;
 
@@ -274,14 +294,6 @@ namespace PiCross
         private InMemoryPlayerDatabase()
         {
             playerProfiles = new Dictionary<string, InMemoryPlayerProfile>();
-        }
-
-        IPlayerProfile IPlayerDatabase.this[string name]
-        {
-            get
-            {
-                return this[name];
-            }
         }
 
         public InMemoryPlayerProfile this[string name]
@@ -302,11 +314,6 @@ namespace PiCross
         public bool IsValidPlayerName( string name )
         {
             return !string.IsNullOrWhiteSpace( name );
-        }
-
-        IPlayerProfile IPlayerDatabase.CreateNewProfile( string name )
-        {
-            return CreateNewProfile( name );
         }
 
         public InMemoryPlayerProfile CreateNewProfile( string name )
@@ -359,85 +366,36 @@ namespace PiCross
         {
             return playerProfiles.GetHashCode();
         }
+
+        IPlayerProfileData IPlayerDatabase2.this[string name]
+        {
+            get
+            {
+                return this[name];
+            }
+        }
+
+        IPlayerProfileData IPlayerDatabase2.CreateNewProfile( string name )
+        {
+            return CreateNewProfile( name );
+        }
     }
 
-    internal class InMemoryPlayerProfile : IPlayerProfile
+    internal class InMemoryPlayerProfile : IPlayerProfileData
     {
         private readonly string name;
 
-        private readonly InMemoryPlayerPuzzleInformation puzzleInformation;
+        private readonly Dictionary<int, InMemoryPlayerPuzzleInformationEntry> entries;
 
         public InMemoryPlayerProfile( string name )
         {
             this.name = name;
-            puzzleInformation = new InMemoryPlayerPuzzleInformation();
-        }
-
-        IPlayerPuzzleInformation IPlayerProfile.PuzzleInformation
-        {
-            get
-            {
-                return PuzzleInformation;
-            }
-        }
-
-        public InMemoryPlayerPuzzleInformation PuzzleInformation
-        {
-            get { return puzzleInformation; }
+            entries = new Dictionary<int, InMemoryPlayerPuzzleInformationEntry>();
         }
 
         public string Name
         {
             get { return name; }
-        }
-
-        public override bool Equals( object obj )
-        {
-            return Equals( obj as InMemoryPlayerProfile );
-        }
-
-        public bool Equals( InMemoryPlayerProfile playerProfile )
-        {
-            return playerProfile != null && name == playerProfile.name && puzzleInformation.Equals( playerProfile.puzzleInformation );
-        }
-
-        public override int GetHashCode()
-        {
-            return name.GetHashCode();
-        }
-    }
-
-    internal class InMemoryPlayerPuzzleInformation : IPlayerPuzzleInformation
-    {
-        private readonly Dictionary<int, InMemoryPlayerPuzzleInformationEntry> entries;
-
-        public InMemoryPlayerPuzzleInformation()
-        {
-            this.entries = new Dictionary<int, InMemoryPlayerPuzzleInformationEntry>();
-        }
-
-        public IEnumerable<int> EntryUIDs
-        {
-            get
-            {
-                return entries.Keys;
-            }
-        }
-
-        IPlayerPuzzleInformationEntry IPlayerPuzzleInformation.this[IPuzzleLibraryEntry libraryEntry]
-        {
-            get
-            {
-                return this[(InMemoryPuzzleLibraryEntry) libraryEntry];
-            }
-        }
-
-        public InMemoryPlayerPuzzleInformationEntry this[InMemoryPuzzleLibraryEntry libraryEntry]
-        {
-            get
-            {
-                return this[libraryEntry.UID];
-            }
         }
 
         public InMemoryPlayerPuzzleInformationEntry this[int id]
@@ -455,43 +413,53 @@ namespace PiCross
 
         public override bool Equals( object obj )
         {
-            return Equals( obj as InMemoryPlayerPuzzleInformation );
+            return Equals( obj as InMemoryPlayerProfile );
         }
 
-        public bool Equals( InMemoryPlayerPuzzleInformation playerPuzzleInformation )
+        public bool Equals( InMemoryPlayerProfile playerProfile )
         {
-            if ( playerPuzzleInformation == null )
-            {
-                return false;
-            }
-            else
-            {
-                var ids = new HashSet<int>( this.entries.Keys.Concat( playerPuzzleInformation.entries.Keys ) );
-
-                return ids.All( id => this[id].Equals( playerPuzzleInformation[id] ) );
-            }
+            throw new NotImplementedException(); // TODO
+            // return playerProfile != null && name == playerProfile.name && puzzleInformation.Equals( playerProfile.puzzleInformation );
         }
 
         public override int GetHashCode()
         {
-            return this.entries.GetHashCode();
+            return name.GetHashCode();
+        }
+
+        IPlayerPuzzleData IPlayerProfileData.this[int id]
+        {
+            get { return this[id]; }
+        }
+
+
+        public IEnumerable<int> EntryUIDs
+        {
+            get
+            {
+                return this.entries.Keys;
+            }
         }
     }
 
-    public class InMemoryPlayerPuzzleInformationEntry : IPlayerPuzzleInformationEntry
+    public class InMemoryPlayerPuzzleInformationEntry : IPlayerPuzzleData
     {
-        private readonly Cell<TimeSpan?> bestTime;
+        private TimeSpan? bestTime;
 
         public InMemoryPlayerPuzzleInformationEntry()
         {
-            this.bestTime = Cell.Create<TimeSpan?>( null );
+            this.bestTime = null;
         }
 
-        public Cell<TimeSpan?> BestTime
+        public TimeSpan? BestTime
         {
             get
             {
                 return bestTime;
+            }
+            set
+            {
+                bestTime = value;
             }
         }
 

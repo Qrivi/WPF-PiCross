@@ -88,7 +88,7 @@ namespace PiCross.PiCross
                     var uid = int.Parse( parts[0] );
                     var bestTime = long.Parse( parts[1] );
 
-                    playerProfile.PuzzleInformation[uid].BestTime.Value = TimeSpan.FromTicks( bestTime );
+                    playerProfile[uid].BestTime = TimeSpan.FromTicks( bestTime );
                 }
 
                 return playerProfile;
@@ -112,13 +112,13 @@ namespace PiCross.PiCross
 
             using ( var writer = OpenZipArchiveEntryForWriting( path ) )
             {
-                foreach ( var id in playerProfile.PuzzleInformation.EntryUIDs )
+                foreach ( var id in playerProfile.EntryUIDs )
                 {
-                    var bestTime = playerProfile.PuzzleInformation[id].BestTime;
+                    var bestTime = playerProfile[id].BestTime;
 
-                    if ( bestTime.Value.HasValue )
+                    if ( bestTime.HasValue )
                     {
-                        writer.WriteLine( "{0} {1}", id, bestTime.Value.Value.Ticks );
+                        writer.WriteLine( "{0} {1}", id, bestTime.Value.Ticks );
                     }
                 }
             }

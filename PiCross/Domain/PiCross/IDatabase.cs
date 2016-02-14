@@ -15,7 +15,7 @@ namespace PiCross
 
     internal interface IPuzzleDatabase
     {
-        IList<IPuzzleDatabaseEntry> Entries { get; }
+        IEnumerable<IPuzzleDatabaseEntry> Entries { get; }
 
         IPuzzleDatabaseEntry this[int id] { get; }
 
@@ -45,6 +45,8 @@ namespace PiCross
     internal interface IPlayerProfileData
     {
         IPlayerPuzzleData this[int id] { get; }
+
+        IEnumerable<int> EntryUIDs { get; }
 
         string Name { get; }
     }

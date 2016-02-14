@@ -13,22 +13,19 @@ namespace PiCross
     {
         public IGameData CreateEmptyGameData()
         {
-            return new InMemoryGameData( InMemoryPuzzleLibrary.CreateEmpty(), InMemoryPlayerDatabase.CreateEmpty() );
+            var data = new InMemoryGameData( InMemoryPuzzleLibrary.CreateEmpty(), InMemoryPlayerDatabase.CreateEmpty() );
+
+            return new GameDataAdapter( data );
         }
 
         public IGameData CreateDummyGameData()
         {
-            return DummyData.Create();
+            return new GameDataAdapter( DummyData.Create() );
         }
 
         public IGameData LoadGameData( string path )
         {
-            var io = new GameDataIO();
-
-            using ( var fileStream = new FileStream( path, FileMode.Open ) )
-            {
-                return io.Read( fileStream );
-            }
+            return null; // TODO
         }
 
         public IPuzzleEditor CreatePuzzleEditor(Puzzle puzzle)

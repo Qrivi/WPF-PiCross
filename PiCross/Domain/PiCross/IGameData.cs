@@ -45,7 +45,7 @@ namespace PiCross
 
     public interface IPuzzleLibrary
     {
-        IList<IPuzzleLibraryEntry> Entries { get; }
+        IEnumerable<IPuzzleLibraryEntry> Entries { get; }
 
         IPuzzleLibraryEntry Create( Puzzle puzzle, string author );
     }
@@ -54,6 +54,6 @@ namespace PiCross
     {
         Puzzle Puzzle { get; set; }
 
-        string Author { get; }
+        string Author { get; set; }
     }
 }

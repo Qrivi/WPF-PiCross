@@ -153,7 +153,7 @@ namespace PiCross.Tests
                 library.Create( puzzle, author );
             }
 
-            return library;
+            return new PuzzleLibraryAdapter( library );
         }
     }
 }
