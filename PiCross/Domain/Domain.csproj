@@ -55,7 +55,6 @@
     <Compile Include="Cells\Flag.cs" />
     <Compile Include="Cells\FutureCell.cs" />
     <Compile Include="Cells\ValidatedCell.cs" />
-    <Compile Include="DataStructures\RecordTable.cs" />
     <Compile Include="IO\Serializer.cs" />
     <Compile Include="PiCross\ArchiveDatabase.cs" />
     <Compile Include="PiCross\GameDataAdapters.cs" />
