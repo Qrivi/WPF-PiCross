@@ -45,38 +45,84 @@ namespace DataStructures
         bool IsValidIndex( int index );
     }
 
+    /// <summary>
+    /// A series of sequence-related static factory methods.
+    /// </summary>
     public static class Sequence
     {
+        /// <summary>
+        /// Creates an empty sequence.
+        /// </summary>
+        /// <typeparam name="T">Element type.</typeparam>
+        /// <returns>An empty sequence.</returns>
         public static ISequence<T> CreateEmpty<T>()
         {
             return new EmptySequence<T>();
         }
 
+        /// <summary>
+        /// Creates a sequence containing the specified values.
+        /// </summary>
+        /// <typeparam name="T">Element type.</typeparam>
+        /// <param name="items">Items.</param>
+        /// <returns>A sequence containing the given items in the given order.</returns>
         public static ISequence<T> FromItems<T>( params T[] items )
         {
             return new ArraySequence<T>( items.Length, i => items[i] );
         }
 
+        /// <summary>
+        /// Creates a sequence from a function. The function is called by-need
+        /// and will be called again with each indexing.
+        /// </summary>
+        /// <typeparam name="T">Element type.</typeparam>
+        /// <param name="length">Length of the sequence.</param>
+        /// <param name="function">Function determining the elements.</param>
+        /// <returns>A sequence.</returns>
         public static ISequence<T> FromFunction<T>( int length, Func<int, T> function )
         {
             return new VirtualSequence<T>( length, function );
         }
 
+        /// <summary>
+        /// Converst an IEnumerable to an ISequence.
+        /// </summary>
+        /// <typeparam name="T">Element type.</typeparam>
+        /// <param name="xs">The IEnumerable.</param>
+        /// <returns>Sequence containing the elements of <paramref name="xs"/> in the same order.</returns>
         public static ISequence<T> FromEnumerable<T>( IEnumerable<T> xs )
         {
             return FromItems( xs.ToArray() );
         }
 
+        /// <summary>
+        /// Creates a sequence of length <paramref name="length"/>. All items are equal to the given <paramref name="value"/>.
+        /// </summary>
+        /// <typeparam name="T">Element type.</typeparam>
+        /// <param name="length">Length of the sequence.</param>
+        /// <param name="value">Value used to initialize the sequence.</param>
+        /// <returns>Sequence containing <paramref name="value"/> repeated <paramref name="length"/> times.</returns>
         public static ISequence<T> Repeat<T>( int length, T value )
         {
             return new VirtualSequence<T>( length, _ => value );
         }
 
+        /// <summary>
+        /// Creates a character sequence.
+        /// </summary>
+        /// <param name="str">String whose characters will be used to initialize the sequence.</param>
+        /// <returns>Sequence.</returns>
         public static ISequence<char> FromString( string str )
         {
             return FromItems( str.ToCharArray() );
         }
 
+        /// <summary>
+        /// Creates a sequence containing the values <paramref name="from"/> to <paramref name="from"/> + <paramref name="length"/>.
+        /// </summary>
+        /// <param name="from">Value of first item.</param>
+        /// <param name="length">Length of the sequence.</param>
+        /// <returns>Sequence.</returns>
         public static ISequence<int> Range( int from, int length )
         {
             return Sequence.FromFunction( length, i => from + i );
