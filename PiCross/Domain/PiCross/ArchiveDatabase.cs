@@ -158,9 +158,9 @@ namespace PiCross
         {
             private readonly IGameDataArchive archive;
 
-            private readonly InMemoryPlayerProfile profile;
+            private readonly InMemoryDatabase.InMemoryPlayerProfile profile;
 
-            public PlayerProfileData( IGameDataArchive archive, InMemoryPlayerProfile profile)
+            public PlayerProfileData( IGameDataArchive archive, InMemoryDatabase.InMemoryPlayerProfile profile )
             {
                 this.archive = archive;
                 this.profile = profile;
@@ -192,13 +192,13 @@ namespace PiCross
         {
             private readonly IGameDataArchive archive;
 
-            private readonly InMemoryPlayerProfile profile;
+            private readonly InMemoryDatabase.InMemoryPlayerProfile profile;
 
             private readonly int uid;
 
             private readonly InMemoryPlayerPuzzleInformationEntry entry;
 
-            public PlayerPuzzleData( IGameDataArchive archive, InMemoryPlayerProfile profile, int uid )
+            public PlayerPuzzleData( IGameDataArchive archive, InMemoryDatabase.InMemoryPlayerProfile profile, int uid )
             {
                 this.archive = archive;
                 this.profile = profile;

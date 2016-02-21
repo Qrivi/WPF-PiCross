@@ -418,69 +418,71 @@ namespace PiCross
                 return CreateNewProfile( name );
             }
         }
+
+        internal class InMemoryPlayerProfile : IPlayerProfileData
+        {
+            private readonly string name;
+
+            private readonly Dictionary<int, InMemoryPlayerPuzzleInformationEntry> entries;
+
+            public InMemoryPlayerProfile( string name )
+            {
+                this.name = name;
+                entries = new Dictionary<int, InMemoryPlayerPuzzleInformationEntry>();
+            }
+
+            public string Name
+            {
+                get { return name; }
+            }
+
+            public InMemoryPlayerPuzzleInformationEntry this[int id]
+            {
+                get
+                {
+                    if ( !entries.ContainsKey( id ) )
+                    {
+                        entries[id] = new InMemoryPlayerPuzzleInformationEntry();
+                    }
+
+                    return entries[id];
+                }
+            }
+
+            public override bool Equals( object obj )
+            {
+                return Equals( obj as InMemoryPlayerProfile );
+            }
+
+            public bool Equals( InMemoryPlayerProfile playerProfile )
+            {
+                return this.name == playerProfile.name;
+            }
+
+            public override int GetHashCode()
+            {
+                return name.GetHashCode();
+            }
+
+            IPlayerPuzzleData IPlayerProfileData.this[int id]
+            {
+                get { return this[id]; }
+            }
+
+
+            public IEnumerable<int> EntryUIDs
+            {
+                get
+                {
+                    return this.entries.Keys;
+                }
+            }
+        }
     }
 
     
 
-    internal class InMemoryPlayerProfile : IPlayerProfileData
-    {
-        private readonly string name;
-
-        private readonly Dictionary<int, InMemoryPlayerPuzzleInformationEntry> entries;
-
-        public InMemoryPlayerProfile( string name )
-        {
-            this.name = name;
-            entries = new Dictionary<int, InMemoryPlayerPuzzleInformationEntry>();
-        }
-
-        public string Name
-        {
-            get { return name; }
-        }
-
-        public InMemoryPlayerPuzzleInformationEntry this[int id]
-        {
-            get
-            {
-                if ( !entries.ContainsKey( id ) )
-                {
-                    entries[id] = new InMemoryPlayerPuzzleInformationEntry();
-                }
-
-                return entries[id];
-            }
-        }
-
-        public override bool Equals( object obj )
-        {
-            return Equals( obj as InMemoryPlayerProfile );
-        }
-
-        public bool Equals( InMemoryPlayerProfile playerProfile )
-        {
-            return this.name == playerProfile.name;
-        }
-
-        public override int GetHashCode()
-        {
-            return name.GetHashCode();
-        }
-
-        IPlayerPuzzleData IPlayerProfileData.this[int id]
-        {
-            get { return this[id]; }
-        }
-
-
-        public IEnumerable<int> EntryUIDs
-        {
-            get
-            {
-                return this.entries.Keys;
-            }
-        }
-    }
+    
 
     public class InMemoryPlayerPuzzleInformationEntry : IPlayerPuzzleData
     {
