@@ -245,71 +245,73 @@ namespace PiCross
                 return Create( puzzle, author );
             }
         }
+
+        internal class InMemoryPuzzleLibraryEntry : IPuzzleDatabaseEntry
+        {
+            private readonly int uid;
+
+            private Puzzle puzzle;
+
+            private string author;
+
+            public InMemoryPuzzleLibraryEntry( int uid, Puzzle puzzle, string author )
+            {
+                this.uid = uid;
+                this.puzzle = puzzle;
+                this.author = author;
+            }
+
+            public int UID
+            {
+                get
+                {
+                    return uid;
+                }
+            }
+
+            public Puzzle Puzzle
+            {
+                get
+                {
+                    return puzzle;
+                }
+                set
+                {
+                    this.puzzle = value;
+                }
+            }
+
+            public string Author
+            {
+                get { return author; }
+                set { author = value; }
+            }
+
+            public override bool Equals( object obj )
+            {
+                return Equals( obj as InMemoryPuzzleLibraryEntry );
+            }
+
+            public bool Equals( InMemoryPuzzleLibraryEntry that )
+            {
+                return this.uid == that.uid;
+            }
+
+            public override int GetHashCode()
+            {
+                return uid.GetHashCode();
+            }
+
+            public int CompareTo( InMemoryPuzzleLibraryEntry other )
+            {
+                return this.uid.CompareTo( other.uid );
+            }
+        }
     }
 
     
 
-    internal class InMemoryPuzzleLibraryEntry : IPuzzleDatabaseEntry
-    {
-        private readonly int uid;
-
-        private Puzzle puzzle;
-
-        private string author;
-
-        public InMemoryPuzzleLibraryEntry( int uid, Puzzle puzzle, string author )
-        {
-            this.uid = uid;
-            this.puzzle = puzzle;
-            this.author = author;
-        }
-
-        public int UID
-        {
-            get
-            {
-                return uid;
-            }
-        }
-
-        public Puzzle Puzzle
-        {
-            get
-            {
-                return puzzle;
-            }
-            set
-            {
-                this.puzzle = value;
-            }
-        }
-
-        public string Author
-        {
-            get { return author; }
-            set { author = value; }
-        }
-
-        public override bool Equals( object obj )
-        {
-            return Equals( obj as InMemoryPuzzleLibraryEntry );
-        }
-
-        public bool Equals( InMemoryPuzzleLibraryEntry that )
-        {
-            return this.uid == that.uid;
-        }
-
-        public override int GetHashCode()
-        {
-            return uid.GetHashCode();
-        }
-
-        public int CompareTo( InMemoryPuzzleLibraryEntry other )
-        {
-            return this.uid.CompareTo( other.uid );
-        }
-    }
+    
 
     internal class InMemoryPlayerDatabase : IPlayerDatabase
     {

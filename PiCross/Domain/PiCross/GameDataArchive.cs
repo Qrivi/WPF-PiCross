@@ -15,11 +15,11 @@ namespace PiCross
 
         IList<string> PlayerNames { get; }
 
-        InMemoryPuzzleLibraryEntry ReadPuzzleLibraryEntry( int id );
+        InMemoryDatabase.InMemoryPuzzleLibraryEntry ReadPuzzleLibraryEntry( int id );
 
         InMemoryPlayerProfile ReadPlayerProfile( string playerName );
 
-        void UpdateLibraryEntry( InMemoryPuzzleLibraryEntry entry );
+        void UpdateLibraryEntry( InMemoryDatabase.InMemoryPuzzleLibraryEntry entry );
 
         void UpdatePlayerProfile( InMemoryPlayerProfile playerProfile );
     }
@@ -60,7 +60,7 @@ namespace PiCross
             }
         }
 
-        public InMemoryPuzzleLibraryEntry ReadPuzzleLibraryEntry( int id )
+        public InMemoryDatabase.InMemoryPuzzleLibraryEntry ReadPuzzleLibraryEntry( int id )
         {
             var path = GetLibraryEntryPath( id );
 
@@ -69,7 +69,7 @@ namespace PiCross
                 var author = reader.ReadLine();
                 var puzzle = ReadPuzzle( reader );
 
-                return new InMemoryPuzzleLibraryEntry( id, puzzle, author );
+                return new InMemoryDatabase.InMemoryPuzzleLibraryEntry( id, puzzle, author );
             }
         }
 
@@ -95,7 +95,7 @@ namespace PiCross
             }
         }
 
-        public void UpdateLibraryEntry( InMemoryPuzzleLibraryEntry entry )
+        public void UpdateLibraryEntry( InMemoryDatabase.InMemoryPuzzleLibraryEntry entry )
         {
             var path = GetLibraryEntryPath( entry.UID );
 
@@ -280,7 +280,7 @@ namespace PiCross
             }
         }
 
-        public InMemoryPuzzleLibraryEntry ReadPuzzleLibraryEntry( int id )
+        public InMemoryDatabase.InMemoryPuzzleLibraryEntry ReadPuzzleLibraryEntry( int id )
         {
             return WithReadOnlyArchive( archive => archive.ReadPuzzleLibraryEntry( id ) );
         }
@@ -290,7 +290,7 @@ namespace PiCross
             return WithReadOnlyArchive( archive => archive.ReadPlayerProfile( playerName ) );
         }
 
-        public void UpdateLibraryEntry( InMemoryPuzzleLibraryEntry entry )
+        public void UpdateLibraryEntry( InMemoryDatabase.InMemoryPuzzleLibraryEntry entry )
         {
             WithWriteableArchive( archive => archive.UpdateLibraryEntry( entry ) );
         }
