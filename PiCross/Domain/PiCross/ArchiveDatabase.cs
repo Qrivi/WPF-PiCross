@@ -31,7 +31,7 @@ namespace PiCross
             get { return new PlayerDB( archive, database.PlayerDatabase ); }
         }
 
-        private class PuzzleDatabase : IPuzzleDatabase // TODO Rename
+        private class PuzzleDatabase : IPuzzleDatabase
         {
             private readonly IGameDataArchive archive;
 
