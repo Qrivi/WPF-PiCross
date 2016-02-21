@@ -196,7 +196,7 @@ namespace PiCross
 
             private readonly int uid;
 
-            private readonly InMemoryPlayerPuzzleInformationEntry entry;
+            private readonly InMemoryDatabase.InMemoryPlayerPuzzleInformationEntry entry;
 
             public PlayerPuzzleData( IGameDataArchive archive, InMemoryDatabase.PlayerProfile profile, int uid )
             {

@@ -478,46 +478,42 @@ namespace PiCross
                 }
             }
         }
-    }
 
-    
-
-    
-
-    public class InMemoryPlayerPuzzleInformationEntry : IPlayerPuzzleData
-    {
-        private TimeSpan? bestTime;
-
-        public InMemoryPlayerPuzzleInformationEntry()
+        public class InMemoryPlayerPuzzleInformationEntry : IPlayerPuzzleData
         {
-            this.bestTime = null;
-        }
+            private TimeSpan? bestTime;
 
-        public TimeSpan? BestTime
-        {
-            get
+            public InMemoryPlayerPuzzleInformationEntry()
             {
-                return bestTime;
+                this.bestTime = null;
             }
-            set
+
+            public TimeSpan? BestTime
             {
-                bestTime = value;
+                get
+                {
+                    return bestTime;
+                }
+                set
+                {
+                    bestTime = value;
+                }
             }
-        }
 
-        public override bool Equals( object obj )
-        {
-            return Equals( obj as InMemoryPlayerPuzzleInformationEntry );
-        }
+            public override bool Equals( object obj )
+            {
+                return Equals( obj as InMemoryPlayerPuzzleInformationEntry );
+            }
 
-        public bool Equals( InMemoryPlayerPuzzleInformationEntry entry )
-        {
-            return entry != null && bestTime.Equals( entry.bestTime );
-        }
+            public bool Equals( InMemoryPlayerPuzzleInformationEntry entry )
+            {
+                return entry != null && bestTime.Equals( entry.bestTime );
+            }
 
-        public override int GetHashCode()
-        {
-            return bestTime.GetHashCode();
+            public override int GetHashCode()
+            {
+                return bestTime.GetHashCode();
+            }
         }
     }
 }
