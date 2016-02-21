@@ -58,7 +58,6 @@
     <Compile Include="DataStructures\RecordTable.cs" />
     <Compile Include="IO\Serializer.cs" />
     <Compile Include="PiCross\ArchiveDatabase.cs" />
-    <Compile Include="PiCross\ArchivedGameData.cs" />
     <Compile Include="PiCross\GameDataAdapters.cs" />
     <Compile Include="PiCross\GameDataArchive.cs" />
     <Compile Include="PiCross\IDatabase.cs" />
