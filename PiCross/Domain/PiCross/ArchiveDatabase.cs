@@ -28,7 +28,7 @@ namespace PiCross
 
         public IPlayerDatabase Players
         {
-            get { return new PlayerDatabase( archive, database.PlayerDatabase ); }
+            get { return new PlayerDatabase( archive, database.Players ); }
         }
 
         private class PuzzleDatabase : IPuzzleDatabase

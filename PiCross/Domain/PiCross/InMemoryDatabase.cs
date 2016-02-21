@@ -46,7 +46,7 @@ namespace PiCross
             foreach ( var playerName in archive.PlayerNames )
             {
                 var profile = archive.ReadPlayerProfile( playerName );
-                gameData.PlayerDatabase.AddProfile( profile );
+                gameData.Players.AddProfile( profile );
             }
 
             foreach ( var uid in archive.PuzzleLibraryUIDs )
@@ -95,11 +95,11 @@ namespace PiCross
         {
             get
             {
-                return PlayerDatabase;
+                return Players;
             }
         }
 
-        public InMemoryPlayerDatabase PlayerDatabase
+        public InMemoryPlayerDatabase Players
         {
             get
             {
