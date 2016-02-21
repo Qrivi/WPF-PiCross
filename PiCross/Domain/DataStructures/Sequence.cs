@@ -7,16 +7,41 @@ using Cells;
 
 namespace DataStructures
 {
+    /// <summary>
+    /// Interface for array-like objects. A sequence is readonly.
+    /// If you need to be able to modify a sequence's elements,
+    /// populate the sequence with objects with <see cref="IVar"/>.
+    /// </summary>
+    /// <typeparam name="T">Element type.</typeparam>
     public interface ISequence<out T>
     {
+        /// <summary>
+        /// Number of items in the sequence.
+        /// </summary>
         int Length { get; }
 
+        /// <summary>
+        /// Looks up an element in the sequence.
+        /// </summary>
+        /// <param name="index">Zero-based index of the element.</param>
+        /// <returns>Element with index <paramref name="index"/></returns>
         T this[int index] { get; }
 
+        /// <summary>
+        /// Enumerates all indices in increasing order.
+        /// </summary>
         IEnumerable<int> Indices { get; }
 
+        /// <summary>
+        /// Enumerates all items in order of increasing index.
+        /// </summary>
         IEnumerable<T> Items { get; }
 
+        /// <summary>
+        /// Checks whether the given index is valid.
+        /// </summary>
+        /// <param name="index">Index to be checked.</param>
+        /// <returns>True if valid, false otherwise.</returns>
         bool IsValidIndex( int index );
     }
 
