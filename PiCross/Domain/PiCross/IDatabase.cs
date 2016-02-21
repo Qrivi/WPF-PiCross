@@ -30,8 +30,7 @@ namespace PiCross
 
         string Author { get; set; }
     }
-
-    internal interface IPlayerDatabase
+internal interface IPlayerDatabase
     {
         IPlayerProfileData this[string name] { get; }
 

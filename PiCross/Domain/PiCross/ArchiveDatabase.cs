@@ -10,40 +10,45 @@ namespace PiCross
     {
         private readonly IGameDataArchive archive;
 
-        public ArchiveDatabase( IGameDataArchive archive )
+        private readonly InMemoryDatabase database;
+
+        public ArchiveDatabase( string path )
         {
-            this.archive = archive;
+            this.database = InMemoryDatabase.ReadFromArchive( path );
+            this.archive = new AutoCloseGameDataArchive( path );
         }
 
         public IPuzzleDatabase PuzzleDatabase
         {
             get
             {
-                return new PuzzleDB( archive );
+                return new PuzzleDB( archive, database.PuzzleDatabase );
             }
         }
 
         public IPlayerDatabase PlayerDatabase
         {
-            get { return new PlayerDB( archive ); }
+            get { return new PlayerDB( archive, database.PlayerDatabase ); }
         }
 
         private class PuzzleDB : IPuzzleDatabase // TODO Rename
         {
             private readonly IGameDataArchive archive;
 
-            public PuzzleDB( IGameDataArchive archive )
+            private readonly InMemoryPuzzleLibrary puzzleLibrary;
+
+            public PuzzleDB( IGameDataArchive archive, InMemoryPuzzleLibrary puzzleLibrary )
             {
                 this.archive = archive;
+                this.puzzleLibrary = puzzleLibrary;
             }
 
             public IEnumerable<IPuzzleDatabaseEntry> Entries
             {
                 get
                 {
-                    return from uid in archive.PuzzleLibraryUIDs
-                           let entry = archive.ReadPuzzleLibraryEntry( uid )
-                           select new PuzzleDatabaseEntry( archive, entry.UID, entry.Puzzle, entry.Author );
+                    return from entry in puzzleLibrary.Entries
+                           select new PuzzleDatabaseEntry( archive, entry );
                 }
             }
 
@@ -51,32 +56,18 @@ namespace PiCross
             {
                 get
                 {
-                    var entry = archive.ReadPuzzleLibraryEntry( id );
+                    var entry = puzzleLibrary[id];
 
-                    return new PuzzleDatabaseEntry( archive, entry.UID, entry.Puzzle, entry.Author );
+                    return new PuzzleDatabaseEntry( archive, entry );
                 }
-            }
-
-            private int GenerateUniqueUID()
-            {
-                var uids = archive.PuzzleLibraryUIDs.ToList();
-                uids.Add( 0 );
-
-                return uids.Max() + 1;
             }
 
             public IPuzzleDatabaseEntry Create( Puzzle puzzle, string author )
             {
-                var uid = GenerateUniqueUID();
-                var entry = new InMemoryPuzzleLibraryEntry( uid, puzzle, author );
+                var entry = this.puzzleLibrary.Create( puzzle, author );
                 archive.UpdateLibraryEntry( entry );
 
-                return new PuzzleDatabaseEntry( archive, uid, puzzle, author );
-            }
-
-            public void Add( IPuzzleDatabaseEntry libraryEntry )
-            {
-                throw new NotImplementedException();
+                return new PuzzleDatabaseEntry( archive, entry );
             }
         }
 
@@ -84,36 +75,29 @@ namespace PiCross
         {
             private readonly IGameDataArchive archive;
 
-            private readonly int uid;
+            private readonly InMemoryPuzzleLibraryEntry entry;
 
-            private Puzzle puzzle;
-
-            private string author;
-
-            public PuzzleDatabaseEntry( IGameDataArchive archive, int uid, Puzzle puzzle, string author )
+            public PuzzleDatabaseEntry( IGameDataArchive archive, InMemoryPuzzleLibraryEntry entry)
             {
                 this.archive = archive;
-                this.uid = uid;
-                this.puzzle = puzzle;
-                this.author = author;
+                this.entry = entry;
             }
 
             public int UID
             {
-                get { return uid; }
+                get { return entry.UID; }
             }
 
             public Puzzle Puzzle
             {
                 get
                 {
-                    return puzzle;
+                    return entry.Puzzle;
                 }
                 set
                 {
-                    var entry = new InMemoryPuzzleLibraryEntry( uid, value, author );
+                    entry.Puzzle = value;
                     archive.UpdateLibraryEntry( entry );
-                    this.puzzle = value;
                 }
             }
 
@@ -121,13 +105,12 @@ namespace PiCross
             {
                 get
                 {
-                    return author;
+                    return entry.Author;
                 }
                 set
                 {
-                    var entry = new InMemoryPuzzleLibraryEntry( uid, puzzle, value );
+                    entry.Author = value;
                     archive.UpdateLibraryEntry( entry );
-                    this.author = value;
                 }
             }
         }
@@ -136,9 +119,12 @@ namespace PiCross
         {
             private readonly IGameDataArchive archive;
 
-            public PlayerDB( IGameDataArchive archive )
+            private readonly InMemoryPlayerDatabase playerDatabase;
+
+            public PlayerDB( IGameDataArchive archive, InMemoryPlayerDatabase playerDatabase )
             {
                 this.archive = archive;
+                this.playerDatabase = playerDatabase;
             }
 
             public IPlayerProfileData this[string name]
@@ -147,25 +133,23 @@ namespace PiCross
                 {
                     var profile = archive.ReadPlayerProfile( name );
 
-                    return new PlayerProfileData( archive, profile.Name );
+                    return new PlayerProfileData( archive, profile );
                 }
             }
 
             public IPlayerProfileData CreateNewProfile( string name )
             {
-                // TODO Check for duplicates
-
-                var profile = new InMemoryPlayerProfile( name );
+                var profile = playerDatabase.CreateNewProfile( name );
                 archive.UpdatePlayerProfile( profile );
 
-                return new PlayerProfileData( archive, name );
+                return new PlayerProfileData( archive, profile );
             }
 
             public IList<string> PlayerNames
             {
                 get
                 {
-                    return archive.PlayerNames;
+                    return this.playerDatabase.PlayerNames;
                 }
             }
         }
@@ -174,19 +158,19 @@ namespace PiCross
         {
             private readonly IGameDataArchive archive;
 
-            private readonly string name;
+            private readonly InMemoryPlayerProfile profile;
 
-            public PlayerProfileData( IGameDataArchive archive, string name )
+            public PlayerProfileData( IGameDataArchive archive, InMemoryPlayerProfile profile)
             {
                 this.archive = archive;
-                this.name = name;
+                this.profile = profile;
             }
 
             public IPlayerPuzzleData this[int id]
             {
                 get
                 {
-                    return new PlayerPuzzleData( archive, name, id );
+                    return new PlayerPuzzleData( archive, profile, id );
                 }
             }
 
@@ -194,14 +178,13 @@ namespace PiCross
             {
                 get
                 {
-                    var profile = archive.ReadPlayerProfile( name );
                     return profile.EntryUIDs;
                 }
             }
 
             public string Name
             {
-                get { return name; }
+                get { return profile.Name; }
             }
         }
 
@@ -209,38 +192,28 @@ namespace PiCross
         {
             private readonly IGameDataArchive archive;
 
-            private readonly string playerName;
+            private readonly InMemoryPlayerProfile profile;
 
             private readonly int uid;
 
-            public PlayerPuzzleData( IGameDataArchive archive, string playerName, int uid )
+            private readonly InMemoryPlayerPuzzleInformationEntry entry;
+
+            public PlayerPuzzleData( IGameDataArchive archive, InMemoryPlayerProfile profile, int uid )
             {
                 this.archive = archive;
-                this.playerName = playerName;
+                this.profile = profile;
                 this.uid = uid;
-            }
-
-            private InMemoryPlayerProfile ReadPlayerProfile()
-            {
-                return archive.ReadPlayerProfile( playerName );
-            }
-
-            private InMemoryPlayerPuzzleInformationEntry ReadInfo()
-            {
-                var profile = ReadPlayerProfile();
-
-                return profile[uid];
+                this.entry = profile[uid];
             }
 
             public TimeSpan? BestTime
             {
                 get
                 {
-                    return ReadInfo().BestTime;
+                    return entry.BestTime;
                 }
                 set
-                {
-                    var profile = ReadPlayerProfile();
+                {                    
                     profile[uid].BestTime = value;
 
                     archive.UpdatePlayerProfile( profile );

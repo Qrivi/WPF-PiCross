@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +23,20 @@ namespace PiCross
             var players = InMemoryPlayerDatabase.CreateEmpty();
 
             return new InMemoryDatabase( puzzles, players );
+        }
+
+        public static InMemoryDatabase ReadFromArchive( string path )
+        {
+            using ( var fileStream = new FileStream( path, FileMode.Open ) )
+            {
+                using ( var zipArchive = new ZipArchive( fileStream, ZipArchiveMode.Read ) )
+                {
+                    using ( var archive = new GameDataArchive( zipArchive ) )
+                    {
+                        return ReadFromArchive( archive );
+                    }
+                }
+            }
         }
 
         public static InMemoryDatabase ReadFromArchive(IGameDataArchive archive)

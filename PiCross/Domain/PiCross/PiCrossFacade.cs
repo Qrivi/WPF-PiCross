@@ -27,12 +27,12 @@ namespace PiCross
         {
             var archive = new AutoCloseGameDataArchive( path );
             // var gameData = new ArchivedGameData( archive );
-            var gameData = new GameDataAdapter( new ArchiveDatabase( archive ) );
+            var gameData = new GameDataAdapter( new ArchiveDatabase( path ) );
 
             return gameData;
         }
 
-        public IPuzzleEditor CreatePuzzleEditor(Puzzle puzzle)
+        public IPuzzleEditor CreatePuzzleEditor( Puzzle puzzle )
         {
             var editorGrid = EditorGrid.FromPuzzle( puzzle );
             var puzzleEditor = new PuzzleEditor( editorGrid );
@@ -40,14 +40,14 @@ namespace PiCross
             return puzzleEditor;
         }
 
-        public IStepwisePuzzleSolver CreateStepwisePuzzleSolver(ISequence<Constraints> rowConstraints, ISequence<Constraints> columnConstraints)
+        public IStepwisePuzzleSolver CreateStepwisePuzzleSolver( ISequence<Constraints> rowConstraints, ISequence<Constraints> columnConstraints )
         {
             var solverGrid = new SolverGrid( columnConstraints: columnConstraints, rowConstraints: rowConstraints );
 
             return new StepwiseSolver( solverGrid );
         }
 
-        public IPlayablePuzzle CreatePlayablePuzzle(Puzzle puzzle)
+        public IPlayablePuzzle CreatePlayablePuzzle( Puzzle puzzle )
         {
             return new PlayablePuzzle( columnConstraints: puzzle.ColumnConstraints, rowConstraints: puzzle.RowConstraints );
         }
