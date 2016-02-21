@@ -229,11 +229,6 @@ namespace PiCross
         {
             return Create( puzzle, author );
         }
-
-        void IPuzzleDatabase.Add( IPuzzleDatabaseEntry libraryEntry )
-        {
-            Add( (InMemoryPuzzleLibraryEntry) libraryEntry );
-        }
     }
 
     internal class InMemoryPuzzleLibraryEntry : IPuzzleDatabaseEntry

@@ -129,7 +129,7 @@ namespace PiCross
 
         public bool IsValidPlayerName( string name )
         {
-            throw new NotImplementedException(); // TODO
+            return !string.IsNullOrWhiteSpace( name );
         }
 
         public IList<string> PlayerNames

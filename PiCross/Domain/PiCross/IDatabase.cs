@@ -20,8 +20,6 @@ namespace PiCross
         IPuzzleDatabaseEntry this[int id] { get; }
 
         IPuzzleDatabaseEntry Create( Puzzle puzzle, string author );
-
-        void Add( IPuzzleDatabaseEntry libraryEntry );
     }
 
     internal interface IPuzzleDatabaseEntry
