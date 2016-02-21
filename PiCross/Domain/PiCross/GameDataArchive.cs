@@ -17,11 +17,11 @@ namespace PiCross
 
         InMemoryDatabase.PuzzleLibraryEntry ReadPuzzleLibraryEntry( int id );
 
-        InMemoryDatabase.InMemoryPlayerProfile ReadPlayerProfile( string playerName );
+        InMemoryDatabase.PlayerProfile ReadPlayerProfile( string playerName );
 
         void UpdateLibraryEntry( InMemoryDatabase.PuzzleLibraryEntry entry );
 
-        void UpdatePlayerProfile( InMemoryDatabase.InMemoryPlayerProfile playerProfile );
+        void UpdatePlayerProfile( InMemoryDatabase.PlayerProfile playerProfile );
     }
 
     internal class GameDataArchive : IGameDataArchive
@@ -73,13 +73,13 @@ namespace PiCross
             }
         }
 
-        public InMemoryDatabase.InMemoryPlayerProfile ReadPlayerProfile( string playerName )
+        public InMemoryDatabase.PlayerProfile ReadPlayerProfile( string playerName )
         {
             var path = GetPlayerProfilePath( playerName );
 
             using ( var reader = OpenZipArchiveEntryForReading( path ) )
             {
-                var playerProfile = new InMemoryDatabase.InMemoryPlayerProfile( playerName );
+                var playerProfile = new InMemoryDatabase.PlayerProfile( playerName );
                 var entryCount = int.Parse( reader.ReadLine() );
 
                 for ( var i = 0; i != entryCount; ++i )
@@ -106,7 +106,7 @@ namespace PiCross
             }
         }
 
-        public void UpdatePlayerProfile( InMemoryDatabase.InMemoryPlayerProfile playerProfile )
+        public void UpdatePlayerProfile( InMemoryDatabase.PlayerProfile playerProfile )
         {
             var path = GetPlayerProfilePath( playerProfile.Name );
 
@@ -285,7 +285,7 @@ namespace PiCross
             return WithReadOnlyArchive( archive => archive.ReadPuzzleLibraryEntry( id ) );
         }
 
-        public InMemoryDatabase.InMemoryPlayerProfile ReadPlayerProfile( string playerName )
+        public InMemoryDatabase.PlayerProfile ReadPlayerProfile( string playerName )
         {
             return WithReadOnlyArchive( archive => archive.ReadPlayerProfile( playerName ) );
         }
@@ -295,7 +295,7 @@ namespace PiCross
             WithWriteableArchive( archive => archive.UpdateLibraryEntry( entry ) );
         }
 
-        public void UpdatePlayerProfile( InMemoryDatabase.InMemoryPlayerProfile playerProfile )
+        public void UpdatePlayerProfile( InMemoryDatabase.PlayerProfile playerProfile )
         {
             WithWriteableArchive( archive => archive.UpdatePlayerProfile( playerProfile ) );
         }

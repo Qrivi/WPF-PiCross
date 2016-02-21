@@ -310,7 +310,7 @@ namespace PiCross
 
         internal class PlayerDatabase : IPlayerDatabase
         {
-            private readonly Dictionary<string, InMemoryPlayerProfile> playerProfiles;
+            private readonly Dictionary<string, PlayerProfile> playerProfiles;
 
             public static PlayerDatabase CreateEmpty()
             {
@@ -319,10 +319,10 @@ namespace PiCross
 
             private PlayerDatabase()
             {
-                playerProfiles = new Dictionary<string, InMemoryPlayerProfile>();
+                playerProfiles = new Dictionary<string, PlayerProfile>();
             }
 
-            public InMemoryPlayerProfile this[string name]
+            public PlayerProfile this[string name]
             {
                 get
                 {
@@ -342,7 +342,7 @@ namespace PiCross
                 return !string.IsNullOrWhiteSpace( name );
             }
 
-            public InMemoryPlayerProfile CreateNewProfile( string name )
+            public PlayerProfile CreateNewProfile( string name )
             {
                 if ( !IsValidPlayerName( name ) )
                 {
@@ -354,7 +354,7 @@ namespace PiCross
                 }
                 else
                 {
-                    var profile = new InMemoryPlayerProfile( name );
+                    var profile = new PlayerProfile( name );
 
                     AddToDictionary( profile );
 
@@ -362,7 +362,7 @@ namespace PiCross
                 }
             }
 
-            public void AddProfile( InMemoryPlayerProfile profile )
+            public void AddProfile( PlayerProfile profile )
             {
                 if ( playerProfiles.ContainsKey( profile.Name ) )
                 {
@@ -374,7 +374,7 @@ namespace PiCross
                 }
             }
 
-            private void AddToDictionary( InMemoryPlayerProfile profile )
+            private void AddToDictionary( PlayerProfile profile )
             {
                 playerProfiles[profile.Name] = profile;
             }
@@ -419,13 +419,13 @@ namespace PiCross
             }
         }
 
-        internal class InMemoryPlayerProfile : IPlayerProfileData
+        internal class PlayerProfile : IPlayerProfileData
         {
             private readonly string name;
 
             private readonly Dictionary<int, InMemoryPlayerPuzzleInformationEntry> entries;
 
-            public InMemoryPlayerProfile( string name )
+            public PlayerProfile( string name )
             {
                 this.name = name;
                 entries = new Dictionary<int, InMemoryPlayerPuzzleInformationEntry>();
@@ -451,10 +451,10 @@ namespace PiCross
 
             public override bool Equals( object obj )
             {
-                return Equals( obj as InMemoryPlayerProfile );
+                return Equals( obj as PlayerProfile );
             }
 
-            public bool Equals( InMemoryPlayerProfile playerProfile )
+            public bool Equals( PlayerProfile playerProfile )
             {
                 return this.name == playerProfile.name;
             }
