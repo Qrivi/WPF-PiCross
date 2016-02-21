@@ -15,6 +15,33 @@ namespace PiCross
 
         private readonly InMemoryPlayerDatabase playerDatabase;
 
+        public static InMemoryGameData CreateEmpty()
+        {
+            var puzzles = InMemoryPuzzleLibrary.CreateEmpty();
+            var players = InMemoryPlayerDatabase.CreateEmpty();
+
+            return new InMemoryGameData( puzzles, players );
+        }
+
+        public static InMemoryGameData ReadFromArchive(IGameDataArchive archive)
+        {
+            var gameData = CreateEmpty();
+
+            foreach ( var playerName in archive.PlayerNames )
+            {
+                var profile = archive.ReadPlayerProfile( playerName );
+                gameData.PlayerDatabase.AddProfile( profile );
+            }
+
+            foreach ( var uid in archive.PuzzleLibraryUIDs )
+            {
+                var entry = archive.ReadPuzzleLibraryEntry( uid );
+                gameData.PuzzleDatabase.Add( entry );
+            }
+
+            return gameData;
+        }
+
         public InMemoryGameData( InMemoryPuzzleLibrary library, InMemoryPlayerDatabase playerDatabase )
         {
             if ( library == null )
@@ -144,6 +171,7 @@ namespace PiCross
             else
             {
                 this.entries.Add( libraryEntry );
+                nextUID = Math.Max( nextUID, libraryEntry.UID + 1 );
             }
         }
 
@@ -180,18 +208,6 @@ namespace PiCross
         {
             return entries.Select( x => x.GetHashCode() ).Aggregate( ( acc, n ) => acc ^ n );
         }
-
-        //public IDictionary<int, IPuzzleLibraryEntry> ToDictionary()
-        //{
-        //    var result = new Dictionary<int, IPuzzleLibraryEntry>();
-
-        //    foreach ( var entry in this.entries )
-        //    {
-        //        result[entry.UID] = entry;
-        //    }
-
-        //    return result;
-        //}
 
         IEnumerable<IPuzzleDatabaseEntry> IPuzzleDatabase.Entries
         {
@@ -336,6 +352,18 @@ namespace PiCross
             }
         }
 
+        public void AddProfile(InMemoryPlayerProfile profile)
+        {
+            if ( playerProfiles.ContainsKey(profile.Name))
+            {
+                throw new ArgumentException( "Player with same name already exists" );
+            }
+            else
+            {
+                AddToDictionary( profile );
+            }
+        }
+
         private void AddToDictionary( InMemoryPlayerProfile profile )
         {
             playerProfiles[profile.Name] = profile;
@@ -418,8 +446,7 @@ namespace PiCross
 
         public bool Equals( InMemoryPlayerProfile playerProfile )
         {
-            throw new NotImplementedException(); // TODO
-            // return playerProfile != null && name == playerProfile.name && puzzleInformation.Equals( playerProfile.puzzleInformation );
+            return this.name == playerProfile.name;
         }
 
         public override int GetHashCode()

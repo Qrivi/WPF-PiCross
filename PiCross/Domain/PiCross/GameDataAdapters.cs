@@ -91,6 +91,21 @@ namespace PiCross
                 entry.Author = value;
             }
         }
+
+        public override bool Equals( object obj )
+        {
+            return Equals( obj as PuzzleLibraryEntryAdapter );
+        }
+
+        public bool Equals(PuzzleLibraryEntryAdapter that)
+        {
+            return that != null && this.UID == that.UID;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.UID;
+        }
     }
 
     internal class PlayerDatabaseAdapter : IPlayerLibrary
@@ -145,6 +160,21 @@ namespace PiCross
         public string Name
         {
             get { return data.Name; }
+        }
+
+        public override bool Equals( object obj )
+        {
+            return Equals( obj as PlayerProfileAdapter );
+        }
+
+        public bool Equals(PlayerProfileAdapter that)
+        {
+            return this.Name == that.Name;
+        }
+
+        public override int GetHashCode()
+        {
+            return this.Name.GetHashCode();
         }
     }
 

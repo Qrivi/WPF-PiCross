@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace PiCross.PiCross
+namespace PiCross
 {
     internal interface IGameDataArchive : IDisposable
     {
@@ -112,7 +112,10 @@ namespace PiCross.PiCross
 
             using ( var writer = OpenZipArchiveEntryForWriting( path ) )
             {
-                foreach ( var id in playerProfile.EntryUIDs )
+                var ids = playerProfile.EntryUIDs.ToList();
+
+                writer.WriteLine( ids.Count );
+                foreach ( var id in ids )
                 {
                     var bestTime = playerProfile[id].BestTime;
 
@@ -136,12 +139,12 @@ namespace PiCross.PiCross
 
         private Stream OpenZipArchive( string path )
         {
-            return zipArchive.GetEntry( path ).Open() ?? CreateAndOpenZipArchive( path );
+            return ( zipArchive.GetEntry( path ) ?? CreateZipArchive( path ) ).Open();
         }
 
-        private Stream CreateAndOpenZipArchive( string path )
+        private ZipArchiveEntry CreateZipArchive( string path )
         {
-            return zipArchive.CreateEntry( path, CompressionLevel.Optimal ).Open();
+            return zipArchive.CreateEntry( path, CompressionLevel.Optimal );
         }
 
         private static string GetLibraryEntryPath( int id )
@@ -206,7 +209,7 @@ namespace PiCross.PiCross
 
         private ZipArchive OpenZipArchiveForWriting()
         {
-            return new ZipArchive( new FileStream( path, FileMode.Open, FileAccess.Write ), ZipArchiveMode.Update );
+            return new ZipArchive( new FileStream( path, FileMode.Open, FileAccess.ReadWrite ), ZipArchiveMode.Update );
         }
 
         private void WithReadOnlyZipArchive( Action<ZipArchive> action )

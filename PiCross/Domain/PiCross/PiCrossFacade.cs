@@ -25,7 +25,10 @@ namespace PiCross
 
         public IGameData LoadGameData( string path )
         {
-            return null; // TODO
+            var archive = new AutoCloseGameDataArchive( path );
+            var gameData = new ArchivedGameData( archive );
+
+            return gameData;
         }
 
         public IPuzzleEditor CreatePuzzleEditor(Puzzle puzzle)
