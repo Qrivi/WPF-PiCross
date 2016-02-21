@@ -14,14 +14,35 @@ namespace PiCross
         IPlayerLibrary PlayerDatabase { get; }
     }
 
+    /// <summary>
+    /// Player Library.
+    /// </summary>
     public interface IPlayerLibrary
     {
+        /// <summary>
+        /// Retrieves the profile of the player with the specified name.
+        /// </summary>
+        /// <param name="name">Name of the player.</param>
+        /// <returns>Player's profile.</returns>
         IPlayerProfile this[string name] { get; }
 
+        /// <summary>
+        /// Creates a new player profile.
+        /// </summary>
+        /// <param name="name">Player name.</param>
+        /// <returns>The newly created player profile.</returns>
         IPlayerProfile CreateNewProfile( string name );
 
+        /// <summary>
+        /// Checks if the specified name is valid.
+        /// </summary>
+        /// <param name="name">Name to be verified.</param>
+        /// <returns>True if the name is valid, false otherwise.</returns>
         bool IsValidPlayerName( string name );
 
+        /// <summary>
+        /// Enumerates all the players' names.
+        /// </summary>
         IList<string> PlayerNames { get; }
     }
 
