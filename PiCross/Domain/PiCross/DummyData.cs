@@ -13,11 +13,11 @@ namespace PiCross
 
         private readonly InMemoryPlayerDatabase players;
 
-        public static InMemoryGameData Create()
+        public static InMemoryDatabase Create()
         {
             var data = new DummyData();
 
-            return new InMemoryGameData( data.library, data.players );
+            return new InMemoryDatabase( data.library, data.players );
         }
 
         public DummyData()

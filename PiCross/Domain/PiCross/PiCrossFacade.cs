@@ -13,7 +13,7 @@ namespace PiCross
     {
         public IGameData CreateEmptyGameData()
         {
-            var data = new InMemoryGameData( InMemoryPuzzleLibrary.CreateEmpty(), InMemoryPlayerDatabase.CreateEmpty() );
+            var data = new InMemoryDatabase( InMemoryPuzzleLibrary.CreateEmpty(), InMemoryPlayerDatabase.CreateEmpty() );
 
             return new GameDataAdapter( data );
         }

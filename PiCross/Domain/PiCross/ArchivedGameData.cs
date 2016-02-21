@@ -10,12 +10,12 @@ namespace PiCross
     {
         private readonly IGameDataArchive archive;
 
-        private readonly InMemoryGameData gameData;
+        private readonly InMemoryDatabase gameData;
 
         public ArchivedGameData( IGameDataArchive archive )
         {
             this.archive = archive;
-            this.gameData = InMemoryGameData.ReadFromArchive( archive );
+            this.gameData = InMemoryDatabase.ReadFromArchive( archive );
         }
 
         public IPuzzleLibrary PuzzleLibrary

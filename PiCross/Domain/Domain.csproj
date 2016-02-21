@@ -64,7 +64,7 @@
     <Compile Include="PiCross\IGameData.cs" />
     <Compile Include="PiCross\IStepwisePuzzleSolver.cs" />
     <Compile Include="PiCross\PiCrossFacade.cs" />
-    <Compile Include="PiCross\InMemoryGameData.cs" />
+    <Compile Include="PiCross\InMemoryDatabase.cs" />
     <Compile Include="Utility\Chronometer.cs" />
     <Compile Include="DataStructures\Grid.cs" />
     <Compile Include="Cells\Cell.cs" />

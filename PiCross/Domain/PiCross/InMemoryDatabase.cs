@@ -9,21 +9,21 @@ using Utility;
 
 namespace PiCross
 {
-    internal class InMemoryGameData : IDatabase
+    internal class InMemoryDatabase : IDatabase
     {
         private readonly InMemoryPuzzleLibrary library;
 
         private readonly InMemoryPlayerDatabase playerDatabase;
 
-        public static InMemoryGameData CreateEmpty()
+        public static InMemoryDatabase CreateEmpty()
         {
             var puzzles = InMemoryPuzzleLibrary.CreateEmpty();
             var players = InMemoryPlayerDatabase.CreateEmpty();
 
-            return new InMemoryGameData( puzzles, players );
+            return new InMemoryDatabase( puzzles, players );
         }
 
-        public static InMemoryGameData ReadFromArchive(IGameDataArchive archive)
+        public static InMemoryDatabase ReadFromArchive(IGameDataArchive archive)
         {
             var gameData = CreateEmpty();
 
@@ -42,7 +42,7 @@ namespace PiCross
             return gameData;
         }
 
-        public InMemoryGameData( InMemoryPuzzleLibrary library, InMemoryPlayerDatabase playerDatabase )
+        public InMemoryDatabase( InMemoryPuzzleLibrary library, InMemoryPlayerDatabase playerDatabase )
         {
             if ( library == null )
             {
@@ -93,10 +93,10 @@ namespace PiCross
 
         public override bool Equals( object obj )
         {
-            return Equals( obj as InMemoryGameData );
+            return Equals( obj as InMemoryDatabase );
         }
 
-        public bool Equals( InMemoryGameData gameData )
+        public bool Equals( InMemoryDatabase gameData )
         {
             return gameData != null && library.Equals( gameData.library ) && playerDatabase.Equals( gameData.playerDatabase );
         }
