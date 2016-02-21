@@ -22,7 +22,7 @@ namespace PiCross
         {
             get
             {
-                return new PuzzleDatabase( archive, database.PuzzleDatabase );
+                return new PuzzleDatabase( archive, database.Puzzles );
             }
         }
 

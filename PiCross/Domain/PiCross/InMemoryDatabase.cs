@@ -52,7 +52,7 @@ namespace PiCross
             foreach ( var uid in archive.PuzzleLibraryUIDs )
             {
                 var entry = archive.ReadPuzzleLibraryEntry( uid );
-                gameData.PuzzleDatabase.Add( entry );
+                gameData.Puzzles.Add( entry );
             }
 
             return gameData;
@@ -79,11 +79,11 @@ namespace PiCross
         {
             get
             {
-                return PuzzleDatabase;
+                return Puzzles;
             }
         }
 
-        public PuzzleLibrary PuzzleDatabase
+        public PuzzleLibrary Puzzles
         {
             get
             {
