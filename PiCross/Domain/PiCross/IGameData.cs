@@ -27,12 +27,12 @@ namespace PiCross
 
     public interface IPlayerProfile
     {
-        IPlayerPuzzleInformationEntry this[IPuzzleLibraryEntry libraryEntry] { get; }
+        IPlayerPuzzleInformation this[IPuzzleLibraryEntry libraryEntry] { get; }
 
         string Name { get; }
     }
 
-    public interface IPlayerPuzzleInformationEntry
+    public interface IPlayerPuzzleInformation
     {
         TimeSpan? BestTime { get; set; }
     }

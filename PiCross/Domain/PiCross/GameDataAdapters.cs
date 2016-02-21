@@ -147,7 +147,7 @@ namespace PiCross
             this.data = data;
         }
 
-        public IPlayerPuzzleInformationEntry this[IPuzzleLibraryEntry libraryEntry]
+        public IPlayerPuzzleInformation this[IPuzzleLibraryEntry libraryEntry]
         {
             get
             {
@@ -178,7 +178,7 @@ namespace PiCross
         }
     }
 
-    internal class PlayerPuzzleInformationEntryAdapter : IPlayerPuzzleInformationEntry
+    internal class PlayerPuzzleInformationEntryAdapter : IPlayerPuzzleInformation
     {
         private readonly IPlayerPuzzleData data;
 
