@@ -13,13 +13,13 @@ namespace PiCross
 {
     internal class InMemoryDatabase : IDatabase
     {
-        private readonly InMemoryPuzzleLibrary library;
+        private readonly PuzzleLibrary library;
 
         private readonly InMemoryPlayerDatabase playerDatabase;
 
         public static InMemoryDatabase CreateEmpty()
         {
-            var puzzles = InMemoryPuzzleLibrary.CreateEmpty();
+            var puzzles = PuzzleLibrary.CreateEmpty();
             var players = InMemoryPlayerDatabase.CreateEmpty();
 
             return new InMemoryDatabase( puzzles, players );
@@ -58,7 +58,7 @@ namespace PiCross
             return gameData;
         }
 
-        public InMemoryDatabase( InMemoryPuzzleLibrary library, InMemoryPlayerDatabase playerDatabase )
+        public InMemoryDatabase( PuzzleLibrary library, InMemoryPlayerDatabase playerDatabase )
         {
             if ( library == null )
             {
@@ -83,7 +83,7 @@ namespace PiCross
             }
         }
 
-        public InMemoryPuzzleLibrary PuzzleDatabase
+        public PuzzleLibrary PuzzleDatabase
         {
             get
             {
@@ -122,18 +122,18 @@ namespace PiCross
             return library.GetHashCode() ^ playerDatabase.GetHashCode();
         }
 
-        public class InMemoryPuzzleLibrary : IPuzzleDatabase
+        public class PuzzleLibrary : IPuzzleDatabase
         {
             private readonly List<InMemoryPuzzleLibraryEntry> entries;
 
             private int nextUID;
 
-            public static InMemoryPuzzleLibrary CreateEmpty()
+            public static PuzzleLibrary CreateEmpty()
             {
-                return new InMemoryPuzzleLibrary();
+                return new PuzzleLibrary();
             }
 
-            private InMemoryPuzzleLibrary()
+            private PuzzleLibrary()
             {
                 this.entries = new List<InMemoryPuzzleLibraryEntry>();
                 nextUID = 0;
@@ -197,10 +197,10 @@ namespace PiCross
 
             public override bool Equals( object obj )
             {
-                return Equals( obj as InMemoryPuzzleLibrary );
+                return Equals( obj as PuzzleLibrary );
             }
 
-            public bool Equals( InMemoryPuzzleLibrary library )
+            public bool Equals( PuzzleLibrary library )
             {
                 if ( library == null )
                 {

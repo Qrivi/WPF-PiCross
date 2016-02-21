@@ -146,7 +146,7 @@ namespace PiCross.Tests
         protected static IPuzzleLibrary CreateLibrary(params Puzzle[] puzzles)
         {
             var author = "test";
-            var library = InMemoryDatabase.InMemoryPuzzleLibrary.CreateEmpty();
+            var library = InMemoryDatabase.PuzzleLibrary.CreateEmpty();
 
             foreach ( var puzzle in puzzles )
             {

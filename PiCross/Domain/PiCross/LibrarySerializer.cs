@@ -9,7 +9,7 @@ using IO;
 
 namespace PiCross
 {
-    internal class LibrarySerializer : ISerializer<InMemoryDatabase.InMemoryPuzzleLibrary>
+    internal class LibrarySerializer : ISerializer<InMemoryDatabase.PuzzleLibrary>
     {
         private readonly ISerializer<InMemoryPuzzleLibraryEntry> libraryEntrySerializer;
 
@@ -18,12 +18,12 @@ namespace PiCross
             libraryEntrySerializer = new LibraryEntrySerializer(new PuzzleSerializer());
         }
 
-        public void Write( StreamWriter writer, InMemoryDatabase.InMemoryPuzzleLibrary obj )
+        public void Write( StreamWriter writer, InMemoryDatabase.PuzzleLibrary obj )
         {
             new Writer( writer, obj, libraryEntrySerializer ).Write();
         }
 
-        public InMemoryDatabase.InMemoryPuzzleLibrary Read( StreamReader reader )
+        public InMemoryDatabase.PuzzleLibrary Read( StreamReader reader )
         {
             return new Reader( reader, libraryEntrySerializer ).Read();
         }
@@ -45,10 +45,10 @@ namespace PiCross
                 }
             }
 
-            public InMemoryDatabase.InMemoryPuzzleLibrary Read()
+            public InMemoryDatabase.PuzzleLibrary Read()
             {
                 var count = ReadInteger();
-                var library = InMemoryDatabase.InMemoryPuzzleLibrary.CreateEmpty();
+                var library = InMemoryDatabase.PuzzleLibrary.CreateEmpty();
                 
                 for ( var i = 0; i != count; ++i )
                 {
@@ -64,9 +64,9 @@ namespace PiCross
         {
             private readonly ISerializer<InMemoryPuzzleLibraryEntry> libraryEntrySerializer;
 
-            private readonly InMemoryDatabase.InMemoryPuzzleLibrary library;
+            private readonly InMemoryDatabase.PuzzleLibrary library;
 
-            public Writer( StreamWriter streamWriter, InMemoryDatabase.InMemoryPuzzleLibrary library, ISerializer<InMemoryPuzzleLibraryEntry> libraryEntrySerializer )
+            public Writer( StreamWriter streamWriter, InMemoryDatabase.PuzzleLibrary library, ISerializer<InMemoryPuzzleLibraryEntry> libraryEntrySerializer )
                 :base(streamWriter)
             {
                 if ( library == null )

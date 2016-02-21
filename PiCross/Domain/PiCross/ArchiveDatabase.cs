@@ -35,9 +35,9 @@ namespace PiCross
         {
             private readonly IGameDataArchive archive;
 
-            private readonly InMemoryDatabase.InMemoryPuzzleLibrary puzzleLibrary;
+            private readonly InMemoryDatabase.PuzzleLibrary puzzleLibrary;
 
-            public PuzzleDatabase( IGameDataArchive archive, InMemoryDatabase.InMemoryPuzzleLibrary puzzleLibrary )
+            public PuzzleDatabase( IGameDataArchive archive, InMemoryDatabase.PuzzleLibrary puzzleLibrary )
             {
                 this.archive = archive;
                 this.puzzleLibrary = puzzleLibrary;
