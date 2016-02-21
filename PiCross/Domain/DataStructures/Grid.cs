@@ -9,7 +9,7 @@ namespace DataStructures
 {
     /// <summary>
     /// Interface for grids. A grid is immutable (i.e. readonly).
-    /// If you need to be able to modify items in a grid, use <see cref="IVar" />.
+    /// If you need to be able to modify items in a grid, use a <see cref="IVar" /> subtype as type parameter, e.g. <code>IGrid&lt;Cel&lt;T&gt;&gt;</code>.
     /// </summary>
     /// <typeparam name="T">Type of the items in the grid.</typeparam>
     public interface IGrid<out T>
@@ -51,14 +51,37 @@ namespace DataStructures
         /// <returns>All column indices.</returns>
         IEnumerable<int> ColumnIndices { get; }
 
+        /// <summary>
+        /// Enumerates all items in the grid.
+        /// </summary>
         IEnumerable<T> Items { get; }
 
+        /// <summary>
+        /// Returns a sequence representing the <paramref name="index"/>-th row.
+        /// This sequence is backed by the grid: changes to the sequence
+        /// will propagate to the grid and vice versa.
+        /// </summary>
+        /// <param name="index">Zero-based index of the row.</param>
+        /// <returns>The row with index <paramref name="index"/></returns>
         ISequence<T> Row( int index );
 
+        /// <summary>
+        /// Returns a sequence representing the <paramref name="index"/>-th column.
+        /// This sequence is backed by the grid: changes
+        /// to the sequence will propagate to the grid and vice versa.
+        /// </summary>
+        /// <param name="index">Zero-based index of the column.</param>
+        /// <returns>The column with index <paramref name="index"/></returns>
         ISequence<T> Column( int index );
 
+        /// <summary>
+        /// Enumerates all rows in order (increasing index).
+        /// </summary>
         IEnumerable<ISequence<T>> Rows { get; }
 
+        /// <summary>
+        /// Enumerates all colums in order (increasing index).
+        /// </summary>
         IEnumerable<ISequence<T>> Columns { get; }
     }
 
