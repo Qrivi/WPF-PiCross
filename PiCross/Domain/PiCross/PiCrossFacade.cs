@@ -26,7 +26,8 @@ namespace PiCross
         public IGameData LoadGameData( string path )
         {
             var archive = new AutoCloseGameDataArchive( path );
-            var gameData = new ArchivedGameData( archive );
+            // var gameData = new ArchivedGameData( archive );
+            var gameData = new GameDataAdapter( new ArchiveDatabase( archive ) );
 
             return gameData;
         }
