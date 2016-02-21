@@ -423,12 +423,12 @@ namespace PiCross
         {
             private readonly string name;
 
-            private readonly Dictionary<int, InMemoryPlayerPuzzleInformationEntry> entries;
+            private readonly Dictionary<int, PlayerPuzzleInformationEntry> entries;
 
             public PlayerProfile( string name )
             {
                 this.name = name;
-                entries = new Dictionary<int, InMemoryPlayerPuzzleInformationEntry>();
+                entries = new Dictionary<int, PlayerPuzzleInformationEntry>();
             }
 
             public string Name
@@ -436,13 +436,13 @@ namespace PiCross
                 get { return name; }
             }
 
-            public InMemoryPlayerPuzzleInformationEntry this[int id]
+            public PlayerPuzzleInformationEntry this[int id]
             {
                 get
                 {
                     if ( !entries.ContainsKey( id ) )
                     {
-                        entries[id] = new InMemoryPlayerPuzzleInformationEntry();
+                        entries[id] = new PlayerPuzzleInformationEntry();
                     }
 
                     return entries[id];
@@ -479,11 +479,11 @@ namespace PiCross
             }
         }
 
-        public class InMemoryPlayerPuzzleInformationEntry : IPlayerPuzzleData
+        public class PlayerPuzzleInformationEntry : IPlayerPuzzleData
         {
             private TimeSpan? bestTime;
 
-            public InMemoryPlayerPuzzleInformationEntry()
+            public PlayerPuzzleInformationEntry()
             {
                 this.bestTime = null;
             }
@@ -502,10 +502,10 @@ namespace PiCross
 
             public override bool Equals( object obj )
             {
-                return Equals( obj as InMemoryPlayerPuzzleInformationEntry );
+                return Equals( obj as PlayerPuzzleInformationEntry );
             }
 
-            public bool Equals( InMemoryPlayerPuzzleInformationEntry entry )
+            public bool Equals( PlayerPuzzleInformationEntry entry )
             {
                 return entry != null && bestTime.Equals( entry.bestTime );
             }
