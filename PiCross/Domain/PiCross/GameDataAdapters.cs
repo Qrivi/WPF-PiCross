@@ -18,12 +18,12 @@ namespace PiCross
 
         public IPuzzleLibrary PuzzleLibrary
         {
-            get { return new PuzzleLibraryAdapter( database.PuzzleDatabase ); }
+            get { return new PuzzleLibraryAdapter( database.Puzzles ); }
         }
 
         public IPlayerLibrary PlayerDatabase
         {
-            get { return new PlayerDatabaseAdapter( database.PlayerDatabase ); }
+            get { return new PlayerDatabaseAdapter( database.Players ); }
         }
     }
 

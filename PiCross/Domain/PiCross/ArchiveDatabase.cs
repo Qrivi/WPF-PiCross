@@ -18,7 +18,7 @@ namespace PiCross
             this.archive = new AutoCloseGameDataArchive( path );
         }
 
-        public IPuzzleDatabase PuzzleDatabase
+        public IPuzzleDatabase Puzzles
         {
             get
             {
@@ -26,7 +26,7 @@ namespace PiCross
             }
         }
 
-        public IPlayerDatabase PlayerDatabase
+        public IPlayerDatabase Players
         {
             get { return new PlayerDB( archive, database.PlayerDatabase ); }
         }

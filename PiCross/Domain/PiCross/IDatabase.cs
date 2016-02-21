@@ -8,9 +8,9 @@ namespace PiCross
 {
     internal interface IDatabase
     {
-        IPuzzleDatabase PuzzleDatabase { get; }
+        IPuzzleDatabase Puzzles { get; }
 
-        IPlayerDatabase PlayerDatabase { get; }
+        IPlayerDatabase Players { get; }
     }
 
     internal interface IPuzzleDatabase

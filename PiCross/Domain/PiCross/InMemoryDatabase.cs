@@ -75,7 +75,7 @@ namespace PiCross
             }
         }
 
-        IPuzzleDatabase IDatabase.PuzzleDatabase
+        IPuzzleDatabase IDatabase.Puzzles
         {
             get
             {
@@ -91,7 +91,7 @@ namespace PiCross
             }
         }
 
-        IPlayerDatabase IDatabase.PlayerDatabase
+        IPlayerDatabase IDatabase.Players
         {
             get
             {
