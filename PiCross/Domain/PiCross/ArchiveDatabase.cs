@@ -22,7 +22,7 @@ namespace PiCross
         {
             get
             {
-                return new PuzzleDB( archive, database.PuzzleDatabase );
+                return new PuzzleDatabase( archive, database.PuzzleDatabase );
             }
         }
 
@@ -31,13 +31,13 @@ namespace PiCross
             get { return new PlayerDB( archive, database.PlayerDatabase ); }
         }
 
-        private class PuzzleDB : IPuzzleDatabase // TODO Rename
+        private class PuzzleDatabase : IPuzzleDatabase // TODO Rename
         {
             private readonly IGameDataArchive archive;
 
             private readonly InMemoryPuzzleLibrary puzzleLibrary;
 
-            public PuzzleDB( IGameDataArchive archive, InMemoryPuzzleLibrary puzzleLibrary )
+            public PuzzleDatabase( IGameDataArchive archive, InMemoryPuzzleLibrary puzzleLibrary )
             {
                 this.archive = archive;
                 this.puzzleLibrary = puzzleLibrary;
