@@ -9,7 +9,7 @@ namespace PiCross
 {
     internal class DummyData
     {
-        private readonly InMemoryPuzzleLibrary library;
+        private readonly InMemoryDatabase.InMemoryPuzzleLibrary library;
 
         private readonly InMemoryPlayerDatabase players;
 
@@ -26,7 +26,7 @@ namespace PiCross
             this.players = CreateDummyPlayerDatabase();
         }
 
-        public InMemoryPuzzleLibrary Puzzles { get { return library; } }
+        public InMemoryDatabase.InMemoryPuzzleLibrary Puzzles { get { return library; } }
 
         public InMemoryPlayerDatabase Players { get { return players; } }
 
@@ -134,9 +134,9 @@ namespace PiCross
             }
         }
 
-        private static InMemoryPuzzleLibrary CreateDummyLibrary()
+        private static InMemoryDatabase.InMemoryPuzzleLibrary CreateDummyLibrary()
         {
-            var library = InMemoryPuzzleLibrary.CreateEmpty();
+            var library = InMemoryDatabase.InMemoryPuzzleLibrary.CreateEmpty();
 
             var author = "Woumpousse";
 

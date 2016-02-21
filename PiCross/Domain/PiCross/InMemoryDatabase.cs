@@ -121,131 +121,133 @@ namespace PiCross
         {
             return library.GetHashCode() ^ playerDatabase.GetHashCode();
         }
-    }
 
-    internal class InMemoryPuzzleLibrary : IPuzzleDatabase
-    {
-        private readonly List<InMemoryPuzzleLibraryEntry> entries;
-
-        private int nextUID;
-
-        public static InMemoryPuzzleLibrary CreateEmpty()
+        public class InMemoryPuzzleLibrary : IPuzzleDatabase
         {
-            return new InMemoryPuzzleLibrary();
-        }
+            private readonly List<InMemoryPuzzleLibraryEntry> entries;
 
-        private InMemoryPuzzleLibrary()
-        {
-            this.entries = new List<InMemoryPuzzleLibraryEntry>();
-            nextUID = 0;
-        }
+            private int nextUID;
 
-        public IList<InMemoryPuzzleLibraryEntry> Entries
-        {
-            get
+            public static InMemoryPuzzleLibrary CreateEmpty()
             {
-                return entries.AsReadOnly();
+                return new InMemoryPuzzleLibrary();
             }
-        }
 
-        public InMemoryPuzzleLibraryEntry this[int id]
-        {
-            get
+            private InMemoryPuzzleLibrary()
             {
-                var result = entries.Find( entry => entry.UID == id );
+                this.entries = new List<InMemoryPuzzleLibraryEntry>();
+                nextUID = 0;
+            }
 
-                if ( result == null )
+            public IList<InMemoryPuzzleLibraryEntry> Entries
+            {
+                get
                 {
-                    throw new ArgumentException( "No entry found" );
+                    return entries.AsReadOnly();
+                }
+            }
+
+            public InMemoryPuzzleLibraryEntry this[int id]
+            {
+                get
+                {
+                    var result = entries.Find( entry => entry.UID == id );
+
+                    if ( result == null )
+                    {
+                        throw new ArgumentException( "No entry found" );
+                    }
+                    else
+                    {
+                        return result;
+                    }
+                }
+            }
+
+            public InMemoryPuzzleLibraryEntry Create( Puzzle puzzle, string author )
+            {
+                var newEntry = new InMemoryPuzzleLibraryEntry( nextUID++, puzzle, author );
+
+                entries.Add( newEntry );
+
+                return newEntry;
+            }
+
+            public void Add( InMemoryPuzzleLibraryEntry libraryEntry )
+            {
+                if ( libraryEntry == null )
+                {
+                    throw new ArgumentNullException( "libraryEntry" );
+                }
+                else if ( ContainsEntryWithUID( libraryEntry.UID ) )
+                {
+                    throw new ArgumentException();
                 }
                 else
                 {
-                    return result;
+                    this.entries.Add( libraryEntry );
+                    nextUID = Math.Max( nextUID, libraryEntry.UID + 1 );
                 }
             }
-        }
 
-        public InMemoryPuzzleLibraryEntry Create( Puzzle puzzle, string author )
-        {
-            var newEntry = new InMemoryPuzzleLibraryEntry( nextUID++, puzzle, author );
-
-            entries.Add( newEntry );
-
-            return newEntry;
-        }
-
-        public void Add( InMemoryPuzzleLibraryEntry libraryEntry )
-        {
-            if ( libraryEntry == null )
+            private bool ContainsEntryWithUID( int uid )
             {
-                throw new ArgumentNullException( "libraryEntry" );
+                return entries.Any( entry => entry.UID == uid );
             }
-            else if ( ContainsEntryWithUID( libraryEntry.UID ) )
-            {
-                throw new ArgumentException();
-            }
-            else
-            {
-                this.entries.Add( libraryEntry );
-                nextUID = Math.Max( nextUID, libraryEntry.UID + 1 );
-            }
-        }
 
-        private bool ContainsEntryWithUID( int uid )
-        {
-            return entries.Any( entry => entry.UID == uid );
-        }
-
-        public override bool Equals( object obj )
-        {
-            return Equals( obj as InMemoryPuzzleLibrary );
-        }
-
-        public bool Equals( InMemoryPuzzleLibrary library )
-        {
-            if ( library == null )
+            public override bool Equals( object obj )
             {
-                return false;
+                return Equals( obj as InMemoryPuzzleLibrary );
             }
-            else
+
+            public bool Equals( InMemoryPuzzleLibrary library )
             {
-                if ( this.entries.Count != library.entries.Count )
+                if ( library == null )
                 {
                     return false;
                 }
                 else
                 {
-                    return Enumerable.Range( 0, this.entries.Count ).All( i => entries[i].Equals( library.entries[i] ) );
+                    if ( this.entries.Count != library.entries.Count )
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return Enumerable.Range( 0, this.entries.Count ).All( i => entries[i].Equals( library.entries[i] ) );
+                    }
                 }
             }
-        }
 
-        public override int GetHashCode()
-        {
-            return entries.Select( x => x.GetHashCode() ).Aggregate( ( acc, n ) => acc ^ n );
-        }
-
-        IEnumerable<IPuzzleDatabaseEntry> IPuzzleDatabase.Entries
-        {
-            get
+            public override int GetHashCode()
             {
-                return Entries;
+                return entries.Select( x => x.GetHashCode() ).Aggregate( ( acc, n ) => acc ^ n );
             }
-        }
 
-        IPuzzleDatabaseEntry IPuzzleDatabase.this[int id]
-        {
-            get
+            IEnumerable<IPuzzleDatabaseEntry> IPuzzleDatabase.Entries
             {
-                return this[id];
+                get
+                {
+                    return Entries;
+                }
             }
-        }
 
-        IPuzzleDatabaseEntry IPuzzleDatabase.Create( Puzzle puzzle, string author )
-        {
-            return Create( puzzle, author );
+            IPuzzleDatabaseEntry IPuzzleDatabase.this[int id]
+            {
+                get
+                {
+                    return this[id];
+                }
+            }
+
+            IPuzzleDatabaseEntry IPuzzleDatabase.Create( Puzzle puzzle, string author )
+            {
+                return Create( puzzle, author );
+            }
         }
     }
+
+    
 
     internal class InMemoryPuzzleLibraryEntry : IPuzzleDatabaseEntry
     {

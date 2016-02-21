@@ -9,7 +9,7 @@ using IO;
 
 namespace PiCross
 {
-    internal class LibrarySerializer : ISerializer<InMemoryPuzzleLibrary>
+    internal class LibrarySerializer : ISerializer<InMemoryDatabase.InMemoryPuzzleLibrary>
     {
         private readonly ISerializer<InMemoryPuzzleLibraryEntry> libraryEntrySerializer;
 
@@ -18,12 +18,12 @@ namespace PiCross
             libraryEntrySerializer = new LibraryEntrySerializer(new PuzzleSerializer());
         }
 
-        public void Write( StreamWriter writer, InMemoryPuzzleLibrary obj )
+        public void Write( StreamWriter writer, InMemoryDatabase.InMemoryPuzzleLibrary obj )
         {
             new Writer( writer, obj, libraryEntrySerializer ).Write();
         }
 
-        public InMemoryPuzzleLibrary Read( StreamReader reader )
+        public InMemoryDatabase.InMemoryPuzzleLibrary Read( StreamReader reader )
         {
             return new Reader( reader, libraryEntrySerializer ).Read();
         }
@@ -45,10 +45,10 @@ namespace PiCross
                 }
             }
 
-            public InMemoryPuzzleLibrary Read()
+            public InMemoryDatabase.InMemoryPuzzleLibrary Read()
             {
                 var count = ReadInteger();
-                var library = InMemoryPuzzleLibrary.CreateEmpty();
+                var library = InMemoryDatabase.InMemoryPuzzleLibrary.CreateEmpty();
                 
                 for ( var i = 0; i != count; ++i )
                 {
@@ -64,9 +64,9 @@ namespace PiCross
         {
             private readonly ISerializer<InMemoryPuzzleLibraryEntry> libraryEntrySerializer;
 
-            private readonly InMemoryPuzzleLibrary library;
+            private readonly InMemoryDatabase.InMemoryPuzzleLibrary library;
 
-            public Writer(StreamWriter streamWriter, InMemoryPuzzleLibrary library, ISerializer<InMemoryPuzzleLibraryEntry> libraryEntrySerializer)
+            public Writer( StreamWriter streamWriter, InMemoryDatabase.InMemoryPuzzleLibrary library, ISerializer<InMemoryPuzzleLibraryEntry> libraryEntrySerializer )
                 :base(streamWriter)
             {
                 if ( library == null )
