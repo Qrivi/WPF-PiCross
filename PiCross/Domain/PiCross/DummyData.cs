@@ -11,7 +11,7 @@ namespace PiCross
     {
         private readonly InMemoryDatabase.PuzzleLibrary library;
 
-        private readonly InMemoryPlayerDatabase players;
+        private readonly InMemoryDatabase.InMemoryPlayerDatabase players;
 
         public static InMemoryDatabase Create()
         {
@@ -28,11 +28,11 @@ namespace PiCross
 
         public InMemoryDatabase.PuzzleLibrary Puzzles { get { return library; } }
 
-        public InMemoryPlayerDatabase Players { get { return players; } }
+        public InMemoryDatabase.InMemoryPlayerDatabase Players { get { return players; } }
 
-        private static InMemoryPlayerDatabase CreateDummyPlayerDatabase()
+        private static InMemoryDatabase.InMemoryPlayerDatabase CreateDummyPlayerDatabase()
         {
-            var db = InMemoryPlayerDatabase.CreateEmpty();
+            var db = InMemoryDatabase.InMemoryPlayerDatabase.CreateEmpty();
 
             var woumpousse = db.CreateNewProfile( "Woumpousse" );
             var pimousse = db.CreateNewProfile( "Pimousse" );

@@ -119,9 +119,9 @@ namespace PiCross
         {
             private readonly IGameDataArchive archive;
 
-            private readonly InMemoryPlayerDatabase playerDatabase;
+            private readonly InMemoryDatabase.InMemoryPlayerDatabase playerDatabase;
 
-            public PlayerDatabase( IGameDataArchive archive, InMemoryPlayerDatabase playerDatabase )
+            public PlayerDatabase( IGameDataArchive archive, InMemoryDatabase.InMemoryPlayerDatabase playerDatabase )
             {
                 this.archive = archive;
                 this.playerDatabase = playerDatabase;

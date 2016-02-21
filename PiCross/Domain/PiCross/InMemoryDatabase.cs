@@ -307,122 +307,120 @@ namespace PiCross
                 return this.uid.CompareTo( other.uid );
             }
         }
-    }
 
-    
-
-    
-
-    internal class InMemoryPlayerDatabase : IPlayerDatabase
-    {
-        private readonly Dictionary<string, InMemoryPlayerProfile> playerProfiles;
-
-        public static InMemoryPlayerDatabase CreateEmpty()
+        internal class InMemoryPlayerDatabase : IPlayerDatabase
         {
-            return new InMemoryPlayerDatabase();
-        }
+            private readonly Dictionary<string, InMemoryPlayerProfile> playerProfiles;
 
-        private InMemoryPlayerDatabase()
-        {
-            playerProfiles = new Dictionary<string, InMemoryPlayerProfile>();
-        }
+            public static InMemoryPlayerDatabase CreateEmpty()
+            {
+                return new InMemoryPlayerDatabase();
+            }
 
-        public InMemoryPlayerProfile this[string name]
-        {
-            get
+            private InMemoryPlayerDatabase()
+            {
+                playerProfiles = new Dictionary<string, InMemoryPlayerProfile>();
+            }
+
+            public InMemoryPlayerProfile this[string name]
+            {
+                get
+                {
+                    if ( !IsValidPlayerName( name ) )
+                    {
+                        throw new ArgumentException( "Invalid name" );
+                    }
+                    else
+                    {
+                        return playerProfiles[name];
+                    }
+                }
+            }
+
+            public bool IsValidPlayerName( string name )
+            {
+                return !string.IsNullOrWhiteSpace( name );
+            }
+
+            public InMemoryPlayerProfile CreateNewProfile( string name )
             {
                 if ( !IsValidPlayerName( name ) )
                 {
                     throw new ArgumentException( "Invalid name" );
                 }
+                else if ( playerProfiles.ContainsKey( name ) )
+                {
+                    throw new ArgumentException( "Player already exists" );
+                }
                 else
                 {
-                    return playerProfiles[name];
+                    var profile = new InMemoryPlayerProfile( name );
+
+                    AddToDictionary( profile );
+
+                    return profile;
                 }
             }
-        }
 
-        public bool IsValidPlayerName( string name )
-        {
-            return !string.IsNullOrWhiteSpace( name );
-        }
-
-        public InMemoryPlayerProfile CreateNewProfile( string name )
-        {
-            if ( !IsValidPlayerName( name ) )
+            public void AddProfile( InMemoryPlayerProfile profile )
             {
-                throw new ArgumentException( "Invalid name" );
+                if ( playerProfiles.ContainsKey( profile.Name ) )
+                {
+                    throw new ArgumentException( "Player with same name already exists" );
+                }
+                else
+                {
+                    AddToDictionary( profile );
+                }
             }
-            else if ( playerProfiles.ContainsKey( name ) )
+
+            private void AddToDictionary( InMemoryPlayerProfile profile )
             {
-                throw new ArgumentException( "Player already exists" );
+                playerProfiles[profile.Name] = profile;
             }
-            else
+
+            public IList<string> PlayerNames
             {
-                var profile = new InMemoryPlayerProfile( name );
-
-                AddToDictionary( profile );
-
-                return profile;
+                get
+                {
+                    return ( from profile in this.playerProfiles
+                             let name = profile.Key
+                             orderby name ascending
+                             select name ).ToList();
+                }
             }
-        }
 
-        public void AddProfile(InMemoryPlayerProfile profile)
-        {
-            if ( playerProfiles.ContainsKey(profile.Name))
+            public override bool Equals( object obj )
             {
-                throw new ArgumentException( "Player with same name already exists" );
+                return Equals( obj as InMemoryPlayerDatabase );
             }
-            else
+
+            public bool Equals( InMemoryPlayerDatabase playerDatabase )
             {
-                AddToDictionary( profile );
+                return playerDatabase != null && playerProfiles.EqualItems( playerDatabase.playerProfiles );
             }
-        }
 
-        private void AddToDictionary( InMemoryPlayerProfile profile )
-        {
-            playerProfiles[profile.Name] = profile;
-        }
-
-        public IList<string> PlayerNames
-        {
-            get
+            public override int GetHashCode()
             {
-                return ( from profile in this.playerProfiles
-                         let name = profile.Key
-                         orderby name ascending
-                         select name ).ToList();
+                return playerProfiles.GetHashCode();
             }
-        }
 
-        public override bool Equals( object obj )
-        {
-            return Equals( obj as InMemoryPlayerDatabase );
-        }
-
-        public bool Equals( InMemoryPlayerDatabase playerDatabase )
-        {
-            return playerDatabase != null && playerProfiles.EqualItems( playerDatabase.playerProfiles );
-        }
-
-        public override int GetHashCode()
-        {
-            return playerProfiles.GetHashCode();
-        }
-
-        IPlayerProfileData IPlayerDatabase.this[string name]
-        {
-            get
+            IPlayerProfileData IPlayerDatabase.this[string name]
             {
-                return this[name];
+                get
+                {
+                    return this[name];
+                }
             }
-        }
 
-        IPlayerProfileData IPlayerDatabase.CreateNewProfile( string name )
-        {
-            return CreateNewProfile( name );
+            IPlayerProfileData IPlayerDatabase.CreateNewProfile( string name )
+            {
+                return CreateNewProfile( name );
+            }
         }
     }
+
+    
 
     internal class InMemoryPlayerProfile : IPlayerProfileData
     {
