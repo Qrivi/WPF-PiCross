@@ -46,10 +46,21 @@ namespace PiCross
         IList<string> PlayerNames { get; }
     }
 
+    /// <summary>
+    /// Player's profile.
+    /// </summary>
     public interface IPlayerProfile
     {
+        /// <summary>
+        /// Fetches player-specific information about the given puzzle.
+        /// </summary>
+        /// <param name="libraryEntry">Puzzle.</param>
+        /// <returns></returns>
         IPlayerPuzzleInformation this[IPuzzleLibraryEntry libraryEntry] { get; }
 
+        /// <summary>
+        /// Name of the player whose profile this is.
+        /// </summary>
         string Name { get; }
     }
 
