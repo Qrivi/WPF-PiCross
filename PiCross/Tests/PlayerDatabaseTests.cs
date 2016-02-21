@@ -48,9 +48,9 @@ namespace PiCross.Tests
         }
 
 
-        private InMemoryDatabase.InMemoryPlayerDatabase CreateEmptyPlayerDatabase()
+        private InMemoryDatabase.PlayerDatabase CreateEmptyPlayerDatabase()
         {
-            return InMemoryDatabase.InMemoryPlayerDatabase.CreateEmpty();
+            return InMemoryDatabase.PlayerDatabase.CreateEmpty();
         }
     }
 }

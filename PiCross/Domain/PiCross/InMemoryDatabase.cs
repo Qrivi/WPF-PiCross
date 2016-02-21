@@ -15,12 +15,12 @@ namespace PiCross
     {
         private readonly PuzzleLibrary library;
 
-        private readonly InMemoryPlayerDatabase playerDatabase;
+        private readonly PlayerDatabase playerDatabase;
 
         public static InMemoryDatabase CreateEmpty()
         {
             var puzzles = PuzzleLibrary.CreateEmpty();
-            var players = InMemoryPlayerDatabase.CreateEmpty();
+            var players = PlayerDatabase.CreateEmpty();
 
             return new InMemoryDatabase( puzzles, players );
         }
@@ -58,7 +58,7 @@ namespace PiCross
             return gameData;
         }
 
-        public InMemoryDatabase( PuzzleLibrary library, InMemoryPlayerDatabase playerDatabase )
+        public InMemoryDatabase( PuzzleLibrary library, PlayerDatabase playerDatabase )
         {
             if ( library == null )
             {
@@ -99,7 +99,7 @@ namespace PiCross
             }
         }
 
-        public InMemoryPlayerDatabase Players
+        public PlayerDatabase Players
         {
             get
             {
@@ -308,16 +308,16 @@ namespace PiCross
             }
         }
 
-        internal class InMemoryPlayerDatabase : IPlayerDatabase
+        internal class PlayerDatabase : IPlayerDatabase
         {
             private readonly Dictionary<string, InMemoryPlayerProfile> playerProfiles;
 
-            public static InMemoryPlayerDatabase CreateEmpty()
+            public static PlayerDatabase CreateEmpty()
             {
-                return new InMemoryPlayerDatabase();
+                return new PlayerDatabase();
             }
 
-            private InMemoryPlayerDatabase()
+            private PlayerDatabase()
             {
                 playerProfiles = new Dictionary<string, InMemoryPlayerProfile>();
             }
@@ -392,10 +392,10 @@ namespace PiCross
 
             public override bool Equals( object obj )
             {
-                return Equals( obj as InMemoryPlayerDatabase );
+                return Equals( obj as PlayerDatabase );
             }
 
-            public bool Equals( InMemoryPlayerDatabase playerDatabase )
+            public bool Equals( PlayerDatabase playerDatabase )
             {
                 return playerDatabase != null && playerProfiles.EqualItems( playerDatabase.playerProfiles );
             }
