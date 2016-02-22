@@ -13,12 +13,12 @@ namespace PiCross
     {
         private readonly ISequence<int> values;
 
-        public static Constraints FromValues(params int[] values)
+        public static Constraints FromValues( params int[] values )
         {
             return new Constraints( values.ToSequence() );
         }
 
-        public static Constraints FromSequence(ISequence<int> sequence)
+        public static Constraints FromSequence( ISequence<int> sequence )
         {
             return new Constraints( sequence );
         }
@@ -76,9 +76,9 @@ namespace PiCross
             {
                 // TODO Possible optimization: create separate sequence prefixer class
                 return from i in Enumerable.Range( 0, sum + 1 )
-                        from tail in GenerateIntegers( count - 1, sum - i )
-                        let prefix = Sequence.FromItems( i )
-                        select prefix.Concatenate( tail );
+                       from tail in GenerateIntegers( count - 1, sum - i )
+                       let prefix = Sequence.FromItems( i )
+                       select prefix.Concatenate( tail );
             }
         }
 
@@ -207,6 +207,120 @@ namespace PiCross
         public Constraints Lift( Func<ISequence<int>, ISequence<int>> function )
         {
             return new Constraints( function( values ) );
+        }
+
+        public void Generate( Action<bool[]> receiver, ISequence<Square> compatibleWith )
+        {
+            new Generator( receiver, compatibleWith, this.values ).Generate();
+        }
+
+        private class Generator
+        {
+            private readonly Action<bool[]> receiver;
+
+            private readonly bool[] slice;
+
+            private ISequence<Square> compatibleWith;
+
+            private ISequence<int> constraints;
+
+            private int[] cumulative;
+
+            public Generator( Action<bool[]> receiver, ISequence<Square> compatibleWith, ISequence<int> constraints )
+            {
+                this.receiver = receiver;
+                this.slice = new bool[compatibleWith.Length];
+                this.compatibleWith = compatibleWith;
+                this.constraints = constraints;
+                this.cumulative = ComputeCumulative( constraints );
+            }
+
+            private static int[] ComputeCumulative( ISequence<int> constraints )
+            {
+                var result = new int[constraints.Length];
+
+                if ( result.Length > 0 )
+                {
+                    result[result.Length - 1] = constraints[constraints.Length - 1];
+
+                    for ( var i = result.Length - 2; i >= 0; --i )
+                    {
+                        result[i] = constraints[i] + 1 + result[i + 1];
+                    }
+                }
+
+                return result;
+            }
+
+            public void Generate()
+            {
+                Generate( 0, 0 );
+            }
+
+            private void Yield()
+            {
+                receiver( slice );
+            }
+
+            private void Generate( int constraintIndex, int index )
+            {
+                if ( constraintIndex == constraints.Length )
+                {
+                    for ( var i = index; i != slice.Length; ++i )
+                    {
+                        if ( compatibleWith[i] == Square.FILLED )
+                        {
+                            return;
+                        }
+
+                        slice[i] = false;
+                    }
+
+                    Yield();
+                }
+                else if ( slice.Length - index < cumulative[constraintIndex] )
+                {
+                    return;
+                }
+                else
+                {
+                    if ( compatibleWith[index] != Square.FILLED )
+                    {
+                        slice[index] = false;
+
+                        Generate( constraintIndex, index + 1 );
+                    }
+
+                    var size = constraints[constraintIndex];
+                    for ( var i = 0; i != size; ++i )
+                    {
+                        if ( compatibleWith[index] == Square.EMPTY )
+                        {
+                            return;
+                        }
+
+                        slice[index] = true;
+
+                        ++index;
+                    }
+
+                    ++constraintIndex;
+
+                    if ( constraintIndex < constraints.Length )
+                    {
+                        if ( compatibleWith[index] == Square.FILLED )
+                        {
+                            return;
+                        }
+
+                        slice[index] = false;
+
+                        index++;
+                    }
+
+                    Generate( constraintIndex, index );
+                }
+            }
         }
     }
 }

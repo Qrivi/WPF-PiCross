@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="AmbiguityCheckerTests.cs" />
     <Compile Include="CellTests.cs" />
+    <Compile Include="Constraints_Generate.cs" />
     <Compile Include="PuzzleIOTests.cs" />
     <Compile Include="Constraints_IsSatisfied.cs" />
     <Compile Include="Constraints_SatisfiedPrefix.cs" />
