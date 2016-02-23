@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -39,7 +40,7 @@ namespace PiCross
             }
         }
 
-        public static InMemoryDatabase ReadFromArchive(IGameDataArchive archive)
+        public static InMemoryDatabase ReadFromArchive( IGameDataArchive archive )
         {
             var gameData = CreateEmpty();
 
@@ -166,7 +167,11 @@ namespace PiCross
 
             public PuzzleLibraryEntry Create( Puzzle puzzle, string author )
             {
-                var newEntry = new PuzzleLibraryEntry( nextUID++, puzzle, author );
+                var uid = nextUID++;
+
+                Debug.Assert( !ContainsEntryWithUID( uid ) );
+
+                var newEntry = new PuzzleLibraryEntry( uid, puzzle, author );
 
                 entries.Add( newEntry );
 
