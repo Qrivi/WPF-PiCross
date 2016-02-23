@@ -12,6 +12,12 @@ namespace PiCross
     {
         private readonly ISequence<Square> squares;
 
+        public Slice(ISequence<bool> squares)
+            : this(squares.Map(x => x ? Square.FILLED : Square.EMPTY))
+        {
+            // NOP
+        }
+
         public Slice( ISequence<Square> squares )
         {
             if ( squares == null )
@@ -109,7 +115,7 @@ namespace PiCross
             }
             else
             {
-                return Merge( constraints.GenerateSlices( squares.Length ).Where( CompatibleWith ) );
+                return new Slice( constraints.Superposition( squares ) );
             }
         }
 

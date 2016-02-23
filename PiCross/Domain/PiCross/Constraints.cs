@@ -214,6 +214,29 @@ namespace PiCross
             new Generator( receiver, compatibleWith, this.values ).Generate();
         }
 
+        public ISequence<Square> Superposition(ISequence<Square> compatibleWith)
+        {
+            Square[] result = null;
+
+            Generate( (bool[] bs) => {
+                if ( result == null )
+                {
+                    result = bs.Select( b => b ? Square.FILLED : Square.EMPTY ).ToArray();
+                }
+                else
+                {
+                    for ( var i = 0; i != result.Length; ++i )
+                    {
+                        var sqr = bs[i] ? Square.FILLED : Square.EMPTY;
+
+                        result[i] = result[i].Merge( sqr );
+                    }
+                }
+            }, compatibleWith );
+
+            return Sequence.FromItems( result );
+        }
+
         private class Generator
         {
             private readonly Action<bool[]> receiver;
