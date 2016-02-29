@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Cells;
 
-namespace PiCross.DataStructures
+namespace DataStructures
 {
     /// <summary>
     /// Interface for grids. A grid is immutable (i.e. readonly).
-    /// If you need to be able to modify items in a grid, use <see cref="IVar" />.
+    /// If you need to be able to modify items in a grid, use a <see cref="IVar" /> subtype as type parameter, e.g. <code>IGrid&lt;Cel&lt;T&gt;&gt;</code>.
     /// </summary>
     /// <typeparam name="T">Type of the items in the grid.</typeparam>
     public interface IGrid<out T>
@@ -21,14 +22,9 @@ namespace PiCross.DataStructures
         T this[Vector2D position] { get; }
 
         /// <summary>
-        /// Width of the grid.
+        /// Size of the grid.
         /// </summary>
-        int Width { get; }
-
-        /// <summary>
-        /// Height of the grid.
-        /// </summary>
-        int Height { get; }
+        Size Size { get; }
 
         /// <summary>
         /// Checks if <paramref name="position"/> is valid.
@@ -55,11 +51,38 @@ namespace PiCross.DataStructures
         /// <returns>All column indices.</returns>
         IEnumerable<int> ColumnIndices { get; }
 
+        /// <summary>
+        /// Enumerates all items in the grid.
+        /// </summary>
         IEnumerable<T> Items { get; }
 
+        /// <summary>
+        /// Returns a sequence representing the <paramref name="index"/>-th row.
+        /// This sequence is backed by the grid: changes to the sequence
+        /// will propagate to the grid and vice versa.
+        /// </summary>
+        /// <param name="index">Zero-based index of the row.</param>
+        /// <returns>The row with index <paramref name="index"/></returns>
         ISequence<T> Row( int index );
 
+        /// <summary>
+        /// Returns a sequence representing the <paramref name="index"/>-th column.
+        /// This sequence is backed by the grid: changes
+        /// to the sequence will propagate to the grid and vice versa.
+        /// </summary>
+        /// <param name="index">Zero-based index of the column.</param>
+        /// <returns>The column with index <paramref name="index"/></returns>
         ISequence<T> Column( int index );
+
+        /// <summary>
+        /// Enumerates all rows in order (increasing index).
+        /// </summary>
+        IEnumerable<ISequence<T>> Rows { get; }
+
+        /// <summary>
+        /// Enumerates all colums in order (increasing index).
+        /// </summary>
+        IEnumerable<ISequence<T>> Columns { get; }
     }
 
     /// <summary>
@@ -67,45 +90,129 @@ namespace PiCross.DataStructures
     /// </summary>
     public static class IGridExtensions
     {
-        /// <summary>
-        /// Enumerates all row indices.
-        /// </summary>
-        /// <typeparam name="T">Type of the elements of the grid.</typeparam>
-        /// <param name="grid">Grid.</param>
-        /// <returns>All row indices.</returns>
-        public static IEnumerable<int> RowIndices<T>( this IGrid<T> grid )
+        public static IGrid<R> Map<T, R>( this IGrid<T> grid, Func<T, R> function )
         {
-            return Enumerable.Range( 0, grid.Height );
+            return Grid.CreateVirtual( grid.Size, p => function( grid[p] ) );
         }
 
-        /// <summary>
-        /// Enumerates all column indices.
-        /// </summary>
-        /// <typeparam name="T">Type of the elements of the grid.</typeparam>
-        /// <param name="grid">Grid.</param>
-        /// <returns>All column indices.</returns>
-        public static IEnumerable<int> ColumnIndices<T>( this IGrid<T> grid )
+        public static IGrid<R> Map<T, R>( this IGrid<T> grid, Func<Vector2D, T, R> function )
         {
-            return Enumerable.Range( 0, grid.Width );
+            return Grid.CreateVirtual( grid.Size, p => function( p, grid[p] ) );
+        }
+
+        public static IGrid<R> Map<T, R>( this IGrid<T> grid, Func<Vector2D, R> function )
+        {
+            return Grid.CreateVirtual( grid.Size, p => function( p ) );
+        }
+
+        public static void ForEach<T>(this IGrid<T> grid, Action<Vector2D> action )
+        {
+            foreach ( var position in grid.AllPositions )
+            {
+                action( position );
+            }
+        }
+
+        public static void ForEach<T>( this IGrid<T> grid, Action<T> action )
+        {
+            foreach ( var position in grid.AllPositions )
+            {
+                action( grid[position] );
+            }
+        }
+
+        public static void ForEach<T>( this IGrid<T> grid, Action<Vector2D, T> action )
+        {
+            foreach ( var position in grid.AllPositions )
+            {
+                action( position, grid[position] );
+            }
+        }
+
+        public static IGrid<T> Copy<T>( this IGrid<T> grid )
+        {
+            return Grid.Create( grid.Size, p => grid[p] );
+        }
+
+        public static string[] AsStrings( this IGrid<char> grid )
+        {
+            return grid.Rows.Select( row => row.Join() ).ToArray();
+        }
+
+        public static void Overwrite<T>( this IGrid<IVar<T>> target, IGrid<T> source )
+        {
+            if ( target == null )
+            {
+                throw new ArgumentNullException( "target" );
+            }
+            else if ( source == null )
+            {
+                throw new ArgumentNullException( "source" );
+            }
+            else if ( target.Size != source.Size )
+            {
+                throw new ArgumentException( "Grids should have same size" );
+            }
+            else
+            {
+                foreach ( var position in target.AllPositions )
+                {
+                    target[position].Value = source[position];
+                }
+            }
+        }
+
+        public static void Overwrite<T>( this IGrid<Cell<T>> target, IGrid<T> source )
+        {
+            if ( target == null )
+            {
+                throw new ArgumentNullException( "target" );
+            }
+            else if ( source == null )
+            {
+                throw new ArgumentNullException( "source" );
+            }
+            else if ( target.Size != source.Size )
+            {
+                throw new ArgumentException( "Grids should have same size" );
+            }
+            else
+            {
+                foreach ( var position in target.AllPositions )
+                {
+                    target[position].Value = source[position];
+                }
+            }
+        }
+
+        public static ISequence<T> Linearize<T>(this IGrid<T> grid)
+        {
+            return grid.Rows.ToSequence().Flatten();   
         }
     }
 
     public static class Grid
     {
-        public static IGrid<T> Create<T>( int width, int height, Func<Vector2D, T> initializer )
+        public static IGrid<T> Create<T>( Size size, Func<Vector2D, T> initializer )
         {
-            return new Grid<T>( width, height, initializer );
+            return new Grid<T>( size, initializer );
         }
 
-        public static IGrid<T> CreateVirtual<T>( int width, int height, Func<Vector2D, T> function )
+        public static IGrid<T> Create<T>( Size size, T initialValue = default(T) )
         {
-            return new VirtualGrid<T>( width, height, function );
+            return Create( size, _ => initialValue );
+        }
+
+        public static IGrid<T> CreateVirtual<T>( Size size, Func<Vector2D, T> function )
+        {
+            return new VirtualGrid<T>( size, function );
         }
 
         public static IGrid<char> CreateCharacterGrid( params string[] strings )
         {
             var height = strings.Length;
             var width = strings[0].Length;
+            var size = new Size( width, height );
 
             if ( !strings.All( s => s.Length == width ) )
             {
@@ -113,7 +220,7 @@ namespace PiCross.DataStructures
             }
             else
             {
-                return new Grid<char>( width, height, p => strings[p.Y][p.X] );
+                return new Grid<char>( size, p => strings[p.Y][p.X] );
             }
         }
 
@@ -129,7 +236,7 @@ namespace PiCross.DataStructures
             }
             else
             {
-                if ( xss.Width == yss.Width && xss.Height == yss.Height )
+                if ( xss.Size == yss.Size )
                 {
                     return xss.AllPositions.All( p => xss[p] == null ? yss[p] == null : xss[p].Equals( yss[p] ) );
                 }
@@ -143,6 +250,15 @@ namespace PiCross.DataStructures
         internal static int HashCode<T>( IGrid<T> grid )
         {
             return grid.Items.Select( x => x.GetHashCode() ).Aggregate( 0, ( x, y ) => x ^ y );
+        }
+
+        public static IGrid<T> FromRows<T>(ISequence<ISequence<T>> rows)
+        {
+            var width = rows[0].Length;
+            var height = rows.Length;
+            var size = new Size(width, height);
+
+            return Grid.Create( size, p => rows[p.Y][p.X] );
         }
     }
 
@@ -172,21 +288,19 @@ namespace PiCross.DataStructures
 
         public abstract T this[Vector2D position] { get; }
 
-        public abstract int Width { get; }
-
-        public abstract int Height { get; }
+        public abstract Size Size { get; }
 
         public bool IsValidPosition( Vector2D position )
         {
-            return 0 <= position.X && position.X < this.Width && 0 <= position.Y && position.Y < this.Height;
+            return 0 <= position.X && position.X < this.Size.Width && 0 <= position.Y && position.Y < this.Size.Height;
         }
 
         public IEnumerable<Vector2D> AllPositions
         {
             get
             {
-                return from y in Enumerable.Range( 0, this.Height )
-                       from x in Enumerable.Range( 0, this.Width )
+                return from y in Enumerable.Range( 0, this.Size.Height )
+                       from x in Enumerable.Range( 0, this.Size.Width )
                        select new Vector2D( x, y );
             }
         }
@@ -195,7 +309,7 @@ namespace PiCross.DataStructures
         {
             get
             {
-                return Enumerable.Range( 0, this.Height );
+                return Enumerable.Range( 0, this.Size.Height );
             }
         }
 
@@ -203,7 +317,7 @@ namespace PiCross.DataStructures
         {
             get
             {
-                return Enumerable.Range( 0, this.Width );
+                return Enumerable.Range( 0, this.Size.Width );
             }
         }
 
@@ -215,14 +329,30 @@ namespace PiCross.DataStructures
             }
         }
 
-        public ISequence<T> Row(int y)
+        public ISequence<T> Row( int y )
         {
-            return Sequence.FromFunction( Width, x => this[new Vector2D( x, y )] );
+            return Sequence.FromFunction( Size.Width, x => this[new Vector2D( x, y )] );
         }
 
-        public ISequence<T> Column(int x)
+        public ISequence<T> Column( int x )
         {
-            return Sequence.FromFunction( Height, y => this[new Vector2D( x, y )] );
+            return Sequence.FromFunction( Size.Height, y => this[new Vector2D( x, y )] );
+        }
+
+        public IEnumerable<ISequence<T>> Rows
+        {
+            get
+            {
+                return RowIndices.Select( Row );
+            }
+        }
+
+        public IEnumerable<ISequence<T>> Columns
+        {
+            get
+            {
+                return ColumnIndices.Select( Column );
+            }
         }
     }
 
@@ -230,8 +360,15 @@ namespace PiCross.DataStructures
     {
         private readonly T[,] items;
 
-        public Grid( int width, int height, Func<Vector2D, T> initializer )
+        private readonly Size size;
+
+        public Grid( Size size, Func<Vector2D, T> initializer )
         {
+            this.size = size;
+
+            var width = size.Width;
+            var height = size.Height;
+
             items = new T[width, height];
 
             foreach ( var x in Enumerable.Range( 0, width ) )
@@ -245,25 +382,17 @@ namespace PiCross.DataStructures
             }
         }
 
-        public Grid( int width, int height, T initialValue = default(T) )
-            : this( width, height, p => initialValue )
+        public Grid( Size size, T initialValue = default(T) )
+            : this( size, p => initialValue )
         {
             // NOP
         }
 
-        public override int Width
+        public override Size Size
         {
             get
             {
-                return items.GetLength( 0 );
-            }
-        }
-
-        public override int Height
-        {
-            get
-            {
-                return items.GetLength( 1 );
+                return new Size( items.GetLength( 0 ), items.GetLength( 1 ) );
             }
         }
 
@@ -280,19 +409,13 @@ namespace PiCross.DataStructures
     {
         private readonly Func<Vector2D, T> function;
 
-        private readonly int width;
+        private readonly Size size;
 
-        private readonly int height;
-
-        public VirtualGrid( int width, int height, Func<Vector2D, T> function )
+        public VirtualGrid( Size size, Func<Vector2D, T> function )
         {
-            if ( width < 0 )
+            if ( size == null )
             {
-                throw new ArgumentOutOfRangeException( "width" );
-            }
-            else if ( height < 0 )
-            {
-                throw new ArgumentOutOfRangeException( "height" );
+                throw new ArgumentNullException( "size" );
             }
             else if ( function == null )
             {
@@ -301,24 +424,15 @@ namespace PiCross.DataStructures
             else
             {
                 this.function = function;
-                this.width = width;
-                this.height = height;
+                this.size = size;
             }
         }
 
-        public override int Width
+        public override Size Size
         {
             get
             {
-                return width;
-            }
-        }
-
-        public override int Height
-        {
-            get
-            {
-                return height;
+                return size;
             }
         }
 

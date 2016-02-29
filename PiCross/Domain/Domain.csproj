@@ -32,6 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -39,21 +40,66 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataStructures\Cell.cs" />
-    <Compile Include="DataStructures\Derived.cs" />
+    <Compile Include="Actors\ActivatableInbox.cs" />
+    <Compile Include="Actors\BlockingMessageQueue.cs" />
+    <Compile Include="Actors\Future.cs" />
+    <Compile Include="Actors\Interfaces.cs" />
+    <Compile Include="Actors\MessageQueue.cs" />
+    <Compile Include="Actors\PriorityInbox.cs" />
+    <Compile Include="Actors\SynchronizedMessageQueue.cs" />
+    <Compile Include="Cells\CellExtensions.cs" />
+    <Compile Include="Cells\ConcreteCell.cs" />
+    <Compile Include="Cells\ConstantCell.cs" />
+    <Compile Include="Cells\DeferredCell.cs" />
+    <Compile Include="Cells\Derived.cs" />
+    <Compile Include="Cells\Flag.cs" />
+    <Compile Include="Cells\FutureCell.cs" />
+    <Compile Include="Cells\ValidatedCell.cs" />
+    <Compile Include="IO\Serializer.cs" />
+    <Compile Include="PiCross\ArchiveDatabase.cs" />
+    <Compile Include="PiCross\GameDataAdapters.cs" />
+    <Compile Include="PiCross\GameDataArchive.cs" />
+    <Compile Include="PiCross\IDatabase.cs" />
+    <Compile Include="PiCross\IGameData.cs" />
+    <Compile Include="PiCross\IStepwisePuzzleSolver.cs" />
+    <Compile Include="PiCross\PiCrossFacade.cs" />
+    <Compile Include="PiCross\InMemoryDatabase.cs" />
+    <Compile Include="Utility\Chronometer.cs" />
     <Compile Include="DataStructures\Grid.cs" />
-    <Compile Include="DataStructures\ICell.cs" />
-    <Compile Include="DataStructures\ReadonlyWrapper.cs" />
+    <Compile Include="Cells\Cell.cs" />
+    <Compile Include="Cells\IVar.cs" />
+    <Compile Include="Cells\ManualCell.cs" />
+    <Compile Include="Cells\ReadonlyWrapper.cs" />
+    <Compile Include="DataStructures\Range.cs" />
     <Compile Include="DataStructures\Sequence.cs" />
-    <Compile Include="DataStructures\Var.cs" />
+    <Compile Include="Cells\Var.cs" />
+    <Compile Include="DataStructures\Signal.cs" />
     <Compile Include="DataStructures\Vector2D.cs" />
-    <Compile Include="Game\Constraints.cs" />
-    <Compile Include="Game\SolverGrid.cs" />
-    <Compile Include="Game\Slice.cs" />
-    <Compile Include="Game\Square.cs" />
+    <Compile Include="PiCross\IPuzzleEditor.cs" />
+    <Compile Include="PiCross\PuzzleEditor.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PiCross\DummyData.cs" />
+    <Compile Include="PiCross\PuzzleLibrary.cs" />
+    <Compile Include="PiCross\LibrarySerializer.cs" />
+    <Compile Include="PiCross\PlayablePuzzle.cs" />
+    <Compile Include="PiCross\IPlayablePuzzle.cs" />
+    <Compile Include="PiCross\Ambiguity.cs" />
+    <Compile Include="PiCross\AmbiguityChecker.cs" />
+    <Compile Include="PiCross\Constraints.cs" />
+    <Compile Include="PiCross\EditorGrid.cs" />
+    <Compile Include="PiCross\PlayGrid.cs" />
+    <Compile Include="PiCross\Puzzle.cs" />
+    <Compile Include="DataStructures\Size.cs" />
+    <Compile Include="PiCross\PuzzleIO.cs" />
+    <Compile Include="PiCross\SolverGrid.cs" />
+    <Compile Include="PiCross\Slice.cs" />
+    <Compile Include="PiCross\Square.cs" />
+    <Compile Include="PiCross\StepwiseSolver.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Cells\Util.cs" />
+    <Compile Include="Utility\Extensions.cs" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
