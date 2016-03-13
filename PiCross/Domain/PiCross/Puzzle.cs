@@ -7,6 +7,19 @@ using DataStructures;
 
 namespace PiCross
 {
+    public class AmbiguousConstraintsException : PiCrossException
+    {
+        public AmbiguousConstraintsException()
+            : base("Ambiguous constraints")
+        {
+            // NOP
+        }
+    }
+
+    /// <summary>
+    /// A Puzzle object contains all information about a PiCross puzzle,
+    /// i.e. it contains the row and column constraints as well as the actual solution.
+    /// </summary>
     public sealed class Puzzle
     {
         private readonly ISequence<Constraints> columnConstraints;
@@ -15,6 +28,15 @@ namespace PiCross
 
         private readonly IGrid<bool> grid;
 
+        /// <summary>
+        /// Creates a Puzzle from the constraints. Since a Puzzle
+        /// contains the solution, this method solves the given puzzle.
+        /// </summary>
+        /// <param name="columnConstraints">Column constraints.</param>
+        /// <param name="rowConstraints">Row constraints.</param>
+        /// <returns>A Puzzle with the given constraints.</returns>
+        /// <exception cref="AmbiguousConstraintsException">Thrown when the constraints
+        /// don't lead to a single solution.</exception>
         public static Puzzle FromConstraints( ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints )
         {
             var solverGrid = new SolverGrid( columnConstraints, rowConstraints );
@@ -32,6 +54,12 @@ namespace PiCross
             }
         }
 
+        /// <summary>
+        /// Creates a Puzzle from a solution. The constraints
+        /// will be inferred.
+        /// </summary>
+        /// <param name="grid">Solution represented by a grid of Squares.</param>
+        /// <returns>A Puzzle with the given solution.</returns>
         public static Puzzle FromGrid( IGrid<Square> grid )
         {
             var editorGrid = new EditorGrid( grid );
@@ -44,16 +72,35 @@ namespace PiCross
             return new Puzzle( columnConstraints: columnConstraints, rowConstraints: rowConstraints, grid: boolGrid );
         }
 
+        /// <summary>
+        /// Creates a Puzzle from a solution. The constraints
+        /// will be inferred.
+        /// </summary>
+        /// <param name="grid">Solution represented by a grid of bools.</param>
+        /// <returns>A Puzzle with the given solution.</returns>
         public static Puzzle FromGrid( IGrid<bool> grid )
         {
             return FromGrid( grid.Map( Square.FromBool ) );
         }
 
+        /// <summary>
+        /// Creates a Puzzle from a sequence of strings representing
+        /// the rows of the solution of a puzzle. A 'x' represents
+        /// a filled cell, a '.' corresponds to an empty cell.
+        /// </summary>
+        /// <param name="rows">Strings representing rows.</param>
+        /// <returns>Puzzle.</returns>
         public static Puzzle FromRowStrings( params string[] rows )
         {
             return FromGrid( Square.CreateGrid( rows ) );
         }
 
+        /// <summary>
+        /// Creates an empty puzzle with the given size.
+        /// The constraints are all zero, the solution is the empty grid.
+        /// </summary>
+        /// <param name="size">Size of the puzzle.</param>
+        /// <returns>Empty puzzle.</returns>
         public static Puzzle CreateEmpty(Size size)
         {
             return FromGrid( DataStructures.Grid.Create( size, false ) );
@@ -94,6 +141,9 @@ namespace PiCross
             }
         }
 
+        /// <summary>
+        /// Grid representing the solution of the puzzle.
+        /// </summary>
         public IGrid<bool> Grid
         {
             get
@@ -102,6 +152,9 @@ namespace PiCross
             }
         }
 
+        /// <summary>
+        /// Row constraints.
+        /// </summary>
         public ISequence<Constraints> RowConstraints
         {
             get
@@ -110,6 +163,9 @@ namespace PiCross
             }
         }
 
+        /// <summary>
+        /// Column constraints.
+        /// </summary>
         public ISequence<Constraints> ColumnConstraints
         {
             get
@@ -118,6 +174,9 @@ namespace PiCross
             }
         }
 
+        /// <summary>
+        /// Size of the puzzle.
+        /// </summary>
         public Size Size
         {
             get
@@ -125,7 +184,10 @@ namespace PiCross
                 return this.grid.Size;
             }
         }
-
+        
+        /// <summary>
+        /// Checks whether the puzzle is solveable based on the constraints.
+        /// </summary>
         public bool IsSolvable
         {
             get
