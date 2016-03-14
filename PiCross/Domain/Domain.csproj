@@ -40,13 +40,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Actors\ActivatableInbox.cs" />
-    <Compile Include="Actors\BlockingMessageQueue.cs" />
-    <Compile Include="Actors\Future.cs" />
-    <Compile Include="Actors\Interfaces.cs" />
-    <Compile Include="Actors\MessageQueue.cs" />
-    <Compile Include="Actors\PriorityInbox.cs" />
-    <Compile Include="Actors\SynchronizedMessageQueue.cs" />
     <Compile Include="Cells\CellExtensions.cs" />
     <Compile Include="Cells\ConcreteCell.cs" />
     <Compile Include="Cells\ConstantCell.cs" />
@@ -62,6 +55,7 @@
     <Compile Include="PiCross\IDatabase.cs" />
     <Compile Include="PiCross\IGameData.cs" />
     <Compile Include="PiCross\IStepwisePuzzleSolver.cs" />
+    <Compile Include="PiCross\PiCrossException.cs" />
     <Compile Include="PiCross\PiCrossFacade.cs" />
     <Compile Include="PiCross\InMemoryDatabase.cs" />
     <Compile Include="Utility\Chronometer.cs" />
