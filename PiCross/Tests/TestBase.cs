@@ -17,7 +17,7 @@ namespace PiCross.Tests
 
         protected static Constraints CreateConstraints( params int[] constraints )
         {
-            return new Constraints( constraints );
+            return Constraints.FromValues( constraints );
         }
 
         protected static ISequence<bool> CreateBooleans( string str )

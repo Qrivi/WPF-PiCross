@@ -18,12 +18,17 @@ namespace PiCross
             return new Constraints( values.ToSequence() );
         }
 
+        public static Constraints FromValues( IEnumerable<int> values )
+        {
+            return new Constraints( values );
+        }
+
         public static Constraints FromSequence( ISequence<int> sequence )
         {
             return new Constraints( sequence );
         }
 
-        public Constraints( ISequence<int> values )
+        private Constraints( ISequence<int> values )
         {
             if ( values == null )
             {
@@ -39,13 +44,13 @@ namespace PiCross
             }
         }
 
-        public Constraints( params int[] values )
+        private Constraints( params int[] values )
             : this( Sequence.FromItems( values ) )
         {
             // NOP
         }
 
-        public Constraints( IEnumerable<int> values )
+        private Constraints( IEnumerable<int> values )
             : this( values.ToArray() )
         {
             // NOP
@@ -140,7 +145,7 @@ namespace PiCross
             return this.values.CommonPrefixLength( knownConstraints.values );
         }
 
-        public Constraints Reverse()
+        internal Constraints Reverse()
         {
             return new Constraints( this.values.Reverse() );
         }
@@ -204,17 +209,17 @@ namespace PiCross
             return string.Format( "[{0}]", this.values.Map( x => x.ToString() ).Join( "-" ) );
         }
 
-        public Constraints Lift( Func<ISequence<int>, ISequence<int>> function )
+        internal Constraints Lift( Func<ISequence<int>, ISequence<int>> function )
         {
             return new Constraints( function( values ) );
         }
 
-        public void Generate( Action<bool[]> receiver, ISequence<Square> compatibleWith )
+        internal void Generate( Action<bool[]> receiver, ISequence<Square> compatibleWith )
         {
             new Generator( receiver, compatibleWith, this.values ).Generate();
         }
 
-        public ISequence<Square> Superposition(ISequence<Square> compatibleWith)
+        internal ISequence<Square> Superposition( ISequence<Square> compatibleWith )
         {
             Square[] result = null;
 

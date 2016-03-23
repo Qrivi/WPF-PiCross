@@ -189,7 +189,7 @@ namespace PiCross
                 constraints.Add( fillCount );
             }
 
-            return new Constraints( constraints );
+            return Constraints.FromValues( constraints );
         }
 
         public bool IsFullyKnown
