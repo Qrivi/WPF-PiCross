@@ -79,7 +79,7 @@ namespace PiCross.Tests
 
             public Test( int length, params int[] constraints )
             {
-                sequences = new Constraints( Sequence.FromItems( constraints ) ).GenerateSlices( length ).ToList();
+                sequences = Constraints.FromSequence( Sequence.FromItems( constraints ) ).GenerateSlices( length ).ToList();
             }
 
             private void CheckSingle( string str )
