@@ -84,7 +84,8 @@ namespace PiCross
 
                 for ( var i = 0; i != entryCount; ++i )
                 {
-                    var parts = reader.ReadLine().Split( ' ' );
+                    var line = reader.ReadLine();
+                    var parts = line.Split( ' ' );
                     var uid = int.Parse( parts[0] );
                     var bestTime = long.Parse( parts[1] );
 
@@ -112,17 +113,16 @@ namespace PiCross
 
             using ( var writer = OpenZipArchiveEntryForWriting( path ) )
             {
-                var ids = playerProfile.EntryUIDs.ToList();
+                var pairs = ( from uid in playerProfile.EntryUIDs
+                              let entry = playerProfile[uid]
+                              where entry.BestTime.HasValue
+                              select new { ID = uid, BestTime = entry.BestTime.Value } ).ToList();
 
-                writer.WriteLine( ids.Count );
-                foreach ( var id in ids )
+                writer.WriteLine( pairs.Count );
+
+                foreach ( var pair in pairs )
                 {
-                    var bestTime = playerProfile[id].BestTime;
-
-                    if ( bestTime.HasValue )
-                    {
-                        writer.WriteLine( "{0} {1}", id, bestTime.Value.Ticks );
-                    }
+                    writer.WriteLine( "{0} {1}", pair.ID, pair.BestTime.Ticks );
                 }
             }
         }
