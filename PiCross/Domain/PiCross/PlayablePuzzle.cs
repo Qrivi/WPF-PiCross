@@ -133,7 +133,7 @@ namespace PiCross
         {
             constraints.IsSatisfied.Refresh();
 
-            foreach ( var value in constraints.Constraints.Items )
+            foreach ( var value in constraints.Values.Items )
             {
                 value.IsSatisfied.Refresh();
             }
@@ -225,7 +225,7 @@ namespace PiCross
                 }
             }
 
-            public ISequence<PlayablePuzzleConstraintsValue> Constraints
+            public ISequence<PlayablePuzzleConstraintsValue> Values
             {
                 get
                 {
