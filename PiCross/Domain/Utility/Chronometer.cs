@@ -32,6 +32,10 @@ namespace Utility
             started = false;
         }
 
+        public void Reset() {
+            totalTime.Value = TimeSpan.Zero;
+        }
+
         public void Tick()
         {
             if ( started )
