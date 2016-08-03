@@ -4,25 +4,23 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GUI"
-        xmlns:extensions="clr-namespace:GUI.Extensions"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen" 
+        WindowStartupLocation="CenterScreen"
         Width="1200" Height="800"
         MinWidth="1024" MinHeight="700"
-        Title="PiCross" x:Name="PiCrossGUI"
-        Background="{StaticResource BackgroundApplication}">
+        Title="PiCross" Background="{StaticResource BackgroundApplication}">
     <DockPanel>
-        <StackPanel DockPanel.Dock="Right" 
-                    Orientation="Vertical" 
-                    HorizontalAlignment="Right" 
+        <StackPanel DockPanel.Dock="Right"
+                    Orientation="Vertical"
+                    HorizontalAlignment="Right"
                     VerticalAlignment="Stretch"
                     Width="280"
                     Background="{StaticResource BackgroundSidebar}">
-            <TextBlock Style="{StaticResource AppTitle}"/>
+            <TextBlock Style="{StaticResource AppTitle}" />
             <TextBlock Style="{StaticResource SubTitle}">Selected Puzzle:</TextBlock>
-            <local:GameControl DataContext="{Binding CurrentGame.Value}"/>
-            <TextBlock  Style="{StaticResource SubTitle}">Current Game:</TextBlock>
-            <local:DetailsControl/>
+            <local:GameControl DataContext="{Binding CurrentGame.Value}" />
+            <TextBlock Style="{StaticResource SubTitle}">Current Game:</TextBlock>
+            <local:DetailsControl />
             <Button Width="100" Margin="30" Command="{Binding NewGame}">New Game</Button>
         </StackPanel>
         <Grid DockPanel.Dock="Left">
@@ -39,7 +37,7 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <local:GameControl Margin="8"/>
+                            <local:GameControl Margin="8" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -47,7 +45,7 @@
             <ScrollViewer Visibility="{Binding Path=ShowBoard.Value, Converter={StaticResource BoolToVis}}"
                           HorizontalScrollBarVisibility="Auto"
                           VerticalScrollBarVisibility="Auto">
-                <local:Board DataContext="{Binding Board.Value}"/>
+                <local:Board DataContext="{Binding Board.Value}" />
             </ScrollViewer>
         </Grid>
     </DockPanel>
