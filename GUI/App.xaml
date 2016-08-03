@@ -2,73 +2,84 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:converters="clr-namespace:GUI.Converters"
-             xmlns:extensions="clr-namespace:GUI.Extensions"
-             StartupUri="View/MainWindow.xaml">
+             xmlns:extensions="clr-namespace:GUI.Extensions">
     <Application.Resources>
-        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
-        <converters:IsLessThanConverter x:Key="MistakeToColor"/>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <converters:IsLessThanConverter x:Key="MistakeToColor" />
         <!-- extensions:Int32Extension x:Key="Int32"/ -->
 
-        <SolidColorBrush x:Key="BackgroundApplication" Color="#0f2849"/>
-        <SolidColorBrush x:Key="BackgroundSidebar" Color="#11305a"/>
-        <SolidColorBrush x:Key="BackgroundPicker" Color="#244b84"/>
+        <SolidColorBrush x:Key="BackgroundApplication" Color="#0f2849" />
+        <SolidColorBrush x:Key="BackgroundSidebar" Color="#11305a" />
+        <SolidColorBrush x:Key="BackgroundPicker" Color="#244b84" />
 
-        <SolidColorBrush x:Key="TextColor" Color="WhiteSmoke"/>
-        <SolidColorBrush x:Key="MistakeColor" Color="#0f2849"/>
+        <SolidColorBrush x:Key="TextColor" Color="WhiteSmoke" />
+        <SolidColorBrush x:Key="MistakeColor" Color="#0f2849" />
 
-        <SolidColorBrush x:Key="BoardBackground" Color="Transparent"/>
-        <SolidColorBrush x:Key="BoardConstraint" Color="#174283"/>
-        <SolidColorBrush x:Key="BoardBorder" Color="WhiteSmoke"/>
+        <SolidColorBrush x:Key="BoardBackground" Color="Transparent" />
+        <SolidColorBrush x:Key="BoardConstraint" Color="#174283" />
+        <SolidColorBrush x:Key="BoardBorder" Color="WhiteSmoke" />
 
         <Style x:Key="AppTitle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="30"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Foreground" Value="{StaticResource TextColor}"/>
-            <Setter Property="Text" Value="PiCross"/>
-            <Setter Property="TextAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="0 20"/>
+            <Setter Property="FontSize" Value="30" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="{StaticResource TextColor}" />
+            <Setter Property="Text" Value="PiCross" />
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0 20" />
         </Style>
 
         <Style x:Key="SubTitle" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="{StaticResource TextColor}"/>
-            <Setter Property="TextAlignment" Value="Left"/>
-            <Setter Property="Margin" Value="30 20 30 0"/>
+            <Setter Property="Foreground" Value="{StaticResource TextColor}" />
+            <Setter Property="TextAlignment" Value="Left" />
+            <Setter Property="Margin" Value="30 20 30 0" />
+        </Style>
+
+        <Style x:Key="InfoTitle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="30" />
+            <Setter Property="Foreground" Value="{StaticResource TextColor}" />
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0 20 0 0" />
+        </Style>
+
+        <Style x:Key="InfoMessage" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource TextColor}" />
+            <Setter Property="TextAlignment" Value="Center" />
         </Style>
 
         <Style x:Key="GameBox" TargetType="Border">
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Width" Value="220"/>
-            <Setter Property="CornerRadius" Value="5"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="Padding" Value="20 10"/>
-            <Setter Property="Background" Value="{StaticResource BackgroundPicker}"/>
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Width" Value="220" />
+            <Setter Property="CornerRadius" Value="5" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="Padding" Value="20 10" />
+            <Setter Property="Background" Value="{StaticResource BackgroundPicker}" />
         </Style>
 
         <Style x:Key="GameNameBox" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Foreground" Value="{StaticResource TextColor}"/>
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="{StaticResource TextColor}" />
         </Style>
 
         <Style x:Key="GameTimeBox" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="12"/>
-            <Setter Property="Foreground" Value="{StaticResource TextColor}"/>
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Foreground" Value="{StaticResource TextColor}" />
         </Style>
 
         <Style x:Key="MistakeBox" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="35"/>
-            <Setter Property="Text" Value="╳"/>
-            <Setter Property="Foreground" Value="Red"/>
+            <Setter Property="FontSize" Value="35" />
+            <Setter Property="Text" Value="╳" />
+            <Setter Property="Foreground" Value="Red" />
         </Style>
 
         <Style x:Key="ConstraintBox" TargetType="TextBlock">
-            <Setter Property="Width" Value="50"/>
-            <Setter Property="Height" Value="50"/>
-            <Setter Property="TextAlignment" Value="Center"/>
-            <Setter Property="FontSize" Value="28"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="Foreground" Value="{StaticResource TextColor}"/>
-            <Setter Property="Padding" Value="0 5 0 0"/>
+            <Setter Property="Width" Value="50" />
+            <Setter Property="Height" Value="50" />
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="28" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="{StaticResource TextColor}" />
+            <Setter Property="Padding" Value="0 5 0 0" />
         </Style>
 
     </Application.Resources>
