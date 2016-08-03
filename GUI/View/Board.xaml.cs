@@ -1,11 +1,14 @@
 ﻿using System.Windows.Controls;
 
-namespace GUI {
+namespace GUI
+{
     /// <summary>
-    /// Interaction logic for Board.xaml
+    ///     Interaction logic for Board.xaml
     /// </summary>
-    public partial class Board : UserControl {
-        public Board() {
+    public partial class Board : UserControl
+    {
+        public Board()
+        {
             InitializeComponent();
         }
     }

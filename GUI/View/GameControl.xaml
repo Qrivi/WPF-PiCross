@@ -1,10 +1,10 @@
 ﻿<UserControl x:Class="GUI.GameControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:GUI"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="80" d:DesignWidth="230">
     <Button Command="{Binding SelectGame}">
         <Button.Template>
@@ -14,16 +14,17 @@
                 </Border>
                 <ControlTemplate.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter TargetName="GameBoxBorder" Property="Opacity" Value=".8"/>
+                        <Setter TargetName="GameBoxBorder" Property="Opacity" Value=".8" />
                     </Trigger>
                 </ControlTemplate.Triggers>
             </ControlTemplate>
         </Button.Template>
         <DockPanel>
-            <TextBlock DockPanel.Dock="Top" Style="{StaticResource GameNameBox}" Text="{Binding Name.Value}"/>
+            <TextBlock DockPanel.Dock="Top" Style="{StaticResource GameNameBox}" Text="{Binding Name.Value}" />
             <WrapPanel DockPanel.Dock="Bottom" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                <TextBlock Style="{StaticResource GameTimeBox}" Text="🕒 "/>
-                <TextBlock Style="{StaticResource GameTimeBox}" Text="{Binding BestTime.Value, StringFormat={}{0:hh}:{0:mm}:{0:ss}.{0:fff}, FallbackValue=00:00:00.000}"/>
+                <TextBlock Style="{StaticResource GameTimeBox}" Text="🕒 " />
+                <TextBlock Style="{StaticResource GameTimeBox}"
+                           Text="{Binding BestTime.Value, StringFormat={}{0:hh}:{0:mm}:{0:ss}.{0:fff}, FallbackValue=00:00:00.000}" />
             </WrapPanel>
         </DockPanel>
     </Button>

@@ -1,11 +1,14 @@
 ﻿using System.Windows.Controls;
 
-namespace GUI {
+namespace GUI
+{
     /// <summary>
-    /// Interaction logic for GameControl.xaml
+    ///     Interaction logic for GameControl.xaml
     /// </summary>
-    public partial class GameControl : UserControl {
-        public GameControl() {
+    public partial class GameControl : UserControl
+    {
+        public GameControl()
+        {
             InitializeComponent();
         }
     }
