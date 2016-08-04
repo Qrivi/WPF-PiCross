@@ -24,10 +24,19 @@
             <Button Width="100" Margin="30" Command="{Binding NewGame}">New Game</Button>
         </StackPanel>
         <Grid DockPanel.Dock="Left">
-            <ScrollViewer Visibility="{Binding Path=ShowGames.Value, Converter={StaticResource BoolToVis}}"
-                          HorizontalScrollBarVisibility="Disabled"
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                           VerticalScrollBarVisibility="Auto"
                           HorizontalAlignment="Center">
+                <ScrollViewer.Style>
+                    <Style>
+                        <Setter Property="ScrollViewer.Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding State.Value}" Value="{x:Static local:GameState.Setup}">
+                                <Setter Property="ScrollViewer.Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ScrollViewer.Style>
                 <ItemsControl Margin="15 30"
                               ItemsSource="{Binding Games}">
                     <ItemsControl.ItemsPanel>
@@ -42,9 +51,27 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </ScrollViewer>
-            <ScrollViewer Visibility="{Binding Path=ShowBoard.Value, Converter={StaticResource BoolToVis}}"
-                          HorizontalScrollBarVisibility="Auto"
+            <ScrollViewer HorizontalScrollBarVisibility="Auto"
                           VerticalScrollBarVisibility="Auto">
+                <ScrollViewer.Style>
+                    <Style>
+                        <Setter Property="ScrollViewer.Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding State.Value}" Value="{x:Static local:GameState.Play}">
+                                <Setter Property="ScrollViewer.Visibility" Value="Visible" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding State.Value}" Value="{x:Static local:GameState.Lose}">
+                                <Setter Property="ScrollViewer.Visibility" Value="Visible" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding State.Value}" Value="{x:Static local:GameState.Win}">
+                                <Setter Property="ScrollViewer.Visibility" Value="Visible" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding State.Value}" Value="{x:Static local:GameState.BestTime}">
+                                <Setter Property="ScrollViewer.Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ScrollViewer.Style>
                 <local:Board DataContext="{Binding Board.Value}" />
             </ScrollViewer>
         </Grid>

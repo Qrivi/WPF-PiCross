@@ -21,6 +21,8 @@ namespace PiCross
 
         private readonly Cell<bool> isSolved;
 
+        public PlayablePuzzle() { }
+
         public PlayablePuzzle( ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints )
             : this( new PlayGrid( columnConstraints: columnConstraints, rowConstraints: rowConstraints ) )
         {

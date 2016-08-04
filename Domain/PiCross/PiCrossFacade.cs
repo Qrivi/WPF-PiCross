@@ -79,9 +79,14 @@ namespace PiCross
         /// </summary>
         /// <param name="puzzle">Puzzle to be solved.</param>
         /// <returns>An IPlayablePuzzle object.</returns>
-        public IPlayablePuzzle CreatePlayablePuzzle( Puzzle puzzle )
+        public IPlayablePuzzle CreatePlayablePuzzle(Puzzle puzzle)
         {
-            return new PlayablePuzzle( columnConstraints: puzzle.ColumnConstraints, rowConstraints: puzzle.RowConstraints );
+            return new PlayablePuzzle(columnConstraints: puzzle.ColumnConstraints, rowConstraints: puzzle.RowConstraints);
+        }
+
+        public IPlayablePuzzle CreateExtendedPlayablePuzzle(ExtendedPuzzle ePuzzle)
+        {
+            return new ExtendedPlayablePuzzle(name: ePuzzle.Name.Value, columnConstraints: ePuzzle.Puzzle.Value.ColumnConstraints, rowConstraints: ePuzzle.Puzzle.Value.RowConstraints);
         }
     }
 }

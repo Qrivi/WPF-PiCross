@@ -23,95 +23,42 @@ namespace GUI
 
     public sealed class PiCrossViewModel
     {
+        private readonly PiCrossFacade _model;
         private readonly Chronometer _chrono;
-        private readonly DispatcherTimer _timer;
 
-        public PiCrossViewModel()
+        public PiCrossViewModel( List<ExtendedPuzzle> puzzles , Chronometer chronometer)
         {
-            _chrono = new Chronometer();
-            _timer = new DispatcherTimer {Interval = TimeSpan.FromMilliseconds(200)};
-
+            _model = new PiCrossFacade();
+            _chrono = chronometer;
+           
             State = Cell.Create(GameState.Init);
-            ShowGames = Cell.Derived(State, s => s == GameState.Setup);
-            ShowBoard = Cell.Derived(State,
-                s => s == GameState.Play || s == GameState.Win || s == GameState.Lose || s == GameState.BestTime);
-            Mistakes = Cell.Create(0);
-
-            _timer.Tick += TimerTicked;
             State.ValueChanged += StateChanged;
 
-            var puzzles = CreatePuzzles();
             Games = new List<GameViewModel>();
             foreach (var puzzle in puzzles)
-                Games.Add(new GameViewModel(this, puzzle.Key, puzzle.Value));
+                Games.Add(new GameViewModel(this, puzzle));
             CurrentGame = Cell.Create(Games[0]);
-            Board = Cell.Create(new BoardViewModel(this));
+
+            Board = Cell.Create(new BoardViewModel(this, _model));
 
             NewGame = new NewGameCommand(this);
         }
 
+        public Cell<GameState> State { get; }
         public IList<GameViewModel> Games { get; }
         public Cell<GameViewModel> CurrentGame { get; }
         public Cell<BoardViewModel> Board { get; }
 
-        public Cell<GameState> State { get; }
-        public Cell<bool> ShowGames { get; }
-        public Cell<bool> ShowBoard { get; }
-        public Cell<int> Mistakes { get; }
         public Cell<TimeSpan> PlayTime => _chrono.TotalTime;
 
         public ICommand NewGame { get; }
-
-        public void AddMistake()
-        {
-            if (++Mistakes.Value == 5)
-                State.Value = GameState.Lose;
-        }
-
-        private static Dictionary<string, Puzzle> CreatePuzzles()
-        {
-            var puzzles = new Dictionary<string, Puzzle>();
-            var xml = new XmlDocument();
-            xml.Load("Data/Puzzles.xml");
-
-            var xmlRoot = xml.DocumentElement;
-            var xmlPuzzles = xmlRoot?.SelectNodes("/puzzles/puzzle");
-
-            if (xmlPuzzles == null)
-                return puzzles;
-
-            foreach (XmlNode xmlPuzzle in xmlPuzzles)
-            {
-                if (xmlPuzzle.Attributes == null)
-                    continue;
-
-                var name = xmlPuzzle.Attributes["name"].Value;
-                var rows = new LinkedList<string>();
-
-                var xmlPuzzleRows = xmlPuzzle.SelectNodes("rows/row");
-                if (xmlPuzzleRows == null)
-                    return puzzles;
-
-                foreach (XmlNode xmlPuzzleRow in xmlPuzzleRows)
-                    rows.AddLast(xmlPuzzleRow.InnerText);
-
-                puzzles.Add(name, Puzzle.FromRowStrings(rows.ToArray()));
-            }
-            return puzzles;
-        }
-
-        private void TimerTicked(object sender, EventArgs e)
-        {
-            _chrono.Tick();
-        }
 
         private void StateChanged()
         {
             switch (State.Value)
             {
                 case GameState.Play:
-                    Board.Value = new BoardViewModel(this);
-                    Mistakes.Value = 0;
+                    Board.Value = new BoardViewModel(this, _model);
                     StartCounter();
                     break;
                 case GameState.Win:
@@ -134,14 +81,12 @@ namespace GUI
         {
             _chrono.Reset();
             _chrono.Start();
-            _timer.Start();
         }
 
         private void StopCounter()
         {
             _chrono.Tick();
             _chrono.Pause();
-            _timer.Stop();
         }
 
         private bool CheckNewBestTime()
@@ -187,11 +132,12 @@ namespace GUI
 
     public sealed class GameViewModel
     {
-        public GameViewModel(PiCrossViewModel viewModel, string name, Puzzle puzzle, TimeSpan bestTime = new TimeSpan())
+        public GameViewModel(PiCrossViewModel viewModel, ExtendedPuzzle puzzle)
         {
-            Name = Cell.Create(name);
-            Puzzle = Cell.Create(puzzle);
-            BestTime = Cell.Create(bestTime);
+            Name = puzzle.Name;
+            Puzzle = puzzle.Puzzle;
+            BestTime = puzzle.BestTime;
+
             SelectGame = new SelectGameCommand(viewModel, this);
         }
 
@@ -203,14 +149,13 @@ namespace GUI
 
         private class SelectGameCommand : ICommand
         {
-            private readonly GameViewModel _current;
+            private readonly GameViewModel _gameVM;
+            private readonly PiCrossViewModel _piCrossVM;
 
-            private readonly PiCrossViewModel _viewModel;
-
-            public SelectGameCommand(PiCrossViewModel viewModel, GameViewModel gameViewModel)
+            public SelectGameCommand(PiCrossViewModel piCrossViewModel, GameViewModel gameViewModel)
             {
-                _viewModel = viewModel;
-                _current = gameViewModel;
+                _piCrossVM = piCrossViewModel;
+                _gameVM = gameViewModel;
             }
 
             public bool CanExecute(object parameter)
@@ -220,40 +165,30 @@ namespace GUI
 
             public void Execute(object parameter)
             {
-                if (!CanSetGame())
-                    return;
-
-                if (_viewModel.CurrentGame.Value == _current)
-                    _viewModel.State.Value = GameState.Setup;
+                if (_piCrossVM.CurrentGame.Value == _gameVM)
+                    _piCrossVM.State.Value = GameState.Setup;
                 else
-                    _viewModel.CurrentGame.Value = _current;
+                    _piCrossVM.CurrentGame.Value = _gameVM;
             }
 
             public event EventHandler CanExecuteChanged;
-
-            private bool CanSetGame()
-            {
-                // if (_viewModel.State.Value != GameState.Play)
-                return true;
-            }
         }
     }
 
     public sealed class BoardViewModel
     {
-        private readonly PiCrossFacade _model;
+        private readonly PiCrossViewModel _piCrossVM;
+
         private readonly IPlayablePuzzle _playablePuzzle;
         private readonly Puzzle _puzzle;
-        private readonly PiCrossViewModel _viewModel;
 
-        public BoardViewModel(PiCrossViewModel piCrossViewModel)
+        public BoardViewModel(PiCrossViewModel piCrossViewModel, PiCrossFacade piCrossFacade)
         {
-            _model = new PiCrossFacade();
-            _viewModel = piCrossViewModel;
-            _puzzle = _viewModel.CurrentGame.Value.Puzzle.Value;
-            _playablePuzzle = _model.CreatePlayablePuzzle(_puzzle);
+            _piCrossVM = piCrossViewModel;
+            _puzzle = _piCrossVM.CurrentGame.Value.Puzzle.Value;
+            _playablePuzzle = piCrossFacade.CreatePlayablePuzzle(_puzzle);
 
-            EnableControls = Cell.Derived(_viewModel.State, s => s == GameState.Play);
+            EnableControls = Cell.Derived(_piCrossVM.State, s => s == GameState.Play);
 
             Grid = new List<BoardControlViewModel>();
 
@@ -275,14 +210,14 @@ namespace GUI
             if (_puzzle.Grid[pos])
                 return true;
 
-            _viewModel.AddMistake();
+            //_viewModel.AddMistake();
             return false;
         }
 
         public void CheckGameState()
         {
             if (_playablePuzzle.IsSolved.Value)
-                _viewModel.State.Value = GameState.Win;
+                _piCrossVM.State.Value = GameState.Win;
         }
     }
 
