@@ -138,7 +138,6 @@ namespace GUI
         public Cell<string> Name { get; }
         public Cell<Puzzle> Puzzle { get; }
         public Cell<TimeSpan> BestTime { get; }
-
         public ICommand SelectGame { get; }
 
         private class SelectGameCommand : ICommand
@@ -209,7 +208,6 @@ namespace GUI
 
         public IPlayablePuzzleSquare PuzzleSquare { get; }
         public ICommand Move { get; }
-
         public Cell<bool> IsPlayable => _piCrossVM.PlayablePuzzle.Value.IsPlayable;
         public Cell<bool> IsClicked { get; }
 
