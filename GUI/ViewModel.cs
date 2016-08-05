@@ -207,9 +207,9 @@ namespace GUI
         }
 
         public IPlayablePuzzleSquare PuzzleSquare { get; }
-        public ICommand Move { get; }
         public Cell<bool> IsPlayable => _piCrossVM.PlayablePuzzle.Value.IsPlayable;
         public Cell<bool> IsClicked { get; }
+        public ICommand Move { get; }
 
         private void PerformMove()
         {
