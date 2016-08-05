@@ -19,11 +19,11 @@ namespace PiCross
 
         private readonly ISequence<PlayablePuzzleConstraints> rowConstraints;
 
-        private readonly Cell<bool> isSolved;
+        protected Cell<bool> isSolved;
 
-        private readonly Cell<bool> isPlayable;
+        protected Cell<bool> isPlayable;
 
-        private Cell<int> mistakes;
+        protected Cell<int> mistakes;
 
         public PlayablePuzzle() { }
 

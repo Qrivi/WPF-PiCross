@@ -26,9 +26,9 @@ namespace GUI
     public sealed class PiCrossViewModel
     {
         private readonly PiCrossFacade _model;
-        private readonly Chronometer _chrono;
+        private readonly IChronometer _chrono;
 
-        public PiCrossViewModel( List<ExtendedPuzzle> puzzles , Chronometer chronometer)
+        public PiCrossViewModel( IList<ExtendedPuzzle> puzzles , IChronometer chronometer)
         {
             _model = new PiCrossFacade();
             _chrono = chronometer;
@@ -43,8 +43,8 @@ namespace GUI
             PlayablePuzzle = Cell.Create(_model.CreateExtendedPlayablePuzzle(Puzzle.Value));
             Board = Cell.Create( new BoardViewModel(this));
 
-            State.ValueChanged += StateChanged;
-            Game.ValueChanged += GameChanged;
+            State.ValueChanged += CheckGameState;
+            CheckGameState();
 
             NewGame = new NewGameCommand(this);
         }
@@ -52,36 +52,27 @@ namespace GUI
         public Cell<GameState> State { get; }
         public IList<GameViewModel> Games { get; }
         public Cell<GameViewModel> Game { get; }
-        public Cell<Puzzle> Puzzle => Game.Value.Puzzle;
-        public Cell<IPlayablePuzzle> PlayablePuzzle { get; }
         public Cell<BoardViewModel> Board { get; }
+        public Cell<IPlayablePuzzle> PlayablePuzzle { get; }
+        public Cell<Puzzle> Puzzle => Game.Value.Puzzle;
         public Cell<TimeSpan> PlayTime => _chrono.TotalTime;
-        public Cell<int> Mistakes => PlayablePuzzle.Value.Mistakes;
         public ICommand NewGame { get; }
 
-        private void GameChanged()
-        {
-            PlayablePuzzle.Value = _model.CreateExtendedPlayablePuzzle(Puzzle.Value);
-           // MessageBox.Show("Puzzle Width: " + Puzzle.Value.Grid.Size.Width +"\nPlayable Width: "+PlayablePuzzle.Value.Grid.Size.Width);
-            //PlayablePuzzle.Refresh();
-        }
-
-        private void StateChanged()
+        private void CheckGameState()
         {
             switch (State.Value)
             {
+                case GameState.Init:
+                    PlayablePuzzle.Value = _model.CreateExtendedPlayablePuzzle(Puzzle.Value);
+                    PlayablePuzzle.Value.IsPlayable.ValueChanged += CheckPlayablePuzzle;
+                    break;
                 case GameState.Play:
                     Board.Value = new BoardViewModel(this);
                     StartCounter();
                     break;
-                case GameState.Win:
-                    StopCounter();
-                    if (CheckNewBestTime())
-                        State.Value = GameState.BestTime;
-                    break;
                 case GameState.BestTime:
+                case GameState.Win:
                 case GameState.Lose:
-                case GameState.Init:
                 case GameState.Setup:
                     StopCounter();
                     break;
@@ -90,11 +81,20 @@ namespace GUI
             }
         }
 
+        private void CheckPlayablePuzzle()
+        {
+            if (PlayablePuzzle.Value.IsSolved.Value && CheckNewBestTime())
+                State.Value = GameState.BestTime;
+            else if (PlayablePuzzle.Value.IsSolved.Value)
+                State.Value = GameState.Win;
+            else
+                State.Value = GameState.Lose;
+        }
+
         private bool CheckNewBestTime()
         {
             if (Game.Value.BestTime.Value != TimeSpan.Zero && Game.Value.BestTime.Value <= PlayTime.Value)
                 return false;
-
             Game.Value.BestTime.Value = PlayTime.Value;
             return true;
         }
@@ -127,6 +127,7 @@ namespace GUI
 
             public void Execute(object parameter)
             {
+                _viewModel.State.Value = GameState.Init;
                 _viewModel.State.Value = GameState.Play;
             }
 
@@ -199,21 +200,6 @@ namespace GUI
         public IEnumerable<IPlayablePuzzleConstraints> ColumnConstraints => _playablePuzzle.ColumnConstraints.Items;
         public int GridWidth => _playablePuzzle.Grid.Size.Width;
         public int GridHeight => _playablePuzzle.Grid.Size.Height;
-
-        public bool CheckValidMove(Vector2D pos)
-        {
-            if (_puzzle.Grid[pos])
-                return true;
-
-            //_viewModel.AddMistake();
-            return false;
-        }
-
-        public void CheckGameState()
-        {
-           // if (_playablePuzzle.IsSolved.Value)
-              //  _viewModel.State.Value = GameState.Win;
-        }
     }
 
 
@@ -226,10 +212,8 @@ namespace GUI
             _piCrossVM = piCrossViewModel;
             PuzzleSquare = playablePuzzleSquare;
 
-            PuzzleSquare.Contents.Value = Square.EMPTY;
-
-            //CanClick = Cell.Derived<Square,bool>( Field.Contents, f => Equals(f, Square.EMPTY) );  // -> readonly 
             IsClicked = Cell.Create(false);
+            PuzzleSquare.Contents.Value = Square.EMPTY;
 
             Move = new MoveCommand(this);
         }
@@ -243,14 +227,13 @@ namespace GUI
         private void PerformMove()
         {
             if (_piCrossVM.Puzzle.Value.Grid[PuzzleSquare.Position])
-            {
                 PuzzleSquare.Contents.Value = Square.FILLED;
-            }
             else
-            {
                 _piCrossVM.PlayablePuzzle.Value.Mistakes.Value++;
-            }
-               
+            //Console.WriteLine("=======================================");
+            //Console.WriteLine("IsPlayable: " + IsPlayable.Value);
+            //Console.WriteLine("Mistakes: " + _piCrossVM.PlayablePuzzle.Value.Mistakes.Value);
+
             IsClicked.Value = true;
         }
 

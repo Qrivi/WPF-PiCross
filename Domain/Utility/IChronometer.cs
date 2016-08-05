@@ -4,15 +4,17 @@ using System.Linq;
 using System.Resources;
 using System.Text;
 using System.Threading.Tasks;
+using Cells;
 
-namespace PiCross.Utility
+namespace Utility
 {
-    interface ITimer
+    public interface IChronometer
     {
-        event Action<int> Tick;
-
         void Start();
-        void Stop();
+        void Pause();
         void Reset();
+        void Tick();
+
+        Cell<TimeSpan> TotalTime { get; }
     }
 }

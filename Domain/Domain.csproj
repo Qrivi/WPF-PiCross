@@ -95,7 +95,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Cells\Util.cs" />
     <Compile Include="Utility\Extensions.cs" />
-    <Compile Include="Utility\ITimer.cs" />
+    <Compile Include="Utility\IChronometer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PiCross\uml-PlayablePuzzle.cd" />

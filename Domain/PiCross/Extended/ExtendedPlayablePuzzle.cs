@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Cells;
-using PiCross.Utility;
 
 namespace PiCross
 {
@@ -21,12 +20,13 @@ namespace PiCross
         public ExtendedPlayablePuzzle( PlayGrid playGrid )
             :base( playGrid )
         {
-            Mistakes = Cell.Create(0);
-            //IsPlayable = Cell.Derived<int, bool, bool>(Mistakes, IsSolved,( Mistakes.Value >= 5 && IsSolved.Value == false));
-            IsPlayable = Cell.Derived(Mistakes, m => m >= 5);
+            mistakes = Cell.Create(0);
+            isPlayable = Cell.Derived(mistakes, isSolved, (m, s) =>
+            {
+                if (s)
+                    return false;
+                return m < 5;
+            });
         }
-        
-        public Cell<int> Mistakes { get; }
-        public Cell<bool> IsPlayable { get; }
     }
 }

@@ -7,12 +7,10 @@ using Cells;
 
 namespace Utility
 {
-    public class Chronometer
+    public class Chronometer : IChronometer
     {
         private DateTime lastTick;
-
         private bool started;
-
         private Cell<TimeSpan> totalTime;
 
         public Chronometer()

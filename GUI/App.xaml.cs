@@ -14,7 +14,7 @@ namespace GUI
     /// </summary>
     public partial class App : Application
     {
-        private Chronometer _chrono;
+        private IChronometer _chrono;
 
         protected override void OnStartup(StartupEventArgs e)
         {

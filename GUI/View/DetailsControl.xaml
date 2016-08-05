@@ -19,7 +19,7 @@
                     <Style TargetType="TextBlock" BasedOn="{StaticResource MistakeBox}">
                         <Style.Triggers>
                             <DataTrigger
-                                Binding="{Binding Mistakes.Value, Converter={StaticResource MistakeToColor}, ConverterParameter={extensions:Int32 1}}"
+                                Binding="{Binding PlayablePuzzle.Value.Mistakes.Value, Converter={StaticResource MistakeToColor}, ConverterParameter={extensions:Int32 1}}"
                                 Value="true">
                                 <Setter Property="Foreground" Value="{DynamicResource MistakeColor}" />
                             </DataTrigger>
@@ -32,7 +32,7 @@
                     <Style TargetType="TextBlock" BasedOn="{StaticResource MistakeBox}">
                         <Style.Triggers>
                             <DataTrigger
-                                Binding="{Binding Mistakes.Value, Converter={StaticResource MistakeToColor}, ConverterParameter={extensions:Int32 2}}"
+                                Binding="{Binding PlayablePuzzle.Value.Mistakes.Value, Converter={StaticResource MistakeToColor}, ConverterParameter={extensions:Int32 2}}"
                                 Value="true">
                                 <Setter Property="Foreground" Value="{DynamicResource MistakeColor}" />
                             </DataTrigger>
@@ -45,7 +45,7 @@
                     <Style TargetType="TextBlock" BasedOn="{StaticResource MistakeBox}">
                         <Style.Triggers>
                             <DataTrigger
-                                Binding="{Binding Mistakes.Value, Converter={StaticResource MistakeToColor}, ConverterParameter={extensions:Int32 3}}"
+                                Binding="{Binding PlayablePuzzle.Value.Mistakes.Value, Converter={StaticResource MistakeToColor}, ConverterParameter={extensions:Int32 3}}"
                                 Value="true">
                                 <Setter Property="Foreground" Value="{DynamicResource MistakeColor}" />
                             </DataTrigger>
@@ -58,7 +58,7 @@
                     <Style TargetType="TextBlock" BasedOn="{StaticResource MistakeBox}">
                         <Style.Triggers>
                             <DataTrigger
-                                Binding="{Binding Mistakes.Value, Converter={StaticResource MistakeToColor}, ConverterParameter={extensions:Int32 4}}"
+                                Binding="{Binding PlayablePuzzle.Value.Mistakes.Value, Converter={StaticResource MistakeToColor}, ConverterParameter={extensions:Int32 4}}"
                                 Value="true">
                                 <Setter Property="Foreground" Value="{DynamicResource MistakeColor}" />
                             </DataTrigger>
@@ -71,7 +71,7 @@
                     <Style TargetType="TextBlock" BasedOn="{StaticResource MistakeBox}">
                         <Style.Triggers>
                             <DataTrigger
-                                Binding="{Binding Mistakes.Value, Converter={StaticResource MistakeToColor}, ConverterParameter={extensions:Int32 5}}"
+                                Binding="{Binding PlayablePuzzle.Value.Mistakes.Value, Converter={StaticResource MistakeToColor}, ConverterParameter={extensions:Int32 5}}"
                                 Value="true">
                                 <Setter Property="Foreground" Value="{StaticResource MistakeColor}" />
                             </DataTrigger>
