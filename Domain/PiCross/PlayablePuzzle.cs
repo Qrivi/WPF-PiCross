@@ -21,6 +21,10 @@ namespace PiCross
 
         private readonly Cell<bool> isSolved;
 
+        private readonly Cell<bool> isPlayable;
+
+        private Cell<int> mistakes;
+
         public PlayablePuzzle() { }
 
         public PlayablePuzzle( ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints )
@@ -42,6 +46,8 @@ namespace PiCross
                 this.columnConstraints = this.playGrid.ColumnConstraints.Map( constraints => new PlayablePuzzleConstraints( constraints ) ).Copy();
                 this.rowConstraints = this.playGrid.RowConstraints.Map( constraints => new PlayablePuzzleConstraints( constraints ) ).Copy();
                 this.isSolved = Cell.Derived( DeriveIsSolved );
+                this.Mistakes = Cell.Create(0);
+                this.isPlayable = Cell.Create(true);
             }
         }
 
@@ -50,14 +56,25 @@ namespace PiCross
             return columnConstraints.Items.All( x => x.IsSatisfied.Value ) && rowConstraints.Items.All( x => x.IsSatisfied.Value );
         }
 
-        public Cell<bool> IsSolved
-        {
-            get
-            {
+        public Cell<bool> IsSolved {
+            get {
                 return isSolved;
             }
         }
-    
+
+        public Cell<bool> IsPlayable {
+            get {
+                return isPlayable;
+            }
+        }
+
+        public Cell<int> Mistakes {
+            get {
+                return mistakes;
+            }
+            set { mistakes = value; }
+        }
+
         public IGrid<IPlayablePuzzleSquare> Grid
         {
             get

@@ -1,29 +1,29 @@
 ﻿<UserControl x:Class="GUI.Board"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:gui="clr-namespace:GUI"
-             mc:Ignorable="d"
+             mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid Background="{StaticResource BackgroundApplication}"
-          HorizontalAlignment="Center"
+          HorizontalAlignment="Center" 
           VerticalAlignment="Center">
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <ItemsControl Grid.Row="1" Grid.Column="0"
-                      ItemsSource="{Binding RowConstraints}">
+            ItemsSource="{Binding RowConstraints}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <StackPanel Orientation="Vertical" />
+                    <StackPanel Orientation="Vertical"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
@@ -33,13 +33,13 @@
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <StackPanel Orientation="Horizontal"
-                                            HorizontalAlignment="Right"
+                                            HorizontalAlignment="Right" 
                                             VerticalAlignment="Center">
                                     <StackPanel.Style>
                                         <Style TargetType="StackPanel">
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding IsSatisfied.Value}" Value="true">
-                                                    <Setter Property="Opacity" Value=".2" />
+                                                    <Setter Property="Opacity" Value=".2"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -50,9 +50,9 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Border Background="{StaticResource BoardConstraint}"
-                                        BorderBrush="{StaticResource BoardBorder}"
+                                        BorderBrush="{StaticResource BoardBorder}" 
                                         BorderThickness="1">
-                                    <TextBlock Text="{Binding Value}" Style="{StaticResource ConstraintBox}" />
+                                    <TextBlock Text="{Binding Value}" Style="{StaticResource ConstraintBox}"/>
                                 </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
@@ -63,10 +63,10 @@
         </ItemsControl>
 
         <ItemsControl Grid.Row="0" Grid.Column="1"
-                      ItemsSource="{Binding ColumnConstraints}">
+            ItemsSource="{Binding ColumnConstraints}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal" />
+                    <StackPanel Orientation="Horizontal"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
@@ -76,13 +76,13 @@
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <StackPanel Orientation="Vertical"
-                                            HorizontalAlignment="Center"
+                                            HorizontalAlignment="Center" 
                                             VerticalAlignment="Bottom">
                                     <StackPanel.Style>
                                         <Style TargetType="StackPanel">
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding IsSatisfied.Value}" Value="true">
-                                                    <Setter Property="Opacity" Value=".2" />
+                                                    <Setter Property="Opacity" Value=".2"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
@@ -93,9 +93,9 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Border Background="{StaticResource BoardConstraint}"
-                                        BorderBrush="{StaticResource BoardBorder}"
+                                        BorderBrush="{StaticResource BoardBorder}" 
                                         BorderThickness="1">
-                                    <TextBlock Text="{Binding Value}" Style="{StaticResource ConstraintBox}" />
+                                    <TextBlock Text="{Binding Value}" Style="{StaticResource ConstraintBox}"/>
                                 </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
@@ -105,14 +105,14 @@
         </ItemsControl>
 
         <ItemsControl Grid.Row="1" Grid.Column="1"
-                      ItemsSource="{Binding Grid}">
+            ItemsSource="{Binding Grid}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <UniformGrid
+                    <UniformGrid 
                         Rows="{Binding GridHeight}"
-                        Columns="{Binding GridWidth}"
-                        VerticalAlignment="Center"
-                        HorizontalAlignment="Center" />
+                        Columns="{Binding GridWidth}" 
+                        VerticalAlignment="Center" 
+                        HorizontalAlignment="Center"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
@@ -120,15 +120,15 @@
                     <Button Command="{Binding Move}">
                         <Button.Template>
                             <ControlTemplate TargetType="{x:Type Button}">
-                                <Border
+                                <Border 
                                     Background="{StaticResource BoardBackground}"
-                                    BorderBrush="{StaticResource BoardBorder}"
+                                    BorderBrush="{StaticResource BoardBorder}" 
                                     BorderThickness="1">
-                                    <ContentPresenter Content="{TemplateBinding Content}" />
+                                    <ContentPresenter Content="{TemplateBinding Content}"/>
                                 </Border>
                             </ControlTemplate>
                         </Button.Template>
-                        <gui:BoardControl Width="50" Height="50" />
+                        <gui:BoardControl Width="50" Height="50"/>
                     </Button>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

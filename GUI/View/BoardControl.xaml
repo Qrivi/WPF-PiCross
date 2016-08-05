@@ -12,8 +12,8 @@
                 <Style.Triggers>
                     <MultiDataTrigger>
                         <MultiDataTrigger.Conditions>
-                            <Condition Binding="{Binding CanPlay.Value}" Value="true" />
-                            <Condition Binding="{Binding CanClick.Value}" Value="true" />
+                            <Condition Binding="{Binding IsClicked.Value}" Value="false" />
+                            <Condition Binding="{Binding IsPlayable.Value}" Value="true" />
                             <Condition Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsMouseOver}"
                                        Value="true" />
                         </MultiDataTrigger.Conditions>
@@ -21,7 +21,7 @@
                         <Setter Property="Background" Value="{StaticResource TextColor}" />
                         <Setter Property="Opacity" Value=".1" />
                     </MultiDataTrigger>
-                    <DataTrigger Binding="{Binding Field.Contents.Value.Symbol}" Value="x">
+                    <DataTrigger Binding="{Binding PuzzleSquare.Contents.Value.Symbol}" Value="x">
                         <Setter Property="Background" Value="{StaticResource TextColor}" />
                     </DataTrigger>
                 </Style.Triggers>

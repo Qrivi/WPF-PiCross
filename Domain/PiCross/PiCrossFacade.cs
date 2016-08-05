@@ -84,9 +84,9 @@ namespace PiCross
             return new PlayablePuzzle(columnConstraints: puzzle.ColumnConstraints, rowConstraints: puzzle.RowConstraints);
         }
 
-        public IPlayablePuzzle CreateExtendedPlayablePuzzle(ExtendedPuzzle ePuzzle)
+        public IPlayablePuzzle CreateExtendedPlayablePuzzle(Puzzle puzzle)
         {
-            return new ExtendedPlayablePuzzle(name: ePuzzle.Name.Value, columnConstraints: ePuzzle.Puzzle.Value.ColumnConstraints, rowConstraints: ePuzzle.Puzzle.Value.RowConstraints);
+            return new ExtendedPlayablePuzzle(columnConstraints: puzzle.ColumnConstraints, rowConstraints: puzzle.RowConstraints);
         }
     }
 }

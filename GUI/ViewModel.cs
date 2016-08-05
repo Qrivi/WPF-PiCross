@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Permissions;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using System.Xml;
@@ -30,35 +32,46 @@ namespace GUI
         {
             _model = new PiCrossFacade();
             _chrono = chronometer;
-           
+
             State = Cell.Create(GameState.Init);
-            State.ValueChanged += StateChanged;
 
             Games = new List<GameViewModel>();
             foreach (var puzzle in puzzles)
                 Games.Add(new GameViewModel(this, puzzle));
-            CurrentGame = Cell.Create(Games[0]);
 
-            Board = Cell.Create(new BoardViewModel(this, _model));
+            Game = Cell.Create(Games[0]);
+            PlayablePuzzle = Cell.Create(_model.CreateExtendedPlayablePuzzle(Puzzle.Value));
+            Board = Cell.Create( new BoardViewModel(this));
+
+            State.ValueChanged += StateChanged;
+            Game.ValueChanged += GameChanged;
 
             NewGame = new NewGameCommand(this);
         }
 
         public Cell<GameState> State { get; }
         public IList<GameViewModel> Games { get; }
-        public Cell<GameViewModel> CurrentGame { get; }
+        public Cell<GameViewModel> Game { get; }
+        public Cell<Puzzle> Puzzle => Game.Value.Puzzle;
+        public Cell<IPlayablePuzzle> PlayablePuzzle { get; }
         public Cell<BoardViewModel> Board { get; }
-
         public Cell<TimeSpan> PlayTime => _chrono.TotalTime;
-
+        public Cell<int> Mistakes => PlayablePuzzle.Value.Mistakes;
         public ICommand NewGame { get; }
+
+        private void GameChanged()
+        {
+            PlayablePuzzle.Value = _model.CreateExtendedPlayablePuzzle(Puzzle.Value);
+           // MessageBox.Show("Puzzle Width: " + Puzzle.Value.Grid.Size.Width +"\nPlayable Width: "+PlayablePuzzle.Value.Grid.Size.Width);
+            //PlayablePuzzle.Refresh();
+        }
 
         private void StateChanged()
         {
             switch (State.Value)
             {
                 case GameState.Play:
-                    Board.Value = new BoardViewModel(this, _model);
+                    Board.Value = new BoardViewModel(this);
                     StartCounter();
                     break;
                 case GameState.Win:
@@ -77,6 +90,15 @@ namespace GUI
             }
         }
 
+        private bool CheckNewBestTime()
+        {
+            if (Game.Value.BestTime.Value != TimeSpan.Zero && Game.Value.BestTime.Value <= PlayTime.Value)
+                return false;
+
+            Game.Value.BestTime.Value = PlayTime.Value;
+            return true;
+        }
+
         private void StartCounter()
         {
             _chrono.Reset();
@@ -87,15 +109,6 @@ namespace GUI
         {
             _chrono.Tick();
             _chrono.Pause();
-        }
-
-        private bool CheckNewBestTime()
-        {
-            if (CurrentGame.Value.BestTime.Value != TimeSpan.Zero && CurrentGame.Value.BestTime.Value <= PlayTime.Value)
-                return false;
-
-            CurrentGame.Value.BestTime.Value = PlayTime.Value;
-            return true;
         }
 
         private class NewGameCommand : ICommand
@@ -114,31 +127,22 @@ namespace GUI
 
             public void Execute(object parameter)
             {
-                if (!CanSetGame())
-                    return;
-                _viewModel.State.Value = GameState.Init;
                 _viewModel.State.Value = GameState.Play;
             }
 
             public event EventHandler CanExecuteChanged;
-
-            private bool CanSetGame()
-            {
-                //if (_viewModel.State.Value != GameState.Play)
-                return true;
-            }
         }
     }
 
     public sealed class GameViewModel
     {
-        public GameViewModel(PiCrossViewModel viewModel, ExtendedPuzzle puzzle)
+        public GameViewModel(PiCrossViewModel piCrossViewModel, ExtendedPuzzle puzzle)
         {
             Name = puzzle.Name;
             Puzzle = puzzle.Puzzle;
             BestTime = puzzle.BestTime;
 
-            SelectGame = new SelectGameCommand(viewModel, this);
+            SelectGame = new SelectGameCommand(piCrossViewModel, this);
         }
 
         public Cell<string> Name { get; }
@@ -165,10 +169,10 @@ namespace GUI
 
             public void Execute(object parameter)
             {
-                if (_piCrossVM.CurrentGame.Value == _gameVM)
+                if (_piCrossVM.Game.Value == _gameVM)
                     _piCrossVM.State.Value = GameState.Setup;
                 else
-                    _piCrossVM.CurrentGame.Value = _gameVM;
+                    _piCrossVM.Game.Value = _gameVM;
             }
 
             public event EventHandler CanExecuteChanged;
@@ -177,33 +181,24 @@ namespace GUI
 
     public sealed class BoardViewModel
     {
-        private readonly PiCrossViewModel _piCrossVM;
-
-        private readonly IPlayablePuzzle _playablePuzzle;
         private readonly Puzzle _puzzle;
+        private readonly IPlayablePuzzle _playablePuzzle;
 
-        public BoardViewModel(PiCrossViewModel piCrossViewModel, PiCrossFacade piCrossFacade)
+        public BoardViewModel(PiCrossViewModel piCrossViewModel)
         {
-            _piCrossVM = piCrossViewModel;
-            _puzzle = _piCrossVM.CurrentGame.Value.Puzzle.Value;
-            _playablePuzzle = piCrossFacade.CreatePlayablePuzzle(_puzzle);
-
-            EnableControls = Cell.Derived(_piCrossVM.State, s => s == GameState.Play);
+            _puzzle = piCrossViewModel.Puzzle.Value;
+            _playablePuzzle = piCrossViewModel.PlayablePuzzle.Value;
 
             Grid = new List<BoardControlViewModel>();
-
             foreach (var square in _playablePuzzle.Grid.Items)
-                Grid.Add(new BoardControlViewModel(this, square));
+                Grid.Add(new BoardControlViewModel(piCrossViewModel, square));
         }
 
         public IList<BoardControlViewModel> Grid { get; }
         public IEnumerable<IPlayablePuzzleConstraints> RowConstraints => _playablePuzzle.RowConstraints.Items;
         public IEnumerable<IPlayablePuzzleConstraints> ColumnConstraints => _playablePuzzle.ColumnConstraints.Items;
-
         public int GridWidth => _playablePuzzle.Grid.Size.Width;
         public int GridHeight => _playablePuzzle.Grid.Size.Height;
-
-        public Cell<bool> EnableControls { get; }
 
         public bool CheckValidMove(Vector2D pos)
         {
@@ -216,61 +211,66 @@ namespace GUI
 
         public void CheckGameState()
         {
-            if (_playablePuzzle.IsSolved.Value)
-                _piCrossVM.State.Value = GameState.Win;
+           // if (_playablePuzzle.IsSolved.Value)
+              //  _viewModel.State.Value = GameState.Win;
         }
     }
 
+
     public sealed class BoardControlViewModel
     {
-        private readonly BoardViewModel _boardViewModel;
+        private readonly PiCrossViewModel _piCrossVM;
 
-        public BoardControlViewModel(BoardViewModel boardViewModel, IPlayablePuzzleSquare square)
+        public BoardControlViewModel(PiCrossViewModel piCrossViewModel, IPlayablePuzzleSquare playablePuzzleSquare)
         {
-            _boardViewModel = boardViewModel;
-            Field = square;
+            _piCrossVM = piCrossViewModel;
+            PuzzleSquare = playablePuzzleSquare;
 
-            Field.Contents.Value = Square.EMPTY;
+            PuzzleSquare.Contents.Value = Square.EMPTY;
 
             //CanClick = Cell.Derived<Square,bool>( Field.Contents, f => Equals(f, Square.EMPTY) );  // -> readonly 
-            CanClick = Cell.Create(true);
+            IsClicked = Cell.Create(false);
 
             Move = new MoveCommand(this);
         }
 
-        public IPlayablePuzzleSquare Field { get; }
+        public IPlayablePuzzleSquare PuzzleSquare { get; }
         public ICommand Move { get; }
-
-        public Cell<bool> CanPlay => _boardViewModel.EnableControls;
-        public Cell<bool> CanClick { get; }
+        
+        public Cell<bool> IsPlayable => _piCrossVM.PlayablePuzzle.Value.IsPlayable;
+        public Cell<bool> IsClicked { get; }
 
         private void PerformMove()
         {
-            if (_boardViewModel.CheckValidMove(Field.Position))
+            if (_piCrossVM.Puzzle.Value.Grid[PuzzleSquare.Position])
             {
-                Field.Contents.Value = Square.FILLED;
-                _boardViewModel.CheckGameState();
+                PuzzleSquare.Contents.Value = Square.FILLED;
             }
-            CanClick.Value = false;
+            else
+            {
+                _piCrossVM.PlayablePuzzle.Value.Mistakes.Value++;
+            }
+               
+            IsClicked.Value = true;
         }
 
         private class MoveCommand : ICommand
         {
-            private readonly BoardControlViewModel _current;
+            private readonly BoardControlViewModel boardControlVM;
 
-            public MoveCommand(BoardControlViewModel viewModel)
+            public MoveCommand(BoardControlViewModel boardControlViewModel)
             {
-                _current = viewModel;
+                boardControlVM = boardControlViewModel;
             }
 
             public bool CanExecute(object parameter)
             {
-                return _current.CanClick.Value && _current.CanPlay.Value;
+                return !boardControlVM.IsClicked.Value && boardControlVM.IsPlayable.Value;
             }
 
             public void Execute(object parameter)
             {
-                _current.PerformMove();
+                boardControlVM.PerformMove();
             }
 
             public event EventHandler CanExecuteChanged;

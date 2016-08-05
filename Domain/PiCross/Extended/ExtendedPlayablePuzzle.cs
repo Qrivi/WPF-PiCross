@@ -12,43 +12,21 @@ namespace PiCross
 {
     internal class ExtendedPlayablePuzzle : PlayablePuzzle
     {
-        public ExtendedPlayablePuzzle( string name, ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints )
-            : this(name, new PlayGrid(columnConstraints: columnConstraints, rowConstraints: rowConstraints))
+        public ExtendedPlayablePuzzle( ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints )
+            : this( new PlayGrid(columnConstraints: columnConstraints, rowConstraints: rowConstraints))
         {
                 // NOP
         }
 
-        public ExtendedPlayablePuzzle( string name, PlayGrid playGrid )
+        public ExtendedPlayablePuzzle( PlayGrid playGrid )
             :base( playGrid )
         {
-            Name = Cell.Create( name );
             Mistakes = Cell.Create(0);
-            // Timer?
-            BestTime = Cell.Create( new TimeSpan() );
-            Playable = Cell.Derived(Mistakes, m => m >= 5);
-
-    }
-
-        public Cell<string> Name { get; }
+            //IsPlayable = Cell.Derived<int, bool, bool>(Mistakes, IsSolved,( Mistakes.Value >= 5 && IsSolved.Value == false));
+            IsPlayable = Cell.Derived(Mistakes, m => m >= 5);
+        }
+        
         public Cell<int> Mistakes { get; }
-        public Cell<ITimer> Timer { get; set; }
-        public Cell<TimeSpan> BestTime { get; }
-        public Cell<bool> Playable { get; }
-
-        public void StartTimer()
-        {
-            Timer.Value.Start();
-        }
-
-        public void StopTimer()
-        {
-            Timer.Value.Stop();
-        }
-
-        public void ResetTimer()
-        {
-            Timer.Value.Reset();
-        }
-
+        public Cell<bool> IsPlayable { get; }
     }
 }

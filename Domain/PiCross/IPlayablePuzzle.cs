@@ -48,6 +48,10 @@ namespace PiCross
         /// false otherwise.
         /// </summary>
         Cell<bool> IsSolved { get; }
+
+        Cell<bool> IsPlayable { get; }
+
+        Cell<int> Mistakes { get; }
     }
 
     public interface IPlayablePuzzleSquare

@@ -18,7 +18,7 @@
                     Background="{StaticResource BackgroundSidebar}">
             <TextBlock Style="{StaticResource AppTitle}" />
             <TextBlock Style="{StaticResource SubTitle}">Selected Puzzle:</TextBlock>
-            <local:GameControl DataContext="{Binding CurrentGame.Value}" />
+            <local:GameControl DataContext="{Binding Game.Value}" />
             <TextBlock Style="{StaticResource SubTitle}">Current Game:</TextBlock>
             <local:DetailsControl />
             <Button Width="100" Margin="30" Command="{Binding NewGame}">New Game</Button>
