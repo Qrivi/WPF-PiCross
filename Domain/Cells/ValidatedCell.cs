@@ -14,20 +14,14 @@ namespace Cells
 
         public override T Value
         {
-            get
-            {
-                return base.Value;
-            }
+            get { return base.Value; }
             set
             {
-                if ( !validator( value ) )
+                if (!validator(value))
                 {
-                    throw new ArgumentException( "Invalid value" );
+                    throw new ArgumentException("Invalid value");
                 }
-                else
-                {
-                    base.Value = value;
-                }
+                base.Value = value;
             }
         }
     }

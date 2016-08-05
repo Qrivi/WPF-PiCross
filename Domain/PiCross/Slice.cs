@@ -1,122 +1,123 @@
-﻿using DataStructures;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Linq;
+using DataStructures;
 
 namespace PiCross
 {
     internal class Slice
     {
-        private readonly ISequence<Square> squares;
-
         public Slice(ISequence<bool> squares)
             : this(squares.Map(x => x ? Square.FILLED : Square.EMPTY))
         {
             // NOP
         }
 
-        public Slice( ISequence<Square> squares )
+        public Slice(ISequence<Square> squares)
         {
-            if ( squares == null )
+            if (squares == null)
             {
-                throw new ArgumentNullException( "squares" );
+                throw new ArgumentNullException("squares");
             }
-            else
-            {
-                this.squares = squares;
-            }
+            Squares = squares;
         }
 
-        public ISequence<Square> Squares
+        public ISequence<Square> Squares { get; }
+
+        public bool IsFullyKnown
+        {
+            get { return Squares.Items.All(x => x != Square.UNKNOWN); }
+        }
+
+        public Slice KnownPrefix
         {
             get
             {
-                return squares;
+                var known = Squares.TakeWhile(sqr => sqr != Square.UNKNOWN);
+
+                if (known.Length == Squares.Length)
+                {
+                    return this;
+                }
+                var sqrs = known.Reverse().DropWhile(sqr => sqr == Square.FILLED).Reverse();
+
+                return new Slice(sqrs);
             }
         }
 
-        public override bool Equals( object obj )
+        public Slice KnownSuffix
         {
-            return Equals( obj as Slice );
+            get { return Reverse().KnownPrefix.Reverse(); }
         }
 
-        public bool Equals( Slice that )
+        public override bool Equals(object obj)
         {
-            if ( that == null )
+            return Equals(obj as Slice);
+        }
+
+        public bool Equals(Slice that)
+        {
+            if (that == null)
             {
                 return false;
             }
-            else
-            {
-                return this.squares.Equals( that.squares );
-            }
+            return Squares.Equals(that.Squares);
         }
 
         public override int GetHashCode()
         {
-            return squares.GetHashCode();
+            return Squares.GetHashCode();
         }
 
         public override string ToString()
         {
-            return squares.Map( x => x.Symbol ).AsString();
+            return Squares.Map(x => x.Symbol).AsString();
         }
 
-        public bool CompatibleWith( Slice that )
+        public bool CompatibleWith(Slice that)
         {
-            if ( that == null )
+            if (that == null)
             {
-                throw new ArgumentNullException( "slice" );
+                throw new ArgumentNullException("slice");
             }
-            else if ( this.Squares.Length != that.Squares.Length )
+            if (Squares.Length != that.Squares.Length)
             {
-                throw new ArgumentException( "Slices should have same length" );
+                throw new ArgumentException("Slices should have same length");
             }
-            else
-            {
-                return this.squares.Indices.All( i => squares[i].CompatibleWith( that.squares[i] ) );
-            }
+            return Squares.Indices.All(i => Squares[i].CompatibleWith(that.Squares[i]));
         }
 
-        public Slice Merge( Slice that )
+        public Slice Merge(Slice that)
         {
-            if ( that == null )
+            if (that == null)
             {
-                throw new ArgumentNullException( "slice" );
+                throw new ArgumentNullException("slice");
             }
-            else if ( this.Squares.Length != that.Squares.Length )
+            if (Squares.Length != that.Squares.Length)
             {
-                throw new ArgumentException( "Slices should have same length" );
+                throw new ArgumentException("Slices should have same length");
             }
-            else
-            {
-                return new Slice( this.squares.ZipWith( that.squares, ( x, y ) => x.Merge( y ) ) );
-            }
+            return new Slice(Squares.ZipWith(that.Squares, (x, y) => x.Merge(y)));
         }
 
-        public static Slice FromString( string str )
+        public static Slice FromString(string str)
         {
-            return new Slice( Sequence.FromString( str ).Map( Square.FromSymbol ) );
+            return new Slice(Sequence.FromString(str).Map(Square.FromSymbol));
         }
 
-        public static Slice Merge( IEnumerable<Slice> slices )
+        public static Slice Merge(IEnumerable<Slice> slices)
         {
-            return slices.Aggregate( ( x, y ) => x.Merge( y ) );
+            return slices.Aggregate((x, y) => x.Merge(y));
         }
 
-        public Slice Refine( Constraints constraints )
+        public Slice Refine(Constraints constraints)
         {
-            if ( constraints == null )
+            if (constraints == null)
             {
-                throw new ArgumentNullException( "constraints" );
+                throw new ArgumentNullException("constraints");
             }
-            else
-            {
-                return new Slice( constraints.Superposition( squares ) );
-            }
+            return new Slice(constraints.Superposition(Squares));
         }
 
         public ISequence<Range> FindBlocks()
@@ -124,36 +125,36 @@ namespace PiCross
             var blocks = new List<Range>();
             var start = -1;
 
-            var squares = this.squares.Concatenate( Sequence.FromItems( Square.EMPTY ) );
+            var squares = Squares.Concatenate(Sequence.FromItems(Square.EMPTY));
 
-            for ( var i = 0; i != this.squares.Length; ++i )
+            for (var i = 0; i != Squares.Length; ++i)
             {
-                var square = this.squares[i];
+                var square = Squares[i];
 
-                Debug.Assert( square != null );
+                Debug.Assert(square != null);
 
-                if ( square == Square.UNKNOWN )
+                if (square == Square.UNKNOWN)
                 {
-                    throw new InvalidOperationException( "Slice must be fully known" );
+                    throw new InvalidOperationException("Slice must be fully known");
                 }
-                else if ( square == Square.EMPTY )
+                if (square == Square.EMPTY)
                 {
-                    if ( start != -1 )
+                    if (start != -1)
                     {
-                        blocks.Add( Range.FromStartAndEndExclusive( start, i - 1 ) );
+                        blocks.Add(Range.FromStartAndEndExclusive(start, i - 1));
                         start = -1;
                     }
                 }
                 else // square == Square.FILLED
                 {
-                    if ( start == -1 )
+                    if (start == -1)
                     {
                         start = i;
                     }
                 }
             }
 
-            return Sequence.FromEnumerable( blocks );
+            return Sequence.FromEnumerable(blocks);
         }
 
         public Constraints DeriveConstraints()
@@ -161,90 +162,55 @@ namespace PiCross
             var fillCount = 0;
             var constraints = new List<int>();
 
-            for ( var i = 0; i != this.squares.Length; ++i )
+            for (var i = 0; i != Squares.Length; ++i)
             {
-                var square = this.squares[i];
+                var square = Squares[i];
 
-                if ( square == Square.FILLED )
+                if (square == Square.FILLED)
                 {
                     fillCount++;
                 }
-                else if ( square == Square.EMPTY )
+                else if (square == Square.EMPTY)
                 {
-                    if ( fillCount > 0 )
+                    if (fillCount > 0)
                     {
-                        constraints.Add( fillCount );
+                        constraints.Add(fillCount);
                     }
 
                     fillCount = 0;
                 }
                 else
                 {
-                    throw new InvalidOperationException( "Slice contained invalid square" );
+                    throw new InvalidOperationException("Slice contained invalid square");
                 }
             }
 
-            if ( fillCount > 0 )
+            if (fillCount > 0)
             {
-                constraints.Add( fillCount );
+                constraints.Add(fillCount);
             }
 
-            return Constraints.FromValues( constraints );
-        }
-
-        public bool IsFullyKnown
-        {
-            get
-            {
-                return squares.Items.All( x => x != Square.UNKNOWN );
-            }
-        }
-
-        public Slice KnownPrefix
-        {
-            get
-            {
-                var known = this.squares.TakeWhile( sqr => sqr != Square.UNKNOWN );
-
-                if ( known.Length == this.squares.Length )
-                {
-                    return this;
-                }
-                else
-                {
-                    var sqrs = known.Reverse().DropWhile( sqr => sqr == Square.FILLED ).Reverse();
-
-                    return new Slice( sqrs );
-                }
-            }
-        }
-
-        public Slice KnownSuffix
-        {
-            get
-            {
-                return Reverse().KnownPrefix.Reverse();
-            }
+            return Constraints.FromValues(constraints);
         }
 
         public Slice Reverse()
         {
-            return Lift( ns => ns.Reverse() );
+            return Lift(ns => ns.Reverse());
         }
 
-        public Slice Prefix( int length )
+        public Slice Prefix(int length)
         {
-            return Lift( ns => ns.Prefix( length ) );
+            return Lift(ns => ns.Prefix(length));
         }
 
-        public Slice Suffix( int length )
+        public Slice Suffix(int length)
         {
-            return Lift( ns => ns.Suffix( length ) );
+            return Lift(ns => ns.Suffix(length));
         }
 
-        public Slice Lift( Func<ISequence<Square>, ISequence<Square>> function )
+        public Slice Lift(Func<ISequence<Square>, ISequence<Square>> function)
         {
-            return new Slice( function( squares ) );
+            return new Slice(function(Squares));
         }
     }
 }

@@ -2,56 +2,52 @@
 using System.Linq;
 using Cells;
 using DataStructures;
-using PiCross;
 using AmbiguityEnum = PiCross.Ambiguity;
 
 namespace PiCross
 {
     internal class PuzzleEditor : IPuzzleEditor
     {
+        private readonly IGrid<Cell<Ambiguity>> ambiguityGrid;
+
+        private readonly ISequence<PuzzleEditorColumnConstraints> columnConstraints;
         private readonly EditorGrid editorGrid;
 
         private readonly IGrid<PuzzleEditorSquare> facadeGrid;
-
-        private readonly ISequence<PuzzleEditorColumnConstraints> columnConstraints;
 
         private readonly ISequence<PuzzleEditorRowConstraints> rowConstraints;
 
         private AmbiguityChecker ambiguityChecker;
 
-        private readonly IGrid<Cell<Ambiguity>> ambiguityGrid;
-
-        public PuzzleEditor( EditorGrid editorGrid )
+        public PuzzleEditor(EditorGrid editorGrid)
         {
-            if ( editorGrid == null )
+            if (editorGrid == null)
             {
-                throw new ArgumentNullException( "grid" );
+                throw new ArgumentNullException("grid");
             }
-            else
-            {
-                this.editorGrid = editorGrid;
-                ambiguityChecker = new AmbiguityChecker( columnConstraints: editorGrid.DeriveColumnConstraints(), rowConstraints: editorGrid.DeriveRowConstraints() );
-                ambiguityGrid = ambiguityChecker.Ambiguities.Map( ( Ambiguity x ) => Cell.Create( x ) ).Copy();
-                
-                facadeGrid = editorGrid.Contents.Map( position => new PuzzleEditorSquare( this, position, ambiguityGrid[position] ) ).Copy();
-                columnConstraints = editorGrid.Contents.ColumnIndices.Select( x => new PuzzleEditorColumnConstraints( editorGrid, x ) ).ToSequence();
-                rowConstraints = editorGrid.Contents.RowIndices.Select( y => new PuzzleEditorRowConstraints( editorGrid, y ) ).ToSequence();                
-            }
+            this.editorGrid = editorGrid;
+            ambiguityChecker = new AmbiguityChecker(editorGrid.DeriveColumnConstraints(),
+                editorGrid.DeriveRowConstraints());
+            ambiguityGrid = ambiguityChecker.Ambiguities.Map((Ambiguity x) => Cell.Create(x)).Copy();
+
+            facadeGrid =
+                editorGrid.Contents.Map(position => new PuzzleEditorSquare(this, position, ambiguityGrid[position]))
+                    .Copy();
+            columnConstraints =
+                editorGrid.Contents.ColumnIndices.Select(x => new PuzzleEditorColumnConstraints(editorGrid, x))
+                    .ToSequence();
+            rowConstraints =
+                editorGrid.Contents.RowIndices.Select(y => new PuzzleEditorRowConstraints(editorGrid, y)).ToSequence();
         }
 
-        public void ResolveAmbiguityStep()
+        public bool IsAmbiguityResolved
         {
-            if ( !ambiguityChecker.IsAmbiguityResolved )
-            {
-                ambiguityChecker.Step();
-
-                RefreshAmbiguities();
-            }
+            get { return ambiguityChecker.IsAmbiguityResolved; }
         }
 
         public void ResolveAmbiguity()
         {
-            if ( !ambiguityChecker.IsAmbiguityResolved )
+            if (!ambiguityChecker.IsAmbiguityResolved)
             {
                 ambiguityChecker.Resolve();
 
@@ -59,188 +55,154 @@ namespace PiCross
             }
         }
 
-        public bool IsAmbiguityResolved
-        {
-            get
-            {
-                return ambiguityChecker.IsAmbiguityResolved;
-            }
-        }        
-
         public IGrid<IPuzzleEditorSquare> Grid
-        { 
-            get
-            {
-                return this.facadeGrid;
-            }
+        {
+            get { return facadeGrid; }
         }
 
         public ISequence<IPuzzleEditorConstraints> ColumnConstraints
         {
-            get
-            {
-                return this.columnConstraints;
-            }
+            get { return columnConstraints; }
         }
 
         public ISequence<IPuzzleEditorConstraints> RowConstraints
         {
-            get
+            get { return rowConstraints; }
+        }
+
+        public Puzzle BuildPuzzle()
+        {
+            return editorGrid.ToPuzzle();
+        }
+
+        public void ResolveAmbiguityStep()
+        {
+            if (!ambiguityChecker.IsAmbiguityResolved)
             {
-                return this.rowConstraints;
+                ambiguityChecker.Step();
+
+                RefreshAmbiguities();
             }
         }
 
-        private void OnSquareChanged( Vector2D position )
+        private void OnSquareChanged(Vector2D position)
         {
-            RefreshSquare( position );
-            RefreshColumnConstraints( position.X );
-            RefreshRowConstraints( position.Y );
+            RefreshSquare(position);
+            RefreshColumnConstraints(position.X);
+            RefreshRowConstraints(position.Y);
             ResetAmbiguities();
         }
 
         private void ResetAmbiguities()
         {
-            this.ambiguityChecker = new AmbiguityChecker( columnConstraints: editorGrid.DeriveColumnConstraints(), rowConstraints: editorGrid.DeriveRowConstraints() );
+            ambiguityChecker = new AmbiguityChecker(editorGrid.DeriveColumnConstraints(),
+                editorGrid.DeriveRowConstraints());
             RefreshAmbiguities();
         }
 
-        private void RefreshSquare( Vector2D position )
+        private void RefreshSquare(Vector2D position)
         {
-            this.facadeGrid[position].Refresh();
+            facadeGrid[position].Refresh();
         }
 
-        private void RefreshColumnConstraints( int x )
+        private void RefreshColumnConstraints(int x)
         {
-            this.columnConstraints[x].Refresh();
+            columnConstraints[x].Refresh();
         }
 
-        private void RefreshRowConstraints( int x )
+        private void RefreshRowConstraints(int x)
         {
-            this.rowConstraints[x].Refresh();
+            rowConstraints[x].Refresh();
         }
 
         private void RefreshAmbiguities()
         {
-            ( (IGrid<IVar<Ambiguity>>) ambiguityGrid ).Overwrite( ambiguityChecker.Ambiguities );
+            ((IGrid<IVar<Ambiguity>>) ambiguityGrid).Overwrite(ambiguityChecker.Ambiguities);
         }
 
         private class PuzzleEditorSquare : IPuzzleEditorSquare
         {
-            private readonly Cell<bool> contents;
-
-            private readonly Vector2D position;
-
-            private readonly Cell<Ambiguity> ambiguity;
-
-            public PuzzleEditorSquare( PuzzleEditor parent, Vector2D position, Cell<Ambiguity> ambiguity )
+            public PuzzleEditorSquare(PuzzleEditor parent, Vector2D position, Cell<Ambiguity> ambiguity)
             {
-                this.contents = new PuzzleEditorSquareContentsCell( parent, position );
-                this.position = position;
-                this.ambiguity = ambiguity;
+                IsFilled = new PuzzleEditorSquareContentsCell(parent, position);
+                Position = position;
+                Ambiguity = ambiguity;
             }
 
-            public Cell<bool> IsFilled
-            {
-                get
-                {
-                    return contents;
-                }
-            }
+            public Cell<bool> IsFilled { get; }
 
-            public Cell<Ambiguity> Ambiguity
-            {
-                get
-                {
-                    return ambiguity;
-                }
-            }
+            public Cell<Ambiguity> Ambiguity { get; }
 
-            public Vector2D Position
-            {
-                get
-                {
-                    return position;
-                }
-            }
+            public Vector2D Position { get; }
 
             public void Refresh()
             {
-                contents.Refresh();
+                IsFilled.Refresh();
             }
         }
 
         private class PuzzleEditorSquareContentsCell : ManualCell<bool>
         {
-            private readonly PuzzleEditor parent;
-
             private readonly IVar<Square> contents;
+            private readonly PuzzleEditor parent;
 
             private readonly Vector2D position;
 
-            public PuzzleEditorSquareContentsCell( PuzzleEditor parent, Vector2D position )
-                : base( SquareToBool( parent.editorGrid.Squares[position] ) )
+            public PuzzleEditorSquareContentsCell(PuzzleEditor parent, Vector2D position)
+                : base(SquareToBool(parent.editorGrid.Squares[position]))
             {
                 this.parent = parent;
-                this.contents = parent.editorGrid.Contents[position];
+                contents = parent.editorGrid.Contents[position];
                 this.position = position;
             }
 
-            private static bool SquareToBool( Square square )
+            private static bool SquareToBool(Square square)
             {
                 return square == Square.FILLED;
             }
 
-            private static Square BoolToSquare( bool b )
+            private static Square BoolToSquare(bool b)
             {
                 return b ? Square.FILLED : Square.EMPTY;
             }
 
             protected override bool ReadValue()
             {
-                return SquareToBool( parent.editorGrid.Squares[position] );
+                return SquareToBool(parent.editorGrid.Squares[position]);
             }
 
-            protected override void WriteValue( bool value )
+            protected override void WriteValue(bool value)
             {
-                var square = BoolToSquare( value );
+                var square = BoolToSquare(value);
 
-                if ( this.contents.Value != square )
+                if (contents.Value != square)
                 {
-                    this.contents.Value = square;
+                    contents.Value = square;
 
-                    parent.OnSquareChanged( position );
+                    parent.OnSquareChanged(position);
                 }
             }
         }
 
         private abstract class PuzzleEditorConstraints : IPuzzleEditorConstraints
         {
-            private Cell<Constraints> values;
-
-            protected PuzzleEditorConstraints( Func<Constraints> constraintsFetcher )
+            protected PuzzleEditorConstraints(Func<Constraints> constraintsFetcher)
             {
-                values = Cell.Derived( () => constraintsFetcher() );
+                Constraints = Cell.Derived(() => constraintsFetcher());
             }
 
-            public Cell<Constraints> Constraints
-            {
-                get
-                {
-                    return values;
-                }
-            }
+            public Cell<Constraints> Constraints { get; }
 
             public void Refresh()
             {
-                values.Refresh();
+                Constraints.Refresh();
             }
         }
 
         private class PuzzleEditorRowConstraints : PuzzleEditorConstraints
         {
-            public PuzzleEditorRowConstraints( EditorGrid parent, int row )
-                : base( () => parent.DeriveRowConstraints( row ) )
+            public PuzzleEditorRowConstraints(EditorGrid parent, int row)
+                : base(() => parent.DeriveRowConstraints(row))
             {
                 // NOP
             }
@@ -248,16 +210,11 @@ namespace PiCross
 
         private class PuzzleEditorColumnConstraints : PuzzleEditorConstraints
         {
-            public PuzzleEditorColumnConstraints( EditorGrid parent, int column )
-                : base( () => parent.DeriveColumnConstraints( column ) )
+            public PuzzleEditorColumnConstraints(EditorGrid parent, int column)
+                : base(() => parent.DeriveColumnConstraints(column))
             {
                 // NOP
             }
-        }
-
-        public Puzzle BuildPuzzle()
-        {
-            return editorGrid.ToPuzzle();
         }
     }
 }

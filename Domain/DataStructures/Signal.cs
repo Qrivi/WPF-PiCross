@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Cells;
+﻿using Cells;
 
 namespace DataStructures
 {
@@ -14,39 +9,30 @@ namespace DataStructures
 
     public class SignalFactory<T>
     {
-        private readonly Cell<T> cell;
-
-        public SignalFactory( Cell<T> cell )
+        public SignalFactory(Cell<T> cell)
         {
-            this.cell = cell;
+            Cell = cell;
         }
 
-        public SignalFactory( T initialCellContents = default(T) )
-            : this( Cells.Cell.Create<T>( initialCellContents ) )
+        public SignalFactory(T initialCellContents = default(T))
+            : this(Cells.Cell.Create(initialCellContents))
         {
             // NOP
         }
 
-        public Cell<T> Cell
-        {
-            get
-            {
-                return cell;
-            }
-        }
+        public Cell<T> Cell { get; }
 
-        public ISignal CreateSignal( T value )
+        public ISignal CreateSignal(T value)
         {
-            return new Signal( cell, value );
+            return new Signal(Cell, value);
         }
 
         private class Signal : ISignal
         {
+            private readonly Cell<T> cell;
             private readonly T value;
 
-            private readonly Cell<T> cell;
-
-            public Signal( Cell<T> cell, T value )
+            public Signal(Cell<T> cell, T value)
             {
                 this.cell = cell;
                 this.value = value;

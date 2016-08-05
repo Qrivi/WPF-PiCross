@@ -1,68 +1,59 @@
 ﻿using System;
+
 namespace DataStructures
 {
     public class Size
     {
-        private readonly int width;
-
-        private readonly int height;
-
-        public Size( int width, int height )
+        public Size(int width, int height)
         {
-            if ( width < 0 )
+            if (width < 0)
             {
-                throw new ArgumentOutOfRangeException( "width" );
+                throw new ArgumentOutOfRangeException("width");
             }
-            else if ( height < 0 )
+            if (height < 0)
             {
-                throw new ArgumentOutOfRangeException( "height" );
+                throw new ArgumentOutOfRangeException("height");
             }
-            else
-            {
-                this.width = width;
-                this.height = height;
-            }
+            Width = width;
+            Height = height;
         }
 
-        public int Width { get { return width; } }
+        public int Width { get; }
 
-        public int Height { get { return height; } }
+        public int Height { get; }
 
-        public override bool Equals( object obj )
+        public override bool Equals(object obj)
         {
-            return Equals( obj as Size );
+            return Equals(obj as Size);
         }
 
-        public bool Equals( Size that )
+        public bool Equals(Size that)
         {
-            return that != null && this.width == that.width && this.height == that.height;
+            return that != null && Width == that.Width && Height == that.Height;
         }
 
         public override int GetHashCode()
         {
-            return width.GetHashCode() ^ height.GetHashCode();
+            return Width.GetHashCode() ^ Height.GetHashCode();
         }
 
         public override string ToString()
         {
-            return string.Format( "PuzzleSize[{0}, {1}]", width, height );
+            return string.Format("PuzzleSize[{0}, {1}]", Width, Height);
         }
 
-        public static bool operator ==( Size s1, Size s2 )
+        public static bool operator ==(Size s1, Size s2)
         {
-            if ( object.ReferenceEquals( s1, null ) )
+            if (ReferenceEquals(s1, null))
             {
-                return object.ReferenceEquals( s2, null );
+                return ReferenceEquals(s2, null);
             }
-            else
-            {
-                return s1.Equals( s2 );
-            }
+            return s1.Equals(s2);
         }
 
-        public static bool operator !=( Size s1, Size s2 )
+        public static bool operator !=(Size s1, Size s2)
         {
-            return !( s1 == s2 );
+            return !(s1 == s2);
         }
     }
 }

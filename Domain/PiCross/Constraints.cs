@@ -1,245 +1,217 @@
-﻿using DataStructures;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Cells;
 using System.Diagnostics;
+using System.Linq;
+using DataStructures;
 
 namespace PiCross
 {
     public sealed class Constraints
     {
-        private readonly ISequence<int> values;
-
-        public static Constraints FromValues( params int[] values )
+        private Constraints(ISequence<int> values)
         {
-            return new Constraints( values.ToSequence() );
-        }
-
-        public static Constraints FromValues( IEnumerable<int> values )
-        {
-            return new Constraints( values );
-        }
-
-        public static Constraints FromSequence( ISequence<int> sequence )
-        {
-            return new Constraints( sequence );
-        }
-
-        private Constraints( ISequence<int> values )
-        {
-            if ( values == null )
+            if (values == null)
             {
-                throw new ArgumentNullException( "values" );
+                throw new ArgumentNullException("values");
             }
-            else if ( values.Items.Any( n => n <= 0 ) )
+            if (values.Items.Any(n => n <= 0))
             {
-                throw new ArgumentOutOfRangeException( "values must all be strictly positive" );
+                throw new ArgumentOutOfRangeException("values must all be strictly positive");
             }
-            else
-            {
-                this.values = values;
-            }
+            Values = values;
         }
 
-        private Constraints( params int[] values )
-            : this( Sequence.FromItems( values ) )
+        private Constraints(params int[] values)
+            : this(Sequence.FromItems(values))
         {
             // NOP
         }
 
-        private Constraints( IEnumerable<int> values )
-            : this( values.ToArray() )
+        private Constraints(IEnumerable<int> values)
+            : this(values.ToArray())
         {
             // NOP
         }
 
-        internal IEnumerable<Slice> GenerateSlices( int sliceLength )
+        public ISequence<int> Values { get; }
+
+        public static Constraints FromValues(params int[] values)
         {
-            return GeneratePatterns( sliceLength, values ).Select( x => new Slice( x ) );
+            return new Constraints(values.ToSequence());
         }
 
-        private static IEnumerable<ISequence<int>> GenerateIntegers( int count, int sum )
+        public static Constraints FromValues(IEnumerable<int> values)
         {
-            Debug.Assert( count >= 0 );
-            Debug.Assert( sum >= 0 );
-
-            if ( count == 0 )
-            {
-                if ( sum == 0 )
-                {
-                    return new List<ISequence<int>> { Sequence.CreateEmpty<int>() };
-                }
-                else
-                {
-                    return Enumerable.Empty<ISequence<int>>();
-                }
-            }
-            else
-            {
-                // TODO Possible optimization: create separate sequence prefixer class
-                return from i in Enumerable.Range( 0, sum + 1 )
-                       from tail in GenerateIntegers( count - 1, sum - i )
-                       let prefix = Sequence.FromItems( i )
-                       select prefix.Concatenate( tail );
-            }
+            return new Constraints(values);
         }
 
-        private static IEnumerable<ISequence<int>> GenerateSpacings( int length, int constraintCount, int constraintSum )
+        public static Constraints FromSequence(ISequence<int> sequence)
         {
-            Debug.Assert( length >= 0 );
-            Debug.Assert( constraintCount >= 0 );
-            Debug.Assert( constraintSum >= 0 );
+            return new Constraints(sequence);
+        }
+
+        internal IEnumerable<Slice> GenerateSlices(int sliceLength)
+        {
+            return GeneratePatterns(sliceLength, Values).Select(x => new Slice(x));
+        }
+
+        private static IEnumerable<ISequence<int>> GenerateIntegers(int count, int sum)
+        {
+            Debug.Assert(count >= 0);
+            Debug.Assert(sum >= 0);
+
+            if (count == 0)
+            {
+                if (sum == 0)
+                {
+                    return new List<ISequence<int>> {Sequence.CreateEmpty<int>()};
+                }
+                return Enumerable.Empty<ISequence<int>>();
+            }
+            // TODO Possible optimization: create separate sequence prefixer class
+            return from i in Enumerable.Range(0, sum + 1)
+                from tail in GenerateIntegers(count - 1, sum - i)
+                let prefix = Sequence.FromItems(i)
+                select prefix.Concatenate(tail);
+        }
+
+        private static IEnumerable<ISequence<int>> GenerateSpacings(int length, int constraintCount, int constraintSum)
+        {
+            Debug.Assert(length >= 0);
+            Debug.Assert(constraintCount >= 0);
+            Debug.Assert(constraintSum >= 0);
 
             var spacingCount = constraintCount + 1;
-            var spacingSum = length - constraintSum - Math.Max( 0, constraintCount - 1 );
+            var spacingSum = length - constraintSum - Math.Max(0, constraintCount - 1);
 
-            if ( spacingSum < 0 )
+            if (spacingSum < 0)
             {
                 return Enumerable.Empty<ISequence<int>>();
             }
-            else
-            {
-                var numbers = GenerateIntegers( spacingCount, spacingSum );
-                var deltas = Sequence.FromFunction( spacingCount, i => i == 0 || i == spacingCount - 1 ? 0 : 1 );
+            var numbers = GenerateIntegers(spacingCount, spacingSum);
+            var deltas = Sequence.FromFunction(spacingCount, i => i == 0 || i == spacingCount - 1 ? 0 : 1);
 
-                return numbers.Select( ns => ns.ZipWith( deltas, ( x, y ) => x + y ) );
-            }
+            return numbers.Select(ns => ns.ZipWith(deltas, (x, y) => x + y));
         }
 
-        private static IEnumerable<ISequence<Square>> GeneratePatterns( int totalSize, ISequence<int> constraints )
+        private static IEnumerable<ISequence<Square>> GeneratePatterns(int totalSize, ISequence<int> constraints)
         {
-            if ( totalSize < 0 )
+            if (totalSize < 0)
             {
-                throw new ArgumentOutOfRangeException( "totalSize" );
+                throw new ArgumentOutOfRangeException("totalSize");
             }
-            else if ( constraints == null )
+            if (constraints == null)
             {
-                throw new ArgumentNullException( "constraints" );
+                throw new ArgumentNullException("constraints");
             }
-            else
+            var constraintCount = constraints.Length;
+            var constraintSum = constraints.Items.Sum();
+
+            var spacings = GenerateSpacings(totalSize, constraintCount, constraintSum);
+
+            var blocks = constraints.Map(n => Sequence.Repeat(n, Square.FILLED));
+
+            foreach (var spacing in spacings)
             {
-                var constraintCount = constraints.Length;
-                var constraintSum = constraints.Items.Sum();
+                var spaces = spacing.Map(n => Sequence.Repeat(n, Square.EMPTY));
 
-                var spacings = GenerateSpacings( totalSize, constraintCount: constraintCount, constraintSum: constraintSum );
-
-                var blocks = constraints.Map( n => Sequence.Repeat( n, Square.FILLED ) );
-
-                foreach ( var spacing in spacings )
-                {
-                    var spaces = spacing.Map( n => Sequence.Repeat( n, Square.EMPTY ) );
-
-                    yield return spaces.Intersperse( blocks ).Flatten();
-                }
+                yield return spaces.Intersperse(blocks).Flatten();
             }
         }
 
-        internal int SatisfiedPrefixLength( Slice slice )
+        internal int SatisfiedPrefixLength(Slice slice)
         {
             var knownPrefix = slice.KnownPrefix;
             var knownConstraints = knownPrefix.DeriveConstraints();
 
-            return this.values.CommonPrefixLength( knownConstraints.values );
+            return Values.CommonPrefixLength(knownConstraints.Values);
         }
 
         internal Constraints Reverse()
         {
-            return new Constraints( this.values.Reverse() );
+            return new Constraints(Values.Reverse());
         }
 
-        internal int SatisfiedSuffixLength( Slice slice )
+        internal int SatisfiedSuffixLength(Slice slice)
         {
-            return this.Reverse().SatisfiedPrefixLength( slice.Reverse() );
+            return Reverse().SatisfiedPrefixLength(slice.Reverse());
         }
 
-        public ISequence<int> Values
+        internal bool IsSatisfied(Slice slice)
         {
-            get
-            {
-                return this.values;
-            }
-        }
-
-        internal bool IsSatisfied( Slice slice )
-        {
-            if ( slice.IsFullyKnown )
+            if (slice.IsFullyKnown)
             {
                 var derivedConstraints = slice.DeriveConstraints();
 
-                return derivedConstraints.Equals( this );
+                return derivedConstraints.Equals(this);
             }
-            else
-            {
-                return false;
-            }
+            return false;
         }
 
-        internal Range UnsatisfiedValueRange( Slice slice )
+        internal Range UnsatisfiedValueRange(Slice slice)
         {
             var knownPrefix = slice.KnownPrefix;
-            var rest = slice.Lift( xs => xs.DropPrefix( knownPrefix.Squares.Length ) );
+            var rest = slice.Lift(xs => xs.DropPrefix(knownPrefix.Squares.Length));
             var knownSuffix = rest.KnownSuffix;
 
-            var left = this.SatisfiedPrefixLength( knownPrefix );
-            var right = this.values.Length - this.Lift( x => x.DropPrefix( left ) ).SatisfiedSuffixLength( knownSuffix );
+            var left = SatisfiedPrefixLength(knownPrefix);
+            var right = Values.Length - Lift(x => x.DropPrefix(left)).SatisfiedSuffixLength(knownSuffix);
 
-            return Range.FromStartAndEndExclusive( left, right );
+            return Range.FromStartAndEndExclusive(left, right);
         }
 
-        public override bool Equals( object obj )
+        public override bool Equals(object obj)
         {
-            return Equals( obj as Constraints );
+            return Equals(obj as Constraints);
         }
 
-        public bool Equals( Constraints that )
+        public bool Equals(Constraints that)
         {
-            return that != null && this.values.Equals( that.values );
+            return that != null && Values.Equals(that.Values);
         }
 
         public override int GetHashCode()
         {
-            return this.values.GetHashCode();
+            return Values.GetHashCode();
         }
 
         public override string ToString()
         {
-            return string.Format( "[{0}]", this.values.Map( x => x.ToString() ).Join( "-" ) );
+            return string.Format("[{0}]", Values.Map(x => x.ToString()).Join("-"));
         }
 
-        internal Constraints Lift( Func<ISequence<int>, ISequence<int>> function )
+        internal Constraints Lift(Func<ISequence<int>, ISequence<int>> function)
         {
-            return new Constraints( function( values ) );
+            return new Constraints(function(Values));
         }
 
-        internal void Generate( Action<bool[]> receiver, ISequence<Square> compatibleWith )
+        internal void Generate(Action<bool[]> receiver, ISequence<Square> compatibleWith)
         {
-            new Generator( receiver, compatibleWith, this.values ).Generate();
+            new Generator(receiver, compatibleWith, Values).Generate();
         }
 
-        internal ISequence<Square> Superposition( ISequence<Square> compatibleWith )
+        internal ISequence<Square> Superposition(ISequence<Square> compatibleWith)
         {
             Square[] result = null;
 
-            Generate( (bool[] bs) => {
-                if ( result == null )
+            Generate((bool[] bs) =>
+            {
+                if (result == null)
                 {
-                    result = bs.Select( b => b ? Square.FILLED : Square.EMPTY ).ToArray();
+                    result = bs.Select(b => b ? Square.FILLED : Square.EMPTY).ToArray();
                 }
                 else
                 {
-                    for ( var i = 0; i != result.Length; ++i )
+                    for (var i = 0; i != result.Length; ++i)
                     {
                         var sqr = bs[i] ? Square.FILLED : Square.EMPTY;
 
-                        result[i] = result[i].Merge( sqr );
+                        result[i] = result[i].Merge(sqr);
                     }
                 }
-            }, compatibleWith );
+            }, compatibleWith);
 
-            return Sequence.FromItems( result );
+            return Sequence.FromItems(result);
         }
 
         private class Generator
@@ -248,30 +220,30 @@ namespace PiCross
 
             private readonly bool[] slice;
 
-            private ISequence<Square> compatibleWith;
+            private readonly ISequence<Square> compatibleWith;
 
-            private ISequence<int> constraints;
+            private readonly ISequence<int> constraints;
 
-            private int[] cumulative;
+            private readonly int[] cumulative;
 
-            public Generator( Action<bool[]> receiver, ISequence<Square> compatibleWith, ISequence<int> constraints )
+            public Generator(Action<bool[]> receiver, ISequence<Square> compatibleWith, ISequence<int> constraints)
             {
                 this.receiver = receiver;
-                this.slice = new bool[compatibleWith.Length];
+                slice = new bool[compatibleWith.Length];
                 this.compatibleWith = compatibleWith;
                 this.constraints = constraints;
-                this.cumulative = ComputeCumulative( constraints );
+                cumulative = ComputeCumulative(constraints);
             }
 
-            private static int[] ComputeCumulative( ISequence<int> constraints )
+            private static int[] ComputeCumulative(ISequence<int> constraints)
             {
                 var result = new int[constraints.Length];
 
-                if ( result.Length > 0 )
+                if (result.Length > 0)
                 {
                     result[result.Length - 1] = constraints[constraints.Length - 1];
 
-                    for ( var i = result.Length - 2; i >= 0; --i )
+                    for (var i = result.Length - 2; i >= 0; --i)
                     {
                         result[i] = constraints[i] + 1 + result[i + 1];
                     }
@@ -282,21 +254,21 @@ namespace PiCross
 
             public void Generate()
             {
-                Generate( 0, 0 );
+                Generate(0, 0);
             }
 
             private void Yield()
             {
-                receiver( slice );
+                receiver(slice);
             }
 
-            private void Generate( int constraintIndex, int index )
+            private void Generate(int constraintIndex, int index)
             {
-                if ( constraintIndex == constraints.Length )
+                if (constraintIndex == constraints.Length)
                 {
-                    for ( var i = index; i != slice.Length; ++i )
+                    for (var i = index; i != slice.Length; ++i)
                     {
-                        if ( compatibleWith[i] == Square.FILLED )
+                        if (compatibleWith[i] == Square.FILLED)
                         {
                             return;
                         }
@@ -306,23 +278,22 @@ namespace PiCross
 
                     Yield();
                 }
-                else if ( slice.Length - index < cumulative[constraintIndex] )
+                else if (slice.Length - index < cumulative[constraintIndex])
                 {
-                    return;
                 }
                 else
                 {
-                    if ( compatibleWith[index] != Square.FILLED )
+                    if (compatibleWith[index] != Square.FILLED)
                     {
                         slice[index] = false;
 
-                        Generate( constraintIndex, index + 1 );
+                        Generate(constraintIndex, index + 1);
                     }
 
                     var size = constraints[constraintIndex];
-                    for ( var i = 0; i != size; ++i )
+                    for (var i = 0; i != size; ++i)
                     {
-                        if ( compatibleWith[index] == Square.EMPTY )
+                        if (compatibleWith[index] == Square.EMPTY)
                         {
                             return;
                         }
@@ -334,9 +305,9 @@ namespace PiCross
 
                     ++constraintIndex;
 
-                    if ( constraintIndex < constraints.Length )
+                    if (constraintIndex < constraints.Length)
                     {
-                        if ( compatibleWith[index] == Square.FILLED )
+                        if (compatibleWith[index] == Square.FILLED)
                         {
                             return;
                         }
@@ -346,7 +317,7 @@ namespace PiCross
                         index++;
                     }
 
-                    Generate( constraintIndex, index );
+                    Generate(constraintIndex, index);
                 }
             }
         }

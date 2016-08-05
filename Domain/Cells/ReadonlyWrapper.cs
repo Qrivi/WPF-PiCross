@@ -6,30 +6,21 @@ namespace Cells
     {
         private readonly Cell<T> wrappedCell;
 
-        public ReadonlyWrapper( Cell<T> wrappedCell )
+        public ReadonlyWrapper(Cell<T> wrappedCell)
         {
-            if ( wrappedCell == null )
+            if (wrappedCell == null)
             {
-                throw new ArgumentNullException( "wrappedCell" );
+                throw new ArgumentNullException("wrappedCell");
             }
-            else
-            {
-                this.wrappedCell = wrappedCell;
+            this.wrappedCell = wrappedCell;
 
-                wrappedCell.ValueChanged += NotifyObservers;                    
-            }
-        }        
+            wrappedCell.ValueChanged += NotifyObservers;
+        }
 
         public override T Value
         {
-            get
-            {
-                return wrappedCell.Value;
-            }
-            set
-            {
-                throw new InvalidOperationException( "Cell is readonly" );
-            }
+            get { return wrappedCell.Value; }
+            set { throw new InvalidOperationException("Cell is readonly"); }
         }
 
         public override void Refresh()

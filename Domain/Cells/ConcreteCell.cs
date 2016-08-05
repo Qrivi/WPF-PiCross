@@ -1,32 +1,28 @@
-﻿
-namespace Cells
-{    
+﻿namespace Cells
+{
     internal class ConcreteCell<T> : Cell<T>
     {
         /// <summary>
-        /// Constructor.
+        ///     Constructor.
         /// </summary>
         /// <param name="initialValue">
-        /// Cell's initial value.
+        ///     Cell's initial value.
         /// </param>
-        public ConcreteCell( T initialValue = default(T) )
-            : base( initialValue )
+        public ConcreteCell(T initialValue = default(T))
+            : base(initialValue)
         {
             // NOP
         }
 
         /// <summary>
-        /// Value of the cell.
+        ///     Value of the cell.
         /// </summary>
         public override T Value
         {
-            get
-            {
-                return base.Value;
-            }
+            get { return base.Value; }
             set
             {
-                if ( !Util.AreEqual( base.Value, value ) )
+                if (!Util.AreEqual(base.Value, value))
                 {
                     base.Value = value;
                     NotifyObservers();
@@ -36,7 +32,7 @@ namespace Cells
 
         public override string ToString()
         {
-            return string.Format( "CELL[{0}]", this.Value != null ? this.Value.ToString() : "null" );
+            return string.Format("CELL[{0}]", Value != null ? Value.ToString() : "null");
         }
 
         public override void Refresh()

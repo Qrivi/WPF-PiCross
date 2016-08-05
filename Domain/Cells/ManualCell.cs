@@ -5,35 +5,26 @@ namespace Cells
 {
     internal abstract class ManualCell<T> : Cell<T>
     {
-        protected ManualCell( T initialValue )
-            : base( initialValue )
+        protected ManualCell(T initialValue)
+            : base(initialValue)
         {
             // NOP
         }
 
         public override T Value
         {
-            get
-            {
-                return ReadValue();
-            }
-            set
-            {
-                WriteValue( value );
-            }
+            get { return ReadValue(); }
+            set { WriteValue(value); }
         }
 
         public bool IsDirty
         {
-            get
-            {
-                return !Util.AreEqual( ReadValue(), base.Value );
-            }
+            get { return !Util.AreEqual(ReadValue(), base.Value); }
         }
 
         public override void Refresh()
         {
-            if ( IsDirty )
+            if (IsDirty)
             {
                 base.Value = ReadValue();
 
@@ -43,42 +34,33 @@ namespace Cells
 
         protected abstract T ReadValue();
 
-        protected abstract void WriteValue( T value );
+        protected abstract void WriteValue(T value);
     }
 
     public class ReadonlyManualCell<T> : Cell<T>
     {
         private readonly Func<T> function;
 
-        public ReadonlyManualCell( Func<T> function )
-            : base( function() )
+        public ReadonlyManualCell(Func<T> function)
+            : base(function())
         {
             this.function = function;
         }
 
         public override T Value
         {
-            get
-            {
-                return function();
-            }
-            set
-            {
-                throw new InvalidOperationException();
-            }
+            get { return function(); }
+            set { throw new InvalidOperationException(); }
         }
 
         public bool IsDirty
         {
-            get
-            {
-                return !Util.AreEqual( function(), base.Value );
-            }
+            get { return !Util.AreEqual(function(), base.Value); }
         }
 
         public override void Refresh()
         {
-            if ( IsDirty )
+            if (IsDirty)
             {
                 base.Value = function();
 
@@ -94,31 +76,28 @@ namespace Cells
 
         private readonly Func<T, CELL> factory;
 
-        public DirtyCellFactory( Func<T, CELL> factory )
+        public DirtyCellFactory(Func<T, CELL> factory)
         {
-            if ( factory == null )
+            if (factory == null)
             {
-                throw new ArgumentNullException( "factory" );
+                throw new ArgumentNullException("factory");
             }
-            else
-            {
-                this.cells = new List<CELL>();
-                this.factory = factory;
-            }
+            cells = new List<CELL>();
+            this.factory = factory;
         }
 
         public CELL CreateCell(T value)
         {
-            var cell = factory( value );
+            var cell = factory(value);
 
-            cells.Add( cell );
+            cells.Add(cell);
 
             return cell;
         }
 
         public void Clean()
         {
-            foreach ( var cell in cells )
+            foreach (var cell in cells)
             {
                 cell.Refresh();
             }

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Cells;
 using DataStructures;
 
@@ -12,8 +8,8 @@ namespace PiCross
     {
         public ExtendedPuzzle()
         {
-            Name = Cell.Create("Nameless Puzzle");
-            Puzzle = Cell.Create(PiCross.Puzzle.CreateEmpty(new Size(0,0)));
+            Name = Cell.Create("Untitled Puzzle");
+            Puzzle = Cell.Create(PiCross.Puzzle.CreateEmpty(new Size(0, 0)));
             BestTime = Cell.Create(new TimeSpan());
         }
 

@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PiCross
 {
     /// <summary>
-    /// Base class for all PiCross-related exceptions.
+    ///     Base class for all PiCross-related exceptions.
     /// </summary>
     public abstract class PiCrossException : Exception
     {

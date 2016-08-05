@@ -1,44 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PiCross;
-
-namespace PiCross
+﻿namespace PiCross
 {
     internal class DummyData
     {
-        private readonly InMemoryDatabase.PuzzleLibrary library;
-
-        private readonly InMemoryDatabase.PlayerDatabase players;
-
-        public static InMemoryDatabase Create()
-        {
-            var data = new DummyData();
-
-            return new InMemoryDatabase( data.library, data.players );
-        }
-
         public DummyData()
         {
-            this.library = CreateDummyLibrary();
-            this.players = CreateDummyPlayerDatabase();
+            Puzzles = CreateDummyLibrary();
+            Players = CreateDummyPlayerDatabase();
         }
 
-        public InMemoryDatabase.PuzzleLibrary Puzzles { get { return library; } }
+        public InMemoryDatabase.PuzzleLibrary Puzzles { get; }
 
-        public InMemoryDatabase.PlayerDatabase Players { get { return players; } }
-
-        private static InMemoryDatabase.PlayerDatabase CreateDummyPlayerDatabase()
-        {
-            var db = InMemoryDatabase.PlayerDatabase.CreateEmpty();
-
-            var woumpousse = db.CreateNewProfile( "Woumpousse" );
-            var pimousse = db.CreateNewProfile( "Pimousse" );
-
-            return db;
-        }
+        public InMemoryDatabase.PlayerDatabase Players { get; }
 
         private static Puzzle Puzzle1
         {
@@ -134,18 +106,35 @@ namespace PiCross
             }
         }
 
+        public static InMemoryDatabase Create()
+        {
+            var data = new DummyData();
+
+            return new InMemoryDatabase(data.Puzzles, data.Players);
+        }
+
+        private static InMemoryDatabase.PlayerDatabase CreateDummyPlayerDatabase()
+        {
+            var db = InMemoryDatabase.PlayerDatabase.CreateEmpty();
+
+            var woumpousse = db.CreateNewProfile("Woumpousse");
+            var pimousse = db.CreateNewProfile("Pimousse");
+
+            return db;
+        }
+
         private static InMemoryDatabase.PuzzleLibrary CreateDummyLibrary()
         {
             var library = InMemoryDatabase.PuzzleLibrary.CreateEmpty();
 
             var author = "Woumpousse";
 
-            library.Create( Puzzle1, author );
-            library.Create( Puzzle2, author );
-            library.Create( Puzzle3, author );
-            library.Create( Puzzle4, author );
-            library.Create( Puzzle5, author );
-            library.Create( Puzzle6, author );
+            library.Create(Puzzle1, author);
+            library.Create(Puzzle2, author);
+            library.Create(Puzzle3, author);
+            library.Create(Puzzle4, author);
+            library.Create(Puzzle5, author);
+            library.Create(Puzzle6, author);
 
             return library;
         }

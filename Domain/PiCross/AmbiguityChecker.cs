@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using DataStructures;
 
 namespace PiCross
@@ -13,32 +11,43 @@ namespace PiCross
 
         private readonly IEnumerator<bool> stepwiseFunction;
 
-        private readonly IGrid<Ambiguity> ambiguities;
-
-        public AmbiguityChecker( ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints )
+        public AmbiguityChecker(ISequence<Constraints> columnConstraints, ISequence<Constraints> rowConstraints)
         {
-            this.solver = new SolverGrid( columnConstraints: columnConstraints, rowConstraints: rowConstraints );
+            solver = new SolverGrid(columnConstraints, rowConstraints);
             stepwiseFunction = CreateStepwiseFunction().GetEnumerator();
-            ambiguities = this.solver.Squares.Map( DeriveAmbiguity );
+            Ambiguities = solver.Squares.Map(DeriveAmbiguity);
+        }
+
+        public bool IsAmbiguityResolved
+        {
+            get { return stepwiseFunction.Current; }
+        }
+
+        public IGrid<Ambiguity> Ambiguities { get; }
+
+        public bool IsAmbiguous
+        {
+            get
+            {
+                if (!IsAmbiguityResolved)
+                {
+                    throw new InvalidOperationException("Ambiguity not resolved yet; use Resolve() first");
+                }
+                return Ambiguities.Items.Any(a => a == Ambiguity.Ambiguous);
+            }
         }
 
         private Ambiguity DeriveAmbiguity(Square square)
         {
-            if ( square == Square.UNKNOWN )
+            if (square == Square.UNKNOWN)
             {
-                if ( IsAmbiguityResolved )
+                if (IsAmbiguityResolved)
                 {
                     return Ambiguity.Ambiguous;
                 }
-                else
-                {
-                    return Ambiguity.Unknown;
-                }
+                return Ambiguity.Unknown;
             }
-            else
-            {
-                return Ambiguity.Unambiguous;
-            }
+            return Ambiguity.Unambiguous;
         }
 
         private IEnumerable<bool> CreateStepwiseFunction()
@@ -49,36 +58,27 @@ namespace PiCross
             {
                 changeDetected = false;
 
-                foreach ( var x in solver.Squares.ColumnIndices )
+                foreach (var x in solver.Squares.ColumnIndices)
                 {
-                    changeDetected = solver.RefineColumn( x ) || changeDetected;
+                    changeDetected = solver.RefineColumn(x) || changeDetected;
 
                     yield return false;
                 }
 
-                foreach ( var y in solver.Squares.RowIndices )
+                foreach (var y in solver.Squares.RowIndices)
                 {
-                    changeDetected = solver.RefineRow( y ) || changeDetected;
+                    changeDetected = solver.RefineRow(y) || changeDetected;
 
                     yield return false;
-                }                
-
-            } while ( changeDetected );
+                }
+            } while (changeDetected);
 
             yield return true;
         }
 
-        public bool IsAmbiguityResolved
-        {
-            get
-            {
-                return stepwiseFunction.Current;
-            }
-        }
-
         public void Step()
         {
-            if ( !stepwiseFunction.Current )
+            if (!stepwiseFunction.Current)
             {
                 stepwiseFunction.MoveNext();
             }
@@ -86,32 +86,9 @@ namespace PiCross
 
         public void Resolve()
         {
-            while ( !IsAmbiguityResolved )
+            while (!IsAmbiguityResolved)
             {
                 Step();
-            }
-        }
-
-        public IGrid<Ambiguity> Ambiguities
-        {
-            get
-            {
-                return ambiguities;
-            }
-        }
-
-        public bool IsAmbiguous
-        {
-            get
-            {
-                if ( !IsAmbiguityResolved )
-                {
-                    throw new InvalidOperationException( "Ambiguity not resolved yet; use Resolve() first" );
-                }
-                else
-                {
-                    return ambiguities.Items.Any( a => a == Ambiguity.Ambiguous );
-                }
             }
         }
     }

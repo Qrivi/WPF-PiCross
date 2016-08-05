@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PiCross
 {
@@ -19,7 +16,7 @@ namespace PiCross
 
         IPuzzleDatabaseEntry this[int id] { get; }
 
-        IPuzzleDatabaseEntry Create( Puzzle puzzle, string author );
+        IPuzzleDatabaseEntry Create(Puzzle puzzle, string author);
     }
 
     internal interface IPuzzleDatabaseEntry
@@ -30,13 +27,14 @@ namespace PiCross
 
         string Author { get; set; }
     }
-internal interface IPlayerDatabase
+
+    internal interface IPlayerDatabase
     {
         IPlayerProfileData this[string name] { get; }
 
-        IPlayerProfileData CreateNewProfile( string name );
-
         IList<string> PlayerNames { get; }
+
+        IPlayerProfileData CreateNewProfile(string name);
     }
 
     internal interface IPlayerProfileData

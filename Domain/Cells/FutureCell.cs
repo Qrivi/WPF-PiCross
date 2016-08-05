@@ -4,13 +4,13 @@ using System.Threading;
 
 namespace Cells
 {
-    [DebuggerDisplay( "{DebugProxy}" )]
+    [DebuggerDisplay("{DebugProxy}")]
     internal class FutureCell<T> : Cell<T>
     {
         private volatile bool isBound;
 
         public FutureCell()
-            : base( default( T ) )
+            : base(default(T))
         {
             isBound = false;
         }
@@ -19,7 +19,7 @@ namespace Cells
         {
             get
             {
-                lock ( this )
+                lock (this)
                 {
                     WaitForBinding();
 
@@ -28,54 +28,54 @@ namespace Cells
             }
             set
             {
-                lock ( this )
+                lock (this)
                 {
-                    if ( isBound )
+                    if (isBound)
                     {
-                        throw new InvalidOperationException( "Future already bound" );
+                        throw new InvalidOperationException("Future already bound");
                     }
-                    else
-                    {
-                        base.Value = value;
+                    base.Value = value;
 
-                        isBound = true;
-                        Monitor.PulseAll( this );
-                    }
+                    isBound = true;
+                    Monitor.PulseAll(this);
                 }
             }
         }
 
-        private void WaitForBinding()
+        private T BaseValue
         {
-            if ( !isBound )
-            {
-                Monitor.Wait( this );
-            }
+            get { return base.Value; }
         }
-
-        public override void Refresh()
-        {
-            throw new InvalidOperationException( "Cannot refresh futures" );
-        }
-
-        private T BaseValue { get { return base.Value; } }
 
         private string DebugString
         {
             get
             {
-                if ( isBound )
+                if (isBound)
                 {
                     return base.Value.ToString();
                 }
-                else
-                {
-                    return "<unbound>";
-                }
+                return "<unbound>";
             }
         }
 
-        private Proxy DebugProxy { get { return new Proxy( this ); } }
+        private Proxy DebugProxy
+        {
+            get { return new Proxy(this); }
+        }
+
+        private void WaitForBinding()
+        {
+            if (!isBound)
+            {
+                Monitor.Wait(this);
+            }
+        }
+
+        public override void Refresh()
+        {
+            throw new InvalidOperationException("Cannot refresh futures");
+        }
 
         private struct Proxy
         {

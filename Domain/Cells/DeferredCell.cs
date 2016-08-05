@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Cells
 {
@@ -10,31 +6,28 @@ namespace Cells
     {
         private bool dirty;
 
-        public DeferredCell( T initialValue )
-            : base( initialValue )
+        public DeferredCell(T initialValue)
+            : base(initialValue)
         {
             // NOP
         }
 
         public override T Value
         {
-            get
-            {
-                return base.Value;
-            }
+            get { return base.Value; }
             set
             {
-                if ( !Util.AreEqual( base.Value, value ) )
+                if (!Util.AreEqual(base.Value, value))
                 {
                     base.Value = value;
                     dirty = true;
-                }                
+                }
             }
         }
 
         public void BroadcastChange()
         {
-            if ( dirty )
+            if (dirty)
             {
                 dirty = false;
 

@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Permissions;
-using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
-using System.Xml;
 using Cells;
-using DataStructures;
 using PiCross;
 using Utility;
 
@@ -15,20 +9,15 @@ namespace GUI
 {
     public enum GameState
     {
-        Init,
-        Setup,
-        Play,
-        Win,
-        Lose,
-        BestTime
+        Init,Setup,Play,Win,Lose,BestTime
     }
 
     public sealed class PiCrossViewModel
     {
-        private readonly PiCrossFacade _model;
         private readonly IChronometer _chrono;
+        private readonly PiCrossFacade _model;
 
-        public PiCrossViewModel( IList<ExtendedPuzzle> puzzles , IChronometer chronometer)
+        public PiCrossViewModel(IList<ExtendedPuzzle> puzzles, IChronometer chronometer)
         {
             _model = new PiCrossFacade();
             _chrono = chronometer;
@@ -41,7 +30,7 @@ namespace GUI
 
             Game = Cell.Create(Games[0]);
             PlayablePuzzle = Cell.Create(_model.CreateExtendedPlayablePuzzle(Puzzle.Value));
-            Board = Cell.Create( new BoardViewModel(this));
+            Board = Cell.Create(new BoardViewModel(this));
 
             State.ValueChanged += CheckGameState;
             CheckGameState();
@@ -182,8 +171,8 @@ namespace GUI
 
     public sealed class BoardViewModel
     {
-        private readonly Puzzle _puzzle;
         private readonly IPlayablePuzzle _playablePuzzle;
+        private readonly Puzzle _puzzle;
 
         public BoardViewModel(PiCrossViewModel piCrossViewModel)
         {
@@ -220,7 +209,7 @@ namespace GUI
 
         public IPlayablePuzzleSquare PuzzleSquare { get; }
         public ICommand Move { get; }
-        
+
         public Cell<bool> IsPlayable => _piCrossVM.PlayablePuzzle.Value.IsPlayable;
         public Cell<bool> IsClicked { get; }
 
@@ -230,10 +219,6 @@ namespace GUI
                 PuzzleSquare.Contents.Value = Square.FILLED;
             else
                 _piCrossVM.PlayablePuzzle.Value.Mistakes.Value++;
-            //Console.WriteLine("=======================================");
-            //Console.WriteLine("IsPlayable: " + IsPlayable.Value);
-            //Console.WriteLine("Mistakes: " + _piCrossVM.PlayablePuzzle.Value.Mistakes.Value);
-
             IsClicked.Value = true;
         }
 

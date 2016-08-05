@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PiCross
+﻿namespace PiCross
 {
-    public enum Ambiguity { Unknown, Ambiguous, Unambiguous }
+    public enum Ambiguity
+    {
+        Unknown,
+        Ambiguous,
+        Unambiguous
+    }
 }

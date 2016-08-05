@@ -50,7 +50,7 @@
     <Compile Include="Cells\ValidatedCell.cs" />
     <Compile Include="IO\Serializer.cs" />
     <Compile Include="PiCross\ArchiveDatabase.cs" />
-    <Compile Include="PiCross\Extended\ExtendedPuzzle.cs" />
+    <Compile Include="PiCross\ExtendedPuzzle.cs" />
     <Compile Include="PiCross\GameDataAdapters.cs" />
     <Compile Include="PiCross\GameDataArchive.cs" />
     <Compile Include="PiCross\IDatabase.cs" />
@@ -59,7 +59,7 @@
     <Compile Include="PiCross\PiCrossException.cs" />
     <Compile Include="PiCross\PiCrossFacade.cs" />
     <Compile Include="PiCross\InMemoryDatabase.cs" />
-    <Compile Include="PiCross\Extended\ExtendedPlayablePuzzle.cs" />
+    <Compile Include="PiCross\ExtendedPlayablePuzzle.cs" />
     <Compile Include="Utility\Chronometer.cs" />
     <Compile Include="DataStructures\Grid.cs" />
     <Compile Include="Cells\Cell.cs" />

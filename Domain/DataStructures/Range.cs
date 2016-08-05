@@ -1,80 +1,58 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataStructures
 {
     public class Range
     {
-        private readonly int from;
-
-        private readonly int length;
-
-        public static Range FromStartAndLength( int start, int length )
+        private Range(int from, int length)
         {
-            return new Range( start, length );
+            From = from;
+            Length = length;
+        }
+
+        public int From { get; }
+
+        public int Length { get; }
+
+        public IEnumerable<int> Items
+        {
+            get { return Enumerable.Range(From, Length); }
+        }
+
+        public static Range FromStartAndLength(int start, int length)
+        {
+            return new Range(start, length);
         }
 
         public static Range FromStartAndEndExclusive(int start, int endExclusive)
         {
-            return new Range( start, endExclusive - start );
-        }
-
-        private Range( int from, int length )
-        {
-            this.from = from;
-            this.length = length;
-        }
-
-        public int From
-        {
-            get
-            {
-                return from;
-            }
-        }
-
-        public int Length
-        {
-            get
-            {
-                return length;
-            }
+            return new Range(start, endExclusive - start);
         }
 
         public bool Contains(int n)
         {
-            return from <= n && n < from + length;
+            return From <= n && n < From + Length;
         }
 
-        public IEnumerable<int> Items
+        public override bool Equals(object obj)
         {
-            get
-            {
-                return Enumerable.Range( from, length );
-            }
+            return Equals(obj as Range);
         }
 
-        public override bool Equals( object obj )
+        public bool Equals(Range that)
         {
-            return Equals( obj as Range );
-        }
-
-        public bool Equals( Range that )
-        {
-            return that != null && this.from == that.from && this.length == that.length;
+            return that != null && From == that.From && Length == that.Length;
         }
 
         public override int GetHashCode()
         {
-            return from.GetHashCode() ^ length.GetHashCode();
+            return From.GetHashCode() ^ Length.GetHashCode();
         }
 
         public override string ToString()
         {
-            return string.Format( "[{0}...{1})", from, from + length );
+            return string.Format("[{0}...{1})", From, From + Length);
         }
     }
 }

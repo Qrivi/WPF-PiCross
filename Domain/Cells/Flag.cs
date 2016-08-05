@@ -4,24 +4,20 @@ namespace Cells
 {
     public class Flag
     {
-        public static Flag<T> Create<T>( Cell<T> cell )
+        public static Flag<T> Create<T>(Cell<T> cell)
         {
-            return new Flag<T>( cell );
+            return new Flag<T>(cell);
         }
     }
 
-    [DebuggerDisplay( "{Status}" )]
+    [DebuggerDisplay("{Status}")]
     public class Flag<T>
     {
-        public Flag( Cell<T> cell )
+        public Flag(Cell<T> cell)
         {
             cell.ValueChanged += () => { Status = true; };
         }
 
-        public bool Status
-        {
-            get;
-            set;
-        }
+        public bool Status { get; set; }
     }
 }

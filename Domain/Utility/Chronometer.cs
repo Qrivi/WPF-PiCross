@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Cells;
 
 namespace Utility
@@ -11,12 +7,11 @@ namespace Utility
     {
         private DateTime lastTick;
         private bool started;
-        private Cell<TimeSpan> totalTime;
 
         public Chronometer()
         {
             started = false;
-            totalTime = Cell.Create( TimeSpan.Zero );
+            TotalTime = Cell.Create(TimeSpan.Zero);
         }
 
         public void Start()
@@ -30,28 +25,23 @@ namespace Utility
             started = false;
         }
 
-        public void Reset() {
-            totalTime.Value = TimeSpan.Zero;
+        public void Reset()
+        {
+            TotalTime.Value = TimeSpan.Zero;
         }
 
         public void Tick()
         {
-            if ( started )
+            if (started)
             {
                 var now = DateTime.Now;
                 var delta = now - lastTick;
                 lastTick = now;
 
-                totalTime.Value += delta;
+                TotalTime.Value += delta;
             }
         }
 
-        public Cell<TimeSpan> TotalTime
-        {
-            get
-            {
-                return totalTime;
-            }
-        }
+        public Cell<TimeSpan> TotalTime { get; }
     }
 }

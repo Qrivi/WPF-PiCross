@@ -1,57 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Cells;
 
 namespace DataStructures
 {
     /// <summary>
-    /// Interface for array-like objects. A sequence is readonly.
-    /// If you need to be able to modify a sequence's elements,
-    /// populate the sequence with objects with <see cref="IVar"/>.
+    ///     Interface for array-like objects. A sequence is readonly.
+    ///     If you need to be able to modify a sequence's elements,
+    ///     populate the sequence with objects with <see cref="IVar" />.
     /// </summary>
     /// <typeparam name="T">Element type.</typeparam>
     public interface ISequence<out T>
     {
         /// <summary>
-        /// Number of items in the sequence.
+        ///     Number of items in the sequence.
         /// </summary>
         int Length { get; }
 
         /// <summary>
-        /// Looks up an element in the sequence.
+        ///     Looks up an element in the sequence.
         /// </summary>
         /// <param name="index">Zero-based index of the element.</param>
-        /// <returns>Element with index <paramref name="index"/></returns>
+        /// <returns>Element with index <paramref name="index" /></returns>
         T this[int index] { get; }
 
         /// <summary>
-        /// Enumerates all indices in increasing order.
+        ///     Enumerates all indices in increasing order.
         /// </summary>
         IEnumerable<int> Indices { get; }
 
         /// <summary>
-        /// Enumerates all items in order of increasing index.
+        ///     Enumerates all items in order of increasing index.
         /// </summary>
         IEnumerable<T> Items { get; }
 
         /// <summary>
-        /// Checks whether the given index is valid.
+        ///     Checks whether the given index is valid.
         /// </summary>
         /// <param name="index">Index to be checked.</param>
         /// <returns>True if valid, false otherwise.</returns>
-        bool IsValidIndex( int index );
+        bool IsValidIndex(int index);
     }
 
     /// <summary>
-    /// A series of sequence-related static factory methods.
+    ///     A series of sequence-related static factory methods.
     /// </summary>
     public static class Sequence
     {
         /// <summary>
-        /// Creates an empty sequence.
+        ///     Creates an empty sequence.
         /// </summary>
         /// <typeparam name="T">Element type.</typeparam>
         /// <returns>An empty sequence.</returns>
@@ -61,285 +59,259 @@ namespace DataStructures
         }
 
         /// <summary>
-        /// Creates a sequence containing the specified values.
+        ///     Creates a sequence containing the specified values.
         /// </summary>
         /// <typeparam name="T">Element type.</typeparam>
         /// <param name="items">Items.</param>
         /// <returns>A sequence containing the given items in the given order.</returns>
-        public static ISequence<T> FromItems<T>( params T[] items )
+        public static ISequence<T> FromItems<T>(params T[] items)
         {
-            return new ArraySequence<T>( items.Length, i => items[i] );
+            return new ArraySequence<T>(items.Length, i => items[i]);
         }
 
         /// <summary>
-        /// Creates a sequence from a function. The function is called by-need
-        /// and will be called again with each indexing.
+        ///     Creates a sequence from a function. The function is called by-need
+        ///     and will be called again with each indexing.
         /// </summary>
         /// <typeparam name="T">Element type.</typeparam>
         /// <param name="length">Length of the sequence.</param>
         /// <param name="function">Function determining the elements.</param>
         /// <returns>A sequence.</returns>
-        public static ISequence<T> FromFunction<T>( int length, Func<int, T> function )
+        public static ISequence<T> FromFunction<T>(int length, Func<int, T> function)
         {
-            return new VirtualSequence<T>( length, function );
+            return new VirtualSequence<T>(length, function);
         }
 
         /// <summary>
-        /// Converst an IEnumerable to an ISequence.
+        ///     Converst an IEnumerable to an ISequence.
         /// </summary>
         /// <typeparam name="T">Element type.</typeparam>
         /// <param name="xs">The IEnumerable.</param>
-        /// <returns>Sequence containing the elements of <paramref name="xs"/> in the same order.</returns>
-        public static ISequence<T> FromEnumerable<T>( IEnumerable<T> xs )
+        /// <returns>Sequence containing the elements of <paramref name="xs" /> in the same order.</returns>
+        public static ISequence<T> FromEnumerable<T>(IEnumerable<T> xs)
         {
-            return FromItems( xs.ToArray() );
+            return FromItems(xs.ToArray());
         }
 
         /// <summary>
-        /// Creates a sequence of length <paramref name="length"/>. All items are equal to the given <paramref name="value"/>.
+        ///     Creates a sequence of length <paramref name="length" />. All items are equal to the given <paramref name="value" />
+        ///     .
         /// </summary>
         /// <typeparam name="T">Element type.</typeparam>
         /// <param name="length">Length of the sequence.</param>
         /// <param name="value">Value used to initialize the sequence.</param>
-        /// <returns>Sequence containing <paramref name="value"/> repeated <paramref name="length"/> times.</returns>
-        public static ISequence<T> Repeat<T>( int length, T value )
+        /// <returns>Sequence containing <paramref name="value" /> repeated <paramref name="length" /> times.</returns>
+        public static ISequence<T> Repeat<T>(int length, T value)
         {
-            return new VirtualSequence<T>( length, _ => value );
+            return new VirtualSequence<T>(length, _ => value);
         }
 
         /// <summary>
-        /// Creates a character sequence.
+        ///     Creates a character sequence.
         /// </summary>
         /// <param name="str">String whose characters will be used to initialize the sequence.</param>
         /// <returns>Sequence.</returns>
-        public static ISequence<char> FromString( string str )
+        public static ISequence<char> FromString(string str)
         {
-            return FromItems( str.ToCharArray() );
+            return FromItems(str.ToCharArray());
         }
 
         /// <summary>
-        /// Creates a sequence containing the values <paramref name="from"/> to <paramref name="from"/> + <paramref name="length"/>.
+        ///     Creates a sequence containing the values <paramref name="from" /> to <paramref name="from" /> +
+        ///     <paramref name="length" />.
         /// </summary>
         /// <param name="from">Value of first item.</param>
         /// <param name="length">Length of the sequence.</param>
         /// <returns>Sequence.</returns>
-        public static ISequence<int> Range( int from, int length )
+        public static ISequence<int> Range(int from, int length)
         {
-            return Sequence.FromFunction( length, i => from + i );
+            return FromFunction(length, i => from + i);
         }
 
-        public static ISequence<bool> Bits( byte n )
+        public static ISequence<bool> Bits(byte n)
         {
-            return FromFunction( 8, i => ( ( n >> ( 7 - i ) ) & 1 ) == 1 );
+            return FromFunction(8, i => ((n >> (7 - i)) & 1) == 1);
         }
     }
 
     public static class SequenceExtensions
     {
-        public static ISequence<T> ToSequence<T>( this IEnumerable<T> enumerable )
+        public static ISequence<T> ToSequence<T>(this IEnumerable<T> enumerable)
         {
-            return Sequence.FromEnumerable( enumerable );
+            return Sequence.FromEnumerable(enumerable);
         }
 
-        public static ISequence<T> Concatenate<T>( this ISequence<T> xs, ISequence<T> ys )
+        public static ISequence<T> Concatenate<T>(this ISequence<T> xs, ISequence<T> ys)
         {
-            return Sequence.FromFunction( xs.Length + ys.Length, i => i < xs.Length ? xs[i] : ys[i - xs.Length] );
+            return Sequence.FromFunction(xs.Length + ys.Length, i => i < xs.Length ? xs[i] : ys[i - xs.Length]);
         }
 
-        public static ISequence<T> Flatten<T>( this ISequence<ISequence<T>> xss )
+        public static ISequence<T> Flatten<T>(this ISequence<ISequence<T>> xss)
         {
-            if ( xss.Length == 0 )
+            if (xss.Length == 0)
             {
                 return Sequence.CreateEmpty<T>();
             }
-            else if ( xss.Length == 1 )
+            if (xss.Length == 1)
             {
                 return xss[0];
             }
-            else
-            {
-                var middle = xss.Length / 2;
+            var middle = xss.Length/2;
 
-                var leftHalf = xss.Prefix( middle );
-                var rightHalf = xss.DropPrefix( middle );
+            var leftHalf = xss.Prefix(middle);
+            var rightHalf = xss.DropPrefix(middle);
 
-                return Flatten( leftHalf ).Concatenate( Flatten( rightHalf ) );
-            }
+            return Flatten(leftHalf).Concatenate(Flatten(rightHalf));
         }
 
-        public static ISequence<R> ZipWith<T1, T2, R>( this ISequence<T1> xs, ISequence<T2> ys, Func<T1, T2, R> zipper )
+        public static ISequence<R> ZipWith<T1, T2, R>(this ISequence<T1> xs, ISequence<T2> ys, Func<T1, T2, R> zipper)
         {
-            if ( xs == null )
+            if (xs == null)
             {
-                throw new ArgumentNullException( "xs" );
+                throw new ArgumentNullException("xs");
             }
-            else if ( ys == null )
+            if (ys == null)
             {
-                throw new ArgumentNullException( "ys" );
+                throw new ArgumentNullException("ys");
             }
-            else if ( xs.Length != ys.Length )
+            if (xs.Length != ys.Length)
             {
-                throw new ArgumentException( "xs and ys should have same length" );
+                throw new ArgumentException("xs and ys should have same length");
             }
-            else if ( zipper == null )
+            if (zipper == null)
             {
-                throw new ArgumentNullException( "zipper" );
+                throw new ArgumentNullException("zipper");
             }
-            else
-            {
-                return Sequence.FromFunction( xs.Length, i => zipper( xs[i], ys[i] ) );
-            }
+            return Sequence.FromFunction(xs.Length, i => zipper(xs[i], ys[i]));
         }
 
-        public static ISequence<R> Map<T, R>( this ISequence<T> xs, Func<T, R> function )
+        public static ISequence<R> Map<T, R>(this ISequence<T> xs, Func<T, R> function)
         {
-            if ( xs == null )
+            if (xs == null)
             {
-                throw new ArgumentNullException( "xs" );
+                throw new ArgumentNullException("xs");
             }
-            else if ( function == null )
+            if (function == null)
             {
-                throw new ArgumentNullException( "function" );
+                throw new ArgumentNullException("function");
             }
-            else
-            {
-                return Sequence.FromFunction( xs.Length, i => function( xs[i] ) );
-            }
+            return Sequence.FromFunction(xs.Length, i => function(xs[i]));
         }
 
-        public static ISequence<R> Map<T, R>( this ISequence<T> xs, Func<int, T, R> function )
+        public static ISequence<R> Map<T, R>(this ISequence<T> xs, Func<int, T, R> function)
         {
-            if ( xs == null )
+            if (xs == null)
             {
-                throw new ArgumentNullException( "xs" );
+                throw new ArgumentNullException("xs");
             }
-            else if ( function == null )
+            if (function == null)
             {
-                throw new ArgumentNullException( "function" );
+                throw new ArgumentNullException("function");
             }
-            else
-            {
-                return Sequence.FromFunction( xs.Length, i => function( i, xs[i] ) );
-            }
+            return Sequence.FromFunction(xs.Length, i => function(i, xs[i]));
         }
 
-        public static ISequence<T> Intersperse<T>( this ISequence<T> xs, ISequence<T> ys )
+        public static ISequence<T> Intersperse<T>(this ISequence<T> xs, ISequence<T> ys)
         {
-            if ( xs == null )
+            if (xs == null)
             {
-                throw new ArgumentNullException( "xs" );
+                throw new ArgumentNullException("xs");
             }
-            else if ( ys == null )
+            if (ys == null)
             {
-                throw new ArgumentNullException( "ys" );
+                throw new ArgumentNullException("ys");
             }
-            else if ( xs.Length != ys.Length + 1 )
+            if (xs.Length != ys.Length + 1)
             {
-                throw new ArgumentException( string.Format( "xs.Length (={0}) should be equal to ys.Length + 1 (={1} + 1)", xs.Length, ys.Length ) );
+                throw new ArgumentException(string.Format(
+                    "xs.Length (={0}) should be equal to ys.Length + 1 (={1} + 1)", xs.Length, ys.Length));
             }
-            else
-            {
-                return Sequence.FromFunction( xs.Length + ys.Length, i => i % 2 == 0 ? xs[i / 2] : ys[( i - 1 ) / 2] );
-            }
+            return Sequence.FromFunction(xs.Length + ys.Length, i => i%2 == 0 ? xs[i/2] : ys[(i - 1)/2]);
         }
 
-        public static string AsString( this ISequence<char> xs )
+        public static string AsString(this ISequence<char> xs)
         {
-            return new string( xs.Items.ToArray() );
+            return new string(xs.Items.ToArray());
         }
 
-        public static ISequence<T> Subsequence<T>( this ISequence<T> xs, int from, int count )
+        public static ISequence<T> Subsequence<T>(this ISequence<T> xs, int from, int count)
         {
-            if ( !xs.IsValidIndex( from ) )
+            if (!xs.IsValidIndex(from))
             {
-                throw new ArgumentOutOfRangeException( "from" );
+                throw new ArgumentOutOfRangeException("from");
             }
-            else if ( count < 0 || ( count > 0 && from + count - 1 >= xs.Length ) )
+            if (count < 0 || (count > 0 && @from + count - 1 >= xs.Length))
             {
-                throw new ArgumentOutOfRangeException( "count" );
+                throw new ArgumentOutOfRangeException("count");
             }
-            else
-            {
-                return Sequence.FromFunction( count, i => xs[i + from] );
-            }
+            return Sequence.FromFunction(count, i => xs[i + @from]);
         }
 
-        private static ISequence<T> SafeSubsequence<T>( this ISequence<T> xs, int from, int count )
+        private static ISequence<T> SafeSubsequence<T>(this ISequence<T> xs, int from, int count)
         {
-            if ( !xs.IsValidIndex( from ) )
+            if (!xs.IsValidIndex(from))
             {
-                throw new ArgumentOutOfRangeException( "from" );
+                throw new ArgumentOutOfRangeException("from");
             }
-            else if ( count < 0 )
+            if (count < 0)
             {
-                throw new ArgumentOutOfRangeException( "count" );
+                throw new ArgumentOutOfRangeException("count");
             }
-            else
-            {
-                count = Math.Min( count, xs.Length - from );
+            count = Math.Min(count, xs.Length - @from);
 
-                return Sequence.FromFunction( count, i => xs[i + from] );
-            }
+            return Sequence.FromFunction(count, i => xs[i + @from]);
         }
 
-        public static ISequence<T> Prefix<T>( this ISequence<T> xs, int length )
+        public static ISequence<T> Prefix<T>(this ISequence<T> xs, int length)
         {
-            if ( xs == null )
+            if (xs == null)
             {
-                throw new ArgumentNullException( "xs" );
+                throw new ArgumentNullException("xs");
             }
-            else if ( length > xs.Length )
+            if (length > xs.Length)
             {
-                throw new ArgumentOutOfRangeException( "length" );
+                throw new ArgumentOutOfRangeException("length");
             }
-            else
-            {
-                return xs.Subsequence( 0, length );
-            }
+            return xs.Subsequence(0, length);
         }
 
-        public static ISequence<T> Suffix<T>( this ISequence<T> xs, int from )
+        public static ISequence<T> Suffix<T>(this ISequence<T> xs, int from)
         {
-            if ( xs == null )
+            if (xs == null)
             {
-                throw new ArgumentNullException( "xs" );
+                throw new ArgumentNullException("xs");
             }
-            else if ( from > xs.Length )
+            if (@from > xs.Length)
             {
-                throw new ArgumentOutOfRangeException( "from", string.Format( "from = {0}, length = {1}", from, xs.Length ) );
+                throw new ArgumentOutOfRangeException("from",
+                    string.Format("from = {0}, length = {1}", @from, xs.Length));
             }
-            else
+            if (@from == xs.Length)
             {
-                if ( from == xs.Length )
-                {
-                    return Sequence.CreateEmpty<T>();
-                }
-                else
-                {
-                    return xs.Subsequence( from, xs.Length - from );
-                }
+                return Sequence.CreateEmpty<T>();
             }
+            return xs.Subsequence(@from, xs.Length - @from);
         }
 
-        public static ISequence<T> DropPrefix<T>( this ISequence<T> xs, int length )
+        public static ISequence<T> DropPrefix<T>(this ISequence<T> xs, int length)
         {
-            return xs.Suffix( length );
+            return xs.Suffix(length);
         }
 
-        public static ISequence<T> DropSuffix<T>( this ISequence<T> xs, int length )
+        public static ISequence<T> DropSuffix<T>(this ISequence<T> xs, int length)
         {
-            return xs.Prefix( xs.Length - length - 1 );
+            return xs.Prefix(xs.Length - length - 1);
         }
 
-        public static int FindFirstIndexOf<T>( this ISequence<T> xs, Func<T, bool> predicate )
+        public static int FindFirstIndexOf<T>(this ISequence<T> xs, Func<T, bool> predicate)
         {
             var i = 0;
 
-            while ( i < xs.Length )
+            while (i < xs.Length)
             {
                 var current = xs[i];
 
-                if ( predicate( current ) )
+                if (predicate(current))
                 {
                     return i;
                 }
@@ -350,44 +322,38 @@ namespace DataStructures
             return -1;
         }
 
-        public static ISequence<T> TakeWhile<T>( this ISequence<T> xs, Func<T, bool> predicate )
+        public static ISequence<T> TakeWhile<T>(this ISequence<T> xs, Func<T, bool> predicate)
         {
-            var index = xs.FindFirstIndexOf( x => !predicate( x ) );
+            var index = xs.FindFirstIndexOf(x => !predicate(x));
 
-            if ( index == -1 )
+            if (index == -1)
             {
                 return xs;
             }
-            else
-            {
-                return xs.Prefix( index );
-            }
+            return xs.Prefix(index);
         }
 
-        public static ISequence<T> DropWhile<T>( this ISequence<T> xs, Func<T, bool> predicate )
+        public static ISequence<T> DropWhile<T>(this ISequence<T> xs, Func<T, bool> predicate)
         {
-            var index = xs.FindFirstIndexOf( x => !predicate( x ) );
+            var index = xs.FindFirstIndexOf(x => !predicate(x));
 
-            if ( index == -1 )
+            if (index == -1)
             {
                 return Sequence.CreateEmpty<T>();
             }
-            else
-            {
-                return xs.Suffix( index );
-            }
+            return xs.Suffix(index);
         }
 
-        public static ISequence<T> Reverse<T>( this ISequence<T> xs )
+        public static ISequence<T> Reverse<T>(this ISequence<T> xs)
         {
-            return Sequence.FromFunction( xs.Length, i => xs[xs.Length - i - 1] );
+            return Sequence.FromFunction(xs.Length, i => xs[xs.Length - i - 1]);
         }
 
-        public static int CommonPrefixLength<T>( this ISequence<T> xs, ISequence<T> ys )
+        public static int CommonPrefixLength<T>(this ISequence<T> xs, ISequence<T> ys)
         {
             var i = 0;
 
-            while ( i < xs.Length && i < ys.Length && xs[i].Equals( ys[i] ) )
+            while (i < xs.Length && i < ys.Length && xs[i].Equals(ys[i]))
             {
                 ++i;
             }
@@ -395,105 +361,100 @@ namespace DataStructures
             return i;
         }
 
-        public static ISequence<T> Copy<T>( this ISequence<T> xs )
+        public static ISequence<T> Copy<T>(this ISequence<T> xs)
         {
-            return new ArraySequence<T>( xs.Length, i => xs[i] );
+            return new ArraySequence<T>(xs.Length, i => xs[i]);
         }
 
-        public static string Join( this ISequence<char> cs, string infix = "" )
+        public static string Join(this ISequence<char> cs, string infix = "")
         {
-            return string.Join( infix, cs.Items.ToArray() );
+            return string.Join(infix, cs.Items.ToArray());
         }
 
-        public static string Join( this ISequence<string> cs, string infix = "" )
+        public static string Join(this ISequence<string> cs, string infix = "")
         {
-            return string.Join( infix, cs.Items.ToArray() );
+            return string.Join(infix, cs.Items.ToArray());
         }
 
-        public static void Each<T>( this ISequence<T> xs, Action<T> action )
+        public static void Each<T>(this ISequence<T> xs, Action<T> action)
         {
-            foreach ( var x in xs.Items )
+            foreach (var x in xs.Items)
             {
-                action( x );
+                action(x);
             }
         }
 
-        public static bool Overwrite<T>( this ISequence<IVar<T>> xs, ISequence<T> ys )
+        public static bool Overwrite<T>(this ISequence<IVar<T>> xs, ISequence<T> ys)
         {
-            if ( xs == null )
+            if (xs == null)
             {
-                throw new ArgumentNullException( "xs" );
+                throw new ArgumentNullException("xs");
             }
-            else if ( ys == null )
+            if (ys == null)
             {
-                throw new ArgumentNullException( "ys" );
+                throw new ArgumentNullException("ys");
             }
-            else if ( xs.Length != ys.Length )
+            if (xs.Length != ys.Length)
             {
-                throw new ArgumentException( "xs and ys must have same length" );
+                throw new ArgumentException("xs and ys must have same length");
             }
-            else
-            {
-                var overwriteDetected = false;
+            var overwriteDetected = false;
 
-                foreach ( var i in xs.Indices )
+            foreach (var i in xs.Indices)
+            {
+                var cell = xs[i];
+                var value = ys[i];
+
+                if (!Util.AreEqual(cell.Value, value))
                 {
-                    var cell = xs[i];
-                    var value = ys[i];
-
-                    if ( !Util.AreEqual( cell.Value, value ) )
-                    {
-                        cell.Value = value;
-                        overwriteDetected = true;
-                    }
+                    cell.Value = value;
+                    overwriteDetected = true;
                 }
-
-                return overwriteDetected;
             }
+
+            return overwriteDetected;
         }
 
-        public static ISequence<ISequence<T>> Group<T>( this ISequence<T> xs, int groupSize )
+        public static ISequence<ISequence<T>> Group<T>(this ISequence<T> xs, int groupSize)
         {
-            return Sequence.FromFunction( ( xs.Length + groupSize - 1 ) / groupSize, i => xs.SafeSubsequence( i * groupSize, groupSize ) );
+            return Sequence.FromFunction((xs.Length + groupSize - 1)/groupSize,
+                i => xs.SafeSubsequence(i*groupSize, groupSize));
         }
 
-        public static ISequence<byte> GroupBits( this ISequence<bool> bits )
+        public static ISequence<byte> GroupBits(this ISequence<bool> bits)
         {
-            var byteGroups = bits.Group( 8 );
+            var byteGroups = bits.Group(8);
 
-            return byteGroups.Map( group => group.ToByte() );
+            return byteGroups.Map(group => group.ToByte());
         }
 
-        public static byte ToByte( this ISequence<bool> bits )
+        public static byte ToByte(this ISequence<bool> bits)
         {
-            if ( bits == null )
+            if (bits == null)
             {
-                throw new ArgumentNullException( "bits" );
+                throw new ArgumentNullException("bits");
             }
-            else if ( bits.Length > 8 )
+            if (bits.Length > 8)
             {
-                throw new ArgumentOutOfRangeException( "Maximum eight bits allowed" );
+                throw new ArgumentOutOfRangeException("Maximum eight bits allowed");
             }
-            else
-            {
-                return (byte) ( bits.Map( ( i, b ) => ( b ? 1 : 0 ) << ( 7 - i ) ).Items.Aggregate( 0, ( x, y ) => x | y ) );
-            }
+            return (byte) bits.Map((i, b) => (b ? 1 : 0) << (7 - i)).Items.Aggregate(0, (x, y) => x | y);
         }
 
-        public static T[] ToArray<T>( this ISequence<T> seq )
+        public static T[] ToArray<T>(this ISequence<T> seq)
         {
             var array = new T[seq.Length];
 
-            seq.Each( i => array[i] = seq[i] );
+            seq.Each(i => array[i] = seq[i]);
 
             return array;
         }
 
         public static void Each<T>(this ISequence<T> xs, Action<int> action)
         {
-            foreach ( var i in xs.Indices )
+            foreach (var i in xs.Indices)
             {
-                action( i );
+                action(i);
             }
         }
     }
@@ -506,68 +467,56 @@ namespace DataStructures
 
         public IEnumerable<int> Indices
         {
-            get
-            {
-                return Enumerable.Range( 0, this.Length );
-            }
+            get { return Enumerable.Range(0, Length); }
         }
 
         public IEnumerable<T> Items
         {
-            get
-            {
-                return Indices.Select( i => this[i] );
-            }
+            get { return Indices.Select(i => this[i]); }
         }
 
-        public bool IsValidIndex( int index )
+        public bool IsValidIndex(int index)
         {
             return 0 <= index && index < Length;
         }
 
         public override string ToString()
         {
-            var str = string.Join( ", ", Items.Select( x => x.ToString() ) );
+            var str = string.Join(", ", Items.Select(x => x.ToString()));
 
             return str;
         }
 
-        public override bool Equals( object obj )
+        public override bool Equals(object obj)
         {
-            return Equals( obj as ISequence<T> );
+            return Equals(obj as ISequence<T>);
         }
 
-        public bool Equals( ISequence<T> that )
+        public bool Equals(ISequence<T> that)
         {
-            if ( that == null )
+            if (that == null)
             {
                 return false;
             }
-            else if ( this.Length != that.Length )
+            if (Length != that.Length)
             {
                 return false;
             }
-            else
-            {
-                return Indices.All( i => EqualItems( this[i], that[i] ) );
-            }
+            return Indices.All(i => EqualItems(this[i], that[i]));
         }
 
-        private bool EqualItems( T x, T y )
+        private bool EqualItems(T x, T y)
         {
-            if ( x == null )
+            if (x == null)
             {
                 return y == null;
             }
-            else
-            {
-                return x.Equals( y );
-            }
+            return x.Equals(y);
         }
 
         public override int GetHashCode()
         {
-            return Items.Select( x => x.GetHashCode() ).Aggregate( 0, ( x, y ) => x ^ y );
+            return Items.Select(x => x.GetHashCode()).Aggregate(0, (x, y) => x ^ y);
         }
     }
 
@@ -580,7 +529,7 @@ namespace DataStructures
 
         public override T this[int index]
         {
-            get { throw new ArgumentOutOfRangeException( "index" ); }
+            get { throw new ArgumentOutOfRangeException("index"); }
         }
     }
 
@@ -588,82 +537,59 @@ namespace DataStructures
     {
         private readonly T[] items;
 
-        public ArraySequence( int length, Func<int, T> initializer )
+        public ArraySequence(int length, Func<int, T> initializer)
         {
-            if ( length < 0 )
+            if (length < 0)
             {
-                throw new ArgumentOutOfRangeException( "length" );
+                throw new ArgumentOutOfRangeException("length");
             }
-            else if ( initializer == null )
+            if (initializer == null)
             {
-                throw new ArgumentNullException( "initializer" );
+                throw new ArgumentNullException("initializer");
             }
-            else
-            {
-                items = Enumerable.Range( 0, length ).Select( initializer ).ToArray();
-            }
+            items = Enumerable.Range(0, length).Select(initializer).ToArray();
         }
 
         public override int Length
         {
-            get
-            {
-                return items.Length;
-            }
+            get { return items.Length; }
         }
 
         public override T this[int index]
         {
-            get
-            {
-                return items[index];
-            }
+            get { return items[index]; }
         }
     }
 
     internal class VirtualSequence<T> : SequenceBase<T>
     {
-        private readonly int length;
-
         private readonly Func<int, T> function;
 
-        public VirtualSequence( int length, Func<int, T> function )
+        public VirtualSequence(int length, Func<int, T> function)
         {
-            if ( length < 0 )
+            if (length < 0)
             {
-                throw new ArgumentOutOfRangeException( "length" );
+                throw new ArgumentOutOfRangeException("length");
             }
-            else if ( function == null )
+            if (function == null)
             {
-                throw new ArgumentNullException( "function" );
+                throw new ArgumentNullException("function");
             }
-            else
-            {
-                this.length = length;
-                this.function = function;
-            }
+            Length = length;
+            this.function = function;
         }
 
-        public override int Length
-        {
-            get
-            {
-                return length;
-            }
-        }
+        public override int Length { get; }
 
         public override T this[int index]
         {
             get
             {
-                if ( !IsValidIndex( index ) )
+                if (!IsValidIndex(index))
                 {
-                    throw new ArgumentOutOfRangeException( "index" );
+                    throw new ArgumentOutOfRangeException("index");
                 }
-                else
-                {
-                    return function( index );
-                }
+                return function(index);
             }
         }
     }

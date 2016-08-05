@@ -22,7 +22,7 @@ namespace GUI
 
             _chrono = new Chronometer();
 
-            var timer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(200) };
+            var timer = new DispatcherTimer {Interval = TimeSpan.FromMilliseconds(200)};
             var main = new MainWindow {DataContext = new PiCrossViewModel(CreatePuzzles(), _chrono)};
 
             timer.Tick += TimerTicked;

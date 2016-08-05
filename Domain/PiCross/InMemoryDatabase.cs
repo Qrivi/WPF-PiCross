@@ -4,123 +4,94 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Cells;
-using PiCross;
 using Utility;
 
 namespace PiCross
 {
     internal class InMemoryDatabase : IDatabase
     {
-        private readonly PuzzleLibrary library;
+        public InMemoryDatabase(PuzzleLibrary library, PlayerDatabase playerDatabase)
+        {
+            if (library == null)
+            {
+                throw new ArgumentNullException("library");
+            }
+            if (playerDatabase == null)
+            {
+                throw new ArgumentNullException("playerDatabase");
+            }
+            Puzzles = library;
+            Players = playerDatabase;
+        }
 
-        private readonly PlayerDatabase playerDatabase;
+        public PuzzleLibrary Puzzles { get; }
+
+        public PlayerDatabase Players { get; }
+
+        IPuzzleDatabase IDatabase.Puzzles
+        {
+            get { return Puzzles; }
+        }
+
+        IPlayerDatabase IDatabase.Players
+        {
+            get { return Players; }
+        }
 
         public static InMemoryDatabase CreateEmpty()
         {
             var puzzles = PuzzleLibrary.CreateEmpty();
             var players = PlayerDatabase.CreateEmpty();
 
-            return new InMemoryDatabase( puzzles, players );
+            return new InMemoryDatabase(puzzles, players);
         }
 
-        public static InMemoryDatabase ReadFromArchive( string path )
+        public static InMemoryDatabase ReadFromArchive(string path)
         {
-            using ( var fileStream = new FileStream( path, FileMode.Open ) )
+            using (var fileStream = new FileStream(path, FileMode.Open))
             {
-                using ( var zipArchive = new ZipArchive( fileStream, ZipArchiveMode.Read ) )
+                using (var zipArchive = new ZipArchive(fileStream, ZipArchiveMode.Read))
                 {
-                    using ( var archive = new GameDataArchive( zipArchive ) )
+                    using (var archive = new GameDataArchive(zipArchive))
                     {
-                        return ReadFromArchive( archive );
+                        return ReadFromArchive(archive);
                     }
                 }
             }
         }
 
-        public static InMemoryDatabase ReadFromArchive( IGameDataArchive archive )
+        public static InMemoryDatabase ReadFromArchive(IGameDataArchive archive)
         {
             var gameData = CreateEmpty();
 
-            foreach ( var playerName in archive.PlayerNames )
+            foreach (var playerName in archive.PlayerNames)
             {
-                var profile = archive.ReadPlayerProfile( playerName );
-                gameData.Players.AddProfile( profile );
+                var profile = archive.ReadPlayerProfile(playerName);
+                gameData.Players.AddProfile(profile);
             }
 
-            foreach ( var uid in archive.PuzzleLibraryUIDs )
+            foreach (var uid in archive.PuzzleLibraryUIDs)
             {
-                var entry = archive.ReadPuzzleLibraryEntry( uid );
-                gameData.Puzzles.Add( entry );
+                var entry = archive.ReadPuzzleLibraryEntry(uid);
+                gameData.Puzzles.Add(entry);
             }
 
             return gameData;
         }
 
-        public InMemoryDatabase( PuzzleLibrary library, PlayerDatabase playerDatabase )
+        public override bool Equals(object obj)
         {
-            if ( library == null )
-            {
-                throw new ArgumentNullException( "library" );
-            }
-            else if ( playerDatabase == null )
-            {
-                throw new ArgumentNullException( "playerDatabase" );
-            }
-            else
-            {
-                this.library = library;
-                this.playerDatabase = playerDatabase;
-            }
+            return Equals(obj as InMemoryDatabase);
         }
 
-        IPuzzleDatabase IDatabase.Puzzles
+        public bool Equals(InMemoryDatabase gameData)
         {
-            get
-            {
-                return Puzzles;
-            }
-        }
-
-        public PuzzleLibrary Puzzles
-        {
-            get
-            {
-                return this.library;
-            }
-        }
-
-        IPlayerDatabase IDatabase.Players
-        {
-            get
-            {
-                return Players;
-            }
-        }
-
-        public PlayerDatabase Players
-        {
-            get
-            {
-                return this.playerDatabase;
-            }
-        }
-
-        public override bool Equals( object obj )
-        {
-            return Equals( obj as InMemoryDatabase );
-        }
-
-        public bool Equals( InMemoryDatabase gameData )
-        {
-            return gameData != null && library.Equals( gameData.library ) && playerDatabase.Equals( gameData.playerDatabase );
+            return gameData != null && Puzzles.Equals(gameData.Puzzles) && Players.Equals(gameData.Players);
         }
 
         public override int GetHashCode()
         {
-            return library.GetHashCode() ^ playerDatabase.GetHashCode();
+            return Puzzles.GetHashCode() ^ Players.GetHashCode();
         }
 
         public class PuzzleLibrary : IPuzzleDatabase
@@ -129,198 +100,146 @@ namespace PiCross
 
             private int nextUID;
 
-            public static PuzzleLibrary CreateEmpty()
-            {
-                return new PuzzleLibrary();
-            }
-
             private PuzzleLibrary()
             {
-                this.entries = new List<PuzzleLibraryEntry>();
+                entries = new List<PuzzleLibraryEntry>();
                 nextUID = 0;
             }
 
             public IList<PuzzleLibraryEntry> Entries
             {
-                get
-                {
-                    return entries.AsReadOnly();
-                }
+                get { return entries.AsReadOnly(); }
             }
 
             public PuzzleLibraryEntry this[int id]
             {
                 get
                 {
-                    var result = entries.Find( entry => entry.UID == id );
+                    var result = entries.Find(entry => entry.UID == id);
 
-                    if ( result == null )
+                    if (result == null)
                     {
-                        throw new ArgumentException( "No entry found" );
+                        throw new ArgumentException("No entry found");
                     }
-                    else
-                    {
-                        return result;
-                    }
+                    return result;
                 }
-            }
-
-            public PuzzleLibraryEntry Create( Puzzle puzzle, string author )
-            {
-                var uid = nextUID++;
-
-                Debug.Assert( !ContainsEntryWithUID( uid ) );
-
-                var newEntry = new PuzzleLibraryEntry( uid, puzzle, author );
-
-                entries.Add( newEntry );
-
-                return newEntry;
-            }
-
-            public void Add( PuzzleLibraryEntry libraryEntry )
-            {
-                if ( libraryEntry == null )
-                {
-                    throw new ArgumentNullException( "libraryEntry" );
-                }
-                else if ( ContainsEntryWithUID( libraryEntry.UID ) )
-                {
-                    throw new ArgumentException();
-                }
-                else
-                {
-                    this.entries.Add( libraryEntry );
-                    nextUID = Math.Max( nextUID, libraryEntry.UID + 1 );
-                }
-            }
-
-            private bool ContainsEntryWithUID( int uid )
-            {
-                return entries.Any( entry => entry.UID == uid );
-            }
-
-            public override bool Equals( object obj )
-            {
-                return Equals( obj as PuzzleLibrary );
-            }
-
-            public bool Equals( PuzzleLibrary library )
-            {
-                if ( library == null )
-                {
-                    return false;
-                }
-                else
-                {
-                    if ( this.entries.Count != library.entries.Count )
-                    {
-                        return false;
-                    }
-                    else
-                    {
-                        return Enumerable.Range( 0, this.entries.Count ).All( i => entries[i].Equals( library.entries[i] ) );
-                    }
-                }
-            }
-
-            public override int GetHashCode()
-            {
-                return entries.Select( x => x.GetHashCode() ).Aggregate( ( acc, n ) => acc ^ n );
             }
 
             IEnumerable<IPuzzleDatabaseEntry> IPuzzleDatabase.Entries
             {
-                get
-                {
-                    return Entries;
-                }
+                get { return Entries; }
             }
 
             IPuzzleDatabaseEntry IPuzzleDatabase.this[int id]
             {
-                get
-                {
-                    return this[id];
-                }
+                get { return this[id]; }
             }
 
-            IPuzzleDatabaseEntry IPuzzleDatabase.Create( Puzzle puzzle, string author )
+            IPuzzleDatabaseEntry IPuzzleDatabase.Create(Puzzle puzzle, string author)
             {
-                return Create( puzzle, author );
+                return Create(puzzle, author);
+            }
+
+            public static PuzzleLibrary CreateEmpty()
+            {
+                return new PuzzleLibrary();
+            }
+
+            public PuzzleLibraryEntry Create(Puzzle puzzle, string author)
+            {
+                var uid = nextUID++;
+
+                Debug.Assert(!ContainsEntryWithUID(uid));
+
+                var newEntry = new PuzzleLibraryEntry(uid, puzzle, author);
+
+                entries.Add(newEntry);
+
+                return newEntry;
+            }
+
+            public void Add(PuzzleLibraryEntry libraryEntry)
+            {
+                if (libraryEntry == null)
+                {
+                    throw new ArgumentNullException("libraryEntry");
+                }
+                if (ContainsEntryWithUID(libraryEntry.UID))
+                {
+                    throw new ArgumentException();
+                }
+                entries.Add(libraryEntry);
+                nextUID = Math.Max(nextUID, libraryEntry.UID + 1);
+            }
+
+            private bool ContainsEntryWithUID(int uid)
+            {
+                return entries.Any(entry => entry.UID == uid);
+            }
+
+            public override bool Equals(object obj)
+            {
+                return Equals(obj as PuzzleLibrary);
+            }
+
+            public bool Equals(PuzzleLibrary library)
+            {
+                if (library == null)
+                {
+                    return false;
+                }
+                if (entries.Count != library.entries.Count)
+                {
+                    return false;
+                }
+                return Enumerable.Range(0, entries.Count).All(i => entries[i].Equals(library.entries[i]));
+            }
+
+            public override int GetHashCode()
+            {
+                return entries.Select(x => x.GetHashCode()).Aggregate((acc, n) => acc ^ n);
             }
         }
 
         internal class PuzzleLibraryEntry : IPuzzleDatabaseEntry
         {
-            private readonly int uid;
-
-            private Puzzle puzzle;
-
-            private string author;
-
-            public PuzzleLibraryEntry( int uid, Puzzle puzzle, string author )
+            public PuzzleLibraryEntry(int uid, Puzzle puzzle, string author)
             {
-                this.uid = uid;
-                this.puzzle = puzzle;
-                this.author = author;
+                UID = uid;
+                Puzzle = puzzle;
+                Author = author;
             }
 
-            public int UID
+            public int UID { get; }
+
+            public Puzzle Puzzle { get; set; }
+
+            public string Author { get; set; }
+
+            public override bool Equals(object obj)
             {
-                get
-                {
-                    return uid;
-                }
+                return Equals(obj as PuzzleLibraryEntry);
             }
 
-            public Puzzle Puzzle
+            public bool Equals(PuzzleLibraryEntry that)
             {
-                get
-                {
-                    return puzzle;
-                }
-                set
-                {
-                    this.puzzle = value;
-                }
-            }
-
-            public string Author
-            {
-                get { return author; }
-                set { author = value; }
-            }
-
-            public override bool Equals( object obj )
-            {
-                return Equals( obj as PuzzleLibraryEntry );
-            }
-
-            public bool Equals( PuzzleLibraryEntry that )
-            {
-                return this.uid == that.uid;
+                return UID == that.UID;
             }
 
             public override int GetHashCode()
             {
-                return uid.GetHashCode();
+                return UID.GetHashCode();
             }
 
-            public int CompareTo( PuzzleLibraryEntry other )
+            public int CompareTo(PuzzleLibraryEntry other)
             {
-                return this.uid.CompareTo( other.uid );
+                return UID.CompareTo(other.UID);
             }
         }
 
         internal class PlayerDatabase : IPlayerDatabase
         {
             private readonly Dictionary<string, PlayerProfile> playerProfiles;
-
-            public static PlayerDatabase CreateEmpty()
-            {
-                return new PlayerDatabase();
-            }
 
             private PlayerDatabase()
             {
@@ -331,121 +250,107 @@ namespace PiCross
             {
                 get
                 {
-                    if ( !IsValidPlayerName( name ) )
+                    if (!IsValidPlayerName(name))
                     {
-                        throw new ArgumentException( "Invalid name" );
+                        throw new ArgumentException("Invalid name");
                     }
-                    else
-                    {
-                        return playerProfiles[name];
-                    }
+                    return playerProfiles[name];
                 }
-            }
-
-            public bool IsValidPlayerName( string name )
-            {
-                return !string.IsNullOrWhiteSpace( name );
-            }
-
-            public PlayerProfile CreateNewProfile( string name )
-            {
-                if ( !IsValidPlayerName( name ) )
-                {
-                    throw new ArgumentException( "Invalid name" );
-                }
-                else if ( playerProfiles.ContainsKey( name ) )
-                {
-                    throw new ArgumentException( "Player already exists" );
-                }
-                else
-                {
-                    var profile = new PlayerProfile( name );
-
-                    AddToDictionary( profile );
-
-                    return profile;
-                }
-            }
-
-            public void AddProfile( PlayerProfile profile )
-            {
-                if ( playerProfiles.ContainsKey( profile.Name ) )
-                {
-                    throw new ArgumentException( "Player with same name already exists" );
-                }
-                else
-                {
-                    AddToDictionary( profile );
-                }
-            }
-
-            private void AddToDictionary( PlayerProfile profile )
-            {
-                playerProfiles[profile.Name] = profile;
             }
 
             public IList<string> PlayerNames
             {
                 get
                 {
-                    return ( from profile in this.playerProfiles
-                             let name = profile.Key
-                             orderby name ascending
-                             select name ).ToList();
+                    return (from profile in playerProfiles
+                        let name = profile.Key
+                        orderby name ascending
+                        select name).ToList();
                 }
             }
 
-            public override bool Equals( object obj )
+            IPlayerProfileData IPlayerDatabase.this[string name]
             {
-                return Equals( obj as PlayerDatabase );
+                get { return this[name]; }
             }
 
-            public bool Equals( PlayerDatabase playerDatabase )
+            IPlayerProfileData IPlayerDatabase.CreateNewProfile(string name)
             {
-                return playerDatabase != null && playerProfiles.EqualItems( playerDatabase.playerProfiles );
+                return CreateNewProfile(name);
+            }
+
+            public static PlayerDatabase CreateEmpty()
+            {
+                return new PlayerDatabase();
+            }
+
+            public bool IsValidPlayerName(string name)
+            {
+                return !string.IsNullOrWhiteSpace(name);
+            }
+
+            public PlayerProfile CreateNewProfile(string name)
+            {
+                if (!IsValidPlayerName(name))
+                {
+                    throw new ArgumentException("Invalid name");
+                }
+                if (playerProfiles.ContainsKey(name))
+                {
+                    throw new ArgumentException("Player already exists");
+                }
+                var profile = new PlayerProfile(name);
+
+                AddToDictionary(profile);
+
+                return profile;
+            }
+
+            public void AddProfile(PlayerProfile profile)
+            {
+                if (playerProfiles.ContainsKey(profile.Name))
+                {
+                    throw new ArgumentException("Player with same name already exists");
+                }
+                AddToDictionary(profile);
+            }
+
+            private void AddToDictionary(PlayerProfile profile)
+            {
+                playerProfiles[profile.Name] = profile;
+            }
+
+            public override bool Equals(object obj)
+            {
+                return Equals(obj as PlayerDatabase);
+            }
+
+            public bool Equals(PlayerDatabase playerDatabase)
+            {
+                return playerDatabase != null && playerProfiles.EqualItems(playerDatabase.playerProfiles);
             }
 
             public override int GetHashCode()
             {
                 return playerProfiles.GetHashCode();
             }
-
-            IPlayerProfileData IPlayerDatabase.this[string name]
-            {
-                get
-                {
-                    return this[name];
-                }
-            }
-
-            IPlayerProfileData IPlayerDatabase.CreateNewProfile( string name )
-            {
-                return CreateNewProfile( name );
-            }
         }
 
         internal class PlayerProfile : IPlayerProfileData
         {
-            private readonly string name;
-
             private readonly Dictionary<int, PlayerPuzzleInformationEntry> entries;
 
-            public PlayerProfile( string name )
+            public PlayerProfile(string name)
             {
-                this.name = name;
+                Name = name;
                 entries = new Dictionary<int, PlayerPuzzleInformationEntry>();
-            }
-
-            public string Name
-            {
-                get { return name; }
             }
 
             public PlayerPuzzleInformationEntry this[int id]
             {
                 get
                 {
-                    if ( !entries.ContainsKey( id ) )
+                    if (!entries.ContainsKey(id))
                     {
                         entries[id] = new PlayerPuzzleInformationEntry();
                     }
@@ -454,20 +359,7 @@ namespace PiCross
                 }
             }
 
-            public override bool Equals( object obj )
-            {
-                return Equals( obj as PlayerProfile );
-            }
-
-            public bool Equals( PlayerProfile playerProfile )
-            {
-                return this.name == playerProfile.name;
-            }
-
-            public override int GetHashCode()
-            {
-                return name.GetHashCode();
-            }
+            public string Name { get; }
 
             IPlayerPuzzleData IPlayerProfileData.this[int id]
             {
@@ -477,47 +369,47 @@ namespace PiCross
 
             public IEnumerable<int> EntryUIDs
             {
-                get
-                {
-                    return this.entries.Keys;
-                }
+                get { return entries.Keys; }
+            }
+
+            public override bool Equals(object obj)
+            {
+                return Equals(obj as PlayerProfile);
+            }
+
+            public bool Equals(PlayerProfile playerProfile)
+            {
+                return Name == playerProfile.Name;
+            }
+
+            public override int GetHashCode()
+            {
+                return Name.GetHashCode();
             }
         }
 
         public class PlayerPuzzleInformationEntry : IPlayerPuzzleData
         {
-            private TimeSpan? bestTime;
-
             public PlayerPuzzleInformationEntry()
             {
-                this.bestTime = null;
+                BestTime = null;
             }
 
-            public TimeSpan? BestTime
+            public TimeSpan? BestTime { get; set; }
+
+            public override bool Equals(object obj)
             {
-                get
-                {
-                    return bestTime;
-                }
-                set
-                {
-                    bestTime = value;
-                }
+                return Equals(obj as PlayerPuzzleInformationEntry);
             }
 
-            public override bool Equals( object obj )
+            public bool Equals(PlayerPuzzleInformationEntry entry)
             {
-                return Equals( obj as PlayerPuzzleInformationEntry );
-            }
-
-            public bool Equals( PlayerPuzzleInformationEntry entry )
-            {
-                return entry != null && bestTime.Equals( entry.bestTime );
+                return entry != null && BestTime.Equals(entry.BestTime);
             }
 
             public override int GetHashCode()
             {
-                return bestTime.GetHashCode();
+                return BestTime.GetHashCode();
             }
         }
     }
