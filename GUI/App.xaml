@@ -4,7 +4,6 @@
              xmlns:converters="clr-namespace:GUI.Converters"
              xmlns:extensions="clr-namespace:GUI.Extensions">
     <Application.Resources>
-        <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <converters:IsLessThanConverter x:Key="MistakeToColor" />
         <!-- extensions:Int32Extension x:Key="Int32"/ -->
 
